@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Mitr-Medium';
+    src: url("../font/Mitr/Mitr-Medium.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: 'RobotoMono-Medium';
+    src: url("../font/Roboto_Mono/RobotoMono-Medium.ttf") format('truetype'); 
+}
+
+.h-100 {
+    height: 100vh;
+}
