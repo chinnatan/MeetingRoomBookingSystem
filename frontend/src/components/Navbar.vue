@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-primary bg-primary shadow">
+    <nav class="navbar navbar-expand-lg navbar-primary bg-primary shadow fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">{{ navbar.brand }}</a>
         <button
