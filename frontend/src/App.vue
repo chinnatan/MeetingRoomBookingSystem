@@ -6,7 +6,10 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created() {
+    document.title = "Meeting Room Booking System - ระบบจองห้องประชุม"
+  }
 }
 </script>
 
