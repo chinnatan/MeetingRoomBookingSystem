@@ -8,6 +8,12 @@
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-8 mx-auto my-auto">
+                <div class="row mt-2">
+                  <div class="col-md-12">
+                    <h2 class="booking-font">{{ txtFloor }} {{ floor }}</h2>
+                    <hr />
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-12">
                     <svg
@@ -41,7 +47,6 @@
                           stroke-width="1px"
                         >Floor 1</title>
                         <rect
-                          class="cursor-pointer"
                           fill="#aaffff"
                           stroke="#000000"
                           stroke-width="0px"
@@ -52,7 +57,6 @@
                           id="floor_1_service"
                           fill-opacity="1"
                           stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomService)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -66,6 +70,7 @@
                           id="floor_1_m04"
                           fill-opacity="1"
                           stroke-opacity="1"
+                          v-on:click="selectRoom(txtFloor1.roomM04)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -79,6 +84,7 @@
                           id="floor_1_m03"
                           fill-opacity="1"
                           stroke-opacity="1"
+                          v-on:click="selectRoom(txtFloor1.roomM03)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -92,6 +98,7 @@
                           id="floor_1_m23"
                           fill-opacity="1"
                           stroke-opacity="1"
+                          v-on:click="selectRoom(txtFloor1.roomM23)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -105,6 +112,7 @@
                           id="floor_1_m22"
                           fill-opacity="1"
                           stroke-opacity="1"
+                          v-on:click="selectRoom(txtFloor1.roomM22)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -118,6 +126,7 @@
                           id="floor_1_m21"
                           fill-opacity="1"
                           stroke-opacity="1"
+                          v-on:click="selectRoom(txtFloor1.roomM21)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -131,6 +140,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m14"
+                          v-on:click="selectRoom(txtFloor1.roomM14)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -144,6 +154,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m18"
+                          v-on:click="selectRoom(txtFloor1.roomM18)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -157,6 +168,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m13"
+                          v-on:click="selectRoom(txtFloor1.roomM13)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -170,6 +182,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m17"
+                          v-on:click="selectRoom(txtFloor1.roomM17)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -183,6 +196,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m12"
+                          v-on:click="selectRoom(txtFloor1.roomM12)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -196,6 +210,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_m16"
+                          v-on:click="selectRoom(txtFloor1.roomM16)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -209,6 +224,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_111"
+                          v-on:click="selectRoom(txtFloor1.room111)"
                         />
                         <rect
                           class="cursor-pointer"
@@ -222,6 +238,7 @@
                           fill-opacity="1"
                           stroke-opacity="1"
                           id="floor_1_auditorium"
+                          v-on:click="selectRoom(txtFloor1.auditorium)"
                         />
                         <text
                           fill="#000000"
@@ -464,13 +481,13 @@
                         aria-label="Toolbar with select Floor"
                       >
                         <div
-                          class="btn-group mr-2 mx-auto my-auto"
+                          class="btn-group mr-2 mx-auto my-auto shadow"
                           role="group"
                           aria-label="Select Floor"
                         >
-                          <button type="button" class="btn btn-secondary active">1</button>
-                          <button type="button" class="btn btn-secondary">2</button>
-                          <button type="button" class="btn btn-secondary">3</button>
+                          <button type="button" class="booking-font btn btn-primary active">1</button>
+                          <button type="button" class="booking-font btn btn-primary">2</button>
+                          <button type="button" class="booking-font btn btn-primary">3</button>
                         </div>
                       </div>
                     </div>
@@ -490,21 +507,32 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
-                  <h4 class="booking-font">{{ txtBooking.lblTitle }}</h4>
+                  <h2 class="booking-font">{{ txtBooking.lblTitle }}</h2>
                 </div>
               </div>
               <div class="row mt-4">
                 <div class="col-md-12">
                   <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-8 text-left">
+                    <div class="col-md-4 text-left">
                       <div class="row">
                         <div class="col-md-12">
-                          <h5
-                            class="booking-font"
-                          >{{ txtBooking.lblRoom }} {{ txtBooking.lblNameRoom }}</h5>
+                          <div class="card shadow">
+                            <img
+                              src="../assets/image/itkmitl-building.jpg"
+                              class="card-img-top"
+                              alt="..."
+                            />
+                            <div class="card-body">
+                              <h5
+                                class="card-title booking-font"
+                              >{{ txtBooking.lblRoom }} {{ txtBooking.lblNameRoom }}</h5>
+                              <p class="card-text booking-font">{{ txtFloor }} {{ floor }}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="col-md-8 text-left">
                       <div class="row">
                         <div class="col-md-12">
                           <form>
@@ -581,7 +609,24 @@
                                 </div>
                               </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">{{ txtBooking.btnBookingAccept }}</button>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <button
+                                    type="submit"
+                                    class="btn btn-primary col-md-12 booking-font"
+                                  >{{ txtBooking.btnBookingAccept }}</button>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <button
+                                    type="reset"
+                                    class="btn btn-danger col-md-12 booking-font"
+                                  >{{ txtBooking.btnBookingReset }}</button>
+                                </div>
+                              </div>
+                            </div>
                           </form>
                         </div>
                       </div>
@@ -610,7 +655,7 @@ export default {
     return {
       selected: false,
       floor: 1,
-      txtShowFloor: "แสดงชั้น",
+      txtFloor: "ชั้นที่ :",
       txtFloor1: {
         auditorium: "Auditorium",
         room111: "111",
@@ -636,7 +681,8 @@ export default {
         lblBookingEndTime: "เวลาสิ้นสุด",
         lblBookingDetail: "รายละเอียดการจอง",
         lblNameRoom: "",
-        btnBookingAccept: "ยืนยัน"
+        btnBookingAccept: "ยืนยันการจอง",
+        btnBookingReset: "คืนค่า"
       }
     };
   },
@@ -674,5 +720,10 @@ export default {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+rect:hover {
+  stroke-width: 2;
+  stroke:#01579B;
 }
 </style>
