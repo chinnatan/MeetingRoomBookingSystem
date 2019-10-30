@@ -67,3 +67,9 @@
 .navbar-primary .navbar-text a:hover, .navbar-primary .navbar-text a:focus {
     color: rgba(0, 0, 0, 0.9);
 }
+
+/* Custom Font */
+
+.mitr-font {
+    font-family: "Mitr-Medium";
+}
