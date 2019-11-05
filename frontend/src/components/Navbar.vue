@@ -46,8 +46,6 @@
                 <i class="fa fa-caret-down"></i>
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link :to="'profile'" class="dropdown-item">{{ navbar.account.profile }}</router-link>
-                <div class="dropdown-divider"></div>
                 <router-link :to="'#'" v-on:click.native="Logout" class="dropdown-item">{{ navbar.account.logout }}</router-link>
               </div>
             </li>
@@ -70,7 +68,6 @@ export default {
         history: "ประวัติการใช้งาน",
         account: {
             username: "test",
-            profile: "ข้อมูลส่วนตัว",
             logout: "ออกจากระบบ"
         }
       }
