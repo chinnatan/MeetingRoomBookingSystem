@@ -36,7 +36,6 @@
                 stroke-opacity="1"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -50,7 +49,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM04)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -64,7 +62,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM03)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -78,7 +75,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM23)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -92,7 +88,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM22)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -106,7 +101,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM21)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -120,7 +114,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM14)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -134,7 +127,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM18)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -148,7 +140,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM13)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -162,7 +153,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM17)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -176,7 +166,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM12)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -190,7 +179,6 @@
                 v-on:click="selectRoom(txtFloor1.roomM16)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -204,7 +192,6 @@
                 v-on:click="selectRoom(txtFloor1.room111)"
               />
               <rect
-                class="cursor-pointer"
                 fill="#bfbfbf"
                 stroke="#000000"
                 stroke-width="0px"
@@ -481,12 +468,13 @@ export default {
 </script>
 
 <style scoped>
-.cursor-pointer {
-  cursor: pointer;
-}
-
 rect:hover {
+  cursor: pointer;
   stroke-width: 2;
   stroke: #01579b;
+}
+
+text:hover {
+  cursor: pointer;
 }
 </style>

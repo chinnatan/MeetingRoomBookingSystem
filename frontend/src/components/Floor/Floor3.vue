@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-12">
           <svg
-            id="floor2"
+            id="floor3"
             width="100%"
             height="100%"
             overflow="visible"
@@ -15,31 +15,119 @@
           >
             <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
             <g>
-              <title>Floor 2</title>
+              <title>Floor 3</title>
               <rect
-                id="floor_2_226"
-                height="92"
-                width="92"
-                y="90"
-                x="413"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room226)"
-              />
-              <rect
-                id="floor_2_225"
+                id="floor_3_335"
                 height="62"
                 width="92"
-                y="190"
+                y="10"
                 x="413"
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room225)"
+                v-on:click="selectRoom(txtFloor3.room335)"
               />
               <rect
-                id="floor_2_223"
+                id="floor_3_334"
+                height="42"
+                width="92"
+                y="80"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room334)"
+              />
+              <rect
+                id="floor_3_332"
+                height="42"
+                width="92"
+                y="180"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room332)"
+              />
+              <rect
+                id="floor_3_333"
+                height="42"
+                width="92"
+                y="130"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room333)"
+              />
+              <rect
+                id="floor_3_308"
+                height="132"
+                width="92"
+                y="60"
+                x="100"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room308)"
+              />
+              <rect
+                id="floor_3_306"
+                height="82"
+                width="92"
+                y="200"
+                x="100"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room306)"
+              />
+              <rect
+                id="floor_3_304"
+                height="134"
+                width="92"
+                y="290"
+                x="99.25"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room304)"
+              />
+              <rect
+                id="floor_3_331"
+                height="42"
+                width="92"
+                y="230"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room331)"
+              />
+              <rect
+                id="floor_3_330"
+                height="42"
+                width="92"
+                y="280"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room330)"
+              />
+              <rect
+                id="floor_3_328"
+                height="72"
+                width="46"
+                y="30"
+                x="330"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor3.room328)"
+              />
+              <rect
+                id="floor_3_329"
                 height="92"
                 width="92"
                 y="330"
@@ -47,112 +135,13 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room223)"
-              />
-              <rect
-                id="floor_2_224"
-                height="62"
-                width="92"
-                y="260"
-                x="413"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room224)"
-              />
-              <rect
-                id="floor_2_207"
-                height="152"
-                width="92"
-                y="10"
-                x="100"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room207)"
-              />
-              <rect
-                id="floor_2_205"
-                height="82"
-                width="92"
-                y="170"
-                x="100"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room205)"
-              />
-              <rect
-                id="floor_2_203"
-                height="164"
-                width="92"
-                y="260"
-                x="99.25"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room203)"
-              />
-              <rect
-                id="floor_2_219"
-                height="92"
-                width="46"
-                y="200"
-                x="280"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room219)"
-              />
-              <rect
-                id="floor_2_218"
-                height="92"
-                width="46"
-                y="300"
-                x="280"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room218)"
-              />
-              <rect
-                id="floor_2_222"
-                height="72"
-                width="46"
-                y="200"
-                x="330"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room222)"
-              />
-              <rect
-                id="floor_2_221"
-                height="52"
-                width="46"
-                y="280"
-                x="330"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room221)"
-              />
-              <rect
-                id="floor_2_220"
-                height="52"
-                width="46"
-                y="340"
-                x="330"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room220)"
+                v-on:click="selectRoom(txtFloor3.room329)"
               />
               <text
                 xml:space="preserve"
                 text-anchor="middle"
-                id="txt_207"
-                y="156"
+                id="txt_308"
+                y="186"
                 x="146"
                 stroke-linecap="null"
                 stroke-linejoin="null"
@@ -160,13 +149,13 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room207"
+                v-text="txtFloor3.room308"
               ></text>
               <text
-                id="txt_205"
+                id="txt_306"
                 xml:space="preserve"
                 text-anchor="middle"
-                y="246"
+                y="276"
                 x="146"
                 stroke-linecap="null"
                 stroke-linejoin="null"
@@ -174,10 +163,10 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room205"
+                v-text="txtFloor3.room306"
               ></text>
               <text
-                id="txt_203"
+                id="txt_304"
                 xml:space="preserve"
                 text-anchor="middle"
                 y="416"
@@ -188,83 +177,13 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room203"
+                v-text="txtFloor3.room304"
               ></text>
               <text
-                id="txt_219"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="286"
-                x="304"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room219"
-              ></text>
-              <text
-                id="txt_218"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="386"
-                x="304"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room218"
-              ></text>
-              <text
-                id="txt_222"
+                id="txt_331"
                 xml:space="preserve"
                 text-anchor="middle"
                 y="266"
-                x="353"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room222"
-              ></text>
-              <text
-                id="txt_221"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="326"
-                x="353"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room221"
-              ></text>
-              <text
-                id="txt_220"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="386"
-                x="353"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room220"
-              ></text>
-              <text
-                id="txt_226"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="176"
                 x="458"
                 stroke-linecap="null"
                 stroke-linejoin="null"
@@ -272,24 +191,10 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room226"
+                v-text="txtFloor3.room331"
               ></text>
               <text
-                id="txt_225"
-                xml:space="preserve"
-                text-anchor="middle"
-                y="246"
-                x="458"
-                stroke-linecap="null"
-                stroke-linejoin="null"
-                stroke-dasharray="null"
-                stroke-width="0"
-                stroke="#000000"
-                fill="#000000"
-                v-text="txtFloor2.room225"
-              ></text>
-              <text
-                id="txt_224"
+                id="txt_330"
                 xml:space="preserve"
                 text-anchor="middle"
                 y="316"
@@ -300,10 +205,24 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room224"
+                v-text="txtFloor3.room330"
               ></text>
               <text
-                id="txt_223"
+                id="txt_328"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="96"
+                x="353"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor3.room328"
+              ></text>
+              <text
+                id="txt_329"
                 xml:space="preserve"
                 text-anchor="middle"
                 y="416"
@@ -314,7 +233,63 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room223"
+                v-text="txtFloor3.room329"
+              ></text>
+              <text
+                id="txt_335"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="66"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor3.room335"
+              ></text>
+              <text
+                id="txt_334"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="116"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor3.room334"
+              ></text>
+              <text
+                id="txt_333"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="166"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor3.room333"
+              ></text>
+              <text
+                id="txt_332"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="216"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor3.room332"
               ></text>
             </g>
           </svg>
@@ -326,22 +301,21 @@
 
 <script>
 export default {
-  name: "Floor2",
+  name: "Floor3",
   data() {
     return {
-      txtFloor2: {
-        room203: "203",
-        room205: "205",
-        room207: "207",
-        room218: "218",
-        room219: "219",
-        room220: "220",
-        room221: "221",
-        room222: "222",
-        room223: "223",
-        room224: "224",
-        room225: "225",
-        room226: "226"
+      txtFloor3: {
+        room304: "304",
+        room306: "306",
+        room308: "308",
+        room328: "328",
+        room329: "329",
+        room330: "330",
+        room331: "331",
+        room332: "332",
+        room333: "333",
+        room334: "334",
+        room335: "335"
       }
     };
   },

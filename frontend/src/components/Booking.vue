@@ -82,7 +82,9 @@
                             role="tabpanel"
                             aria-labelledby="v-pills-floor3-tab"
                             v-if="floor === 3"
-                          >3</div>
+                          >
+                            <Floor3></Floor3>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -294,13 +296,15 @@ import Navbar from "@/components/Navbar";
 
 import Floor1 from "@/components/Floor/Floor1";
 import Floor2 from "@/components/Floor/Floor2";
+import Floor3 from "@/components/Floor/Floor3";
 
 export default {
   name: "Booking",
   components: {
     Navbar: Navbar,
     Floor1: Floor1,
-    Floor2: Floor2
+    Floor2: Floor2,
+    Floor3: Floor3
   },
   created() {},
   data() {
