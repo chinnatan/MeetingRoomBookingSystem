@@ -32,25 +32,28 @@
                             role="tab"
                             aria-controls="v-pills-floor1"
                             aria-selected="true"
-                          >{{ txtFloor }} {{ floor }}</a>
+                            v-on:click="changeFloor(1)"
+                          >{{ txtFloor }} 1</a>
                           <a
                             class="nav-link"
-                            id="v-pills-profile-tab"
+                            id="v-pills-floor2-tab"
                             data-toggle="pill"
-                            href="#v-pills-profile"
+                            href="#v-pills-floor2"
                             role="tab"
-                            aria-controls="v-pills-profile"
+                            aria-controls="v-pills-floor2"
                             aria-selected="false"
-                          >Profile</a>
+                            v-on:click="changeFloor(2)"
+                          >{{ txtFloor }} 2</a>
                           <a
                             class="nav-link"
-                            id="v-pills-messages-tab"
+                            id="v-pills-floor3-tab"
                             data-toggle="pill"
-                            href="#v-pills-messages"
+                            href="#v-pills-floor3"
                             role="tab"
-                            aria-controls="v-pills-messages"
+                            aria-controls="v-pills-floor3"
                             aria-selected="false"
-                          >Messages</a>
+                            v-on:click="changeFloor(3)"
+                          >{{ txtFloor }} 3</a>
                         </div>
                       </div>
                       <div class="col-md-8">
@@ -60,20 +63,25 @@
                             id="v-pills-floor1"
                             role="tabpanel"
                             aria-labelledby="v-pills-floor1-tab"
+                            v-if="floor === 1"
                           >
-                            <Floor1 ref="floor1"></Floor1>
+                            <Floor1></Floor1>
                           </div>
                           <div
                             class="tab-pane fade"
-                            id="v-pills-profile"
+                            id="v-pills-floor2"
                             role="tabpanel"
-                            aria-labelledby="v-pills-profile-tab"
-                          >2</div>
+                            aria-labelledby="v-pills-floor2-tab"
+                            v-if="floor === 2"
+                          >
+                            <Floor2></Floor2>
+                          </div>
                           <div
                             class="tab-pane fade"
-                            id="v-pills-messages"
+                            id="v-pills-floor3"
                             role="tabpanel"
-                            aria-labelledby="v-pills-messages-tab"
+                            aria-labelledby="v-pills-floor3-tab"
+                            v-if="floor === 3"
                           >3</div>
                         </div>
                       </div>
@@ -285,12 +293,14 @@
 import Navbar from "@/components/Navbar";
 
 import Floor1 from "@/components/Floor/Floor1";
+import Floor2 from "@/components/Floor/Floor2";
 
 export default {
   name: "Booking",
   components: {
     Navbar: Navbar,
-    Floor1: Floor1
+    Floor1: Floor1,
+    Floor2: Floor2
   },
   created() {},
   data() {
@@ -298,22 +308,6 @@ export default {
       selected: false,
       floor: 1,
       txtFloor: "ชั้นที่ :",
-      txtFloor1: {
-        auditorium: "Auditorium",
-        room111: "111",
-        roomService: "Service",
-        roomM03: "M03",
-        roomM04: "M04",
-        roomM12: "M12",
-        roomM13: "M13",
-        roomM14: "M14",
-        roomM16: "M16",
-        roomM17: "M17",
-        roomM18: "M18",
-        roomM21: "M21",
-        roomM22: "M22",
-        roomM23: "M23"
-      },
       txtBooking: {
         lblTitle: "จองห้อง",
         lblRoom: "ห้อง :",
@@ -339,6 +333,10 @@ export default {
           .scrollIntoView({ behavior: "smooth" });
       }, 100);
       this.txtBooking.lblNameRoom = name;
+    },
+    changeFloor(floor) {
+      this.floor = floor;
+      this.selected = false;
     }
   }
 };

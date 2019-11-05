@@ -1,0 +1,377 @@
+<template>
+  <div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <svg
+            id="floor2"
+            width="100%"
+            height="100%"
+            overflow="visible"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg"
+            viewBox="0 0 600 440"
+            stroke="none"
+          >
+            <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
+            <g>
+              <title>Floor 2</title>
+              <rect
+                id="floor_2_226"
+                class="cursor-pointer"
+                height="92"
+                width="92"
+                y="90"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room226)"
+              />
+              <rect
+                id="floor_2_225"
+                class="cursor-pointer"
+                height="62"
+                width="92"
+                y="190"
+                x="412"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room225)"
+              />
+              <rect
+                id="floor_2_223"
+                class="cursor-pointer"
+                height="92"
+                width="92"
+                y="330"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room223)"
+              />
+              <rect
+                id="floor_2_224"
+                class="cursor-pointer"
+                height="62"
+                width="92"
+                y="260"
+                x="413"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room224)"
+              />
+              <rect
+                id="floor_2_207"
+                class="cursor-pointer"
+                height="152"
+                width="92"
+                y="10"
+                x="100"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room207)"
+              />
+              <rect
+                id="floor_2_205"
+                class="cursor-pointer"
+                height="82"
+                width="92"
+                y="170"
+                x="100"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room205)"
+              />
+              <rect
+                id="floor_2_203"
+                class="cursor-pointer"
+                height="164"
+                width="92"
+                y="260"
+                x="99.25"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room203)"
+              />
+              <rect
+                id="floor_2_219"
+                class="cursor-pointer"
+                height="92"
+                width="46"
+                y="200"
+                x="280"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room219)"
+              />
+              <rect
+                id="floor_2_218"
+                class="cursor-pointer"
+                height="92"
+                width="46"
+                y="300"
+                x="280"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room218)"
+              />
+              <rect
+                id="floor_2_222"
+                class="cursor-pointer"
+                height="72"
+                width="46"
+                y="200"
+                x="330"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room222)"
+              />
+              <rect
+                id="floor_2_221"
+                class="cursor-pointer"
+                height="52"
+                width="46"
+                y="280"
+                x="330"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room221)"
+              />
+              <rect
+                id="floor_2_220"
+                class="cursor-pointer"
+                height="52"
+                width="46"
+                y="340"
+                x="330"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#bfbfbf"
+                v-on:click="selectRoom(txtFloor2.room220)"
+              />
+              <text
+                xml:space="preserve"
+                text-anchor="middle"
+                id="txt_207"
+                y="156"
+                x="146"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room207"
+              ></text>
+              <text
+                id="txt_205"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="246"
+                x="146"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room205"
+              ></text>
+              <text
+                id="txt_203"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="416"
+                x="146"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room203"
+              ></text>
+              <text
+                id="txt_219"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="286"
+                x="304"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room219"
+              ></text>
+              <text
+                id="txt_218"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="386"
+                x="304"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room218"
+              ></text>
+              <text
+                id="txt_222"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="266"
+                x="353"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room222"
+              ></text>
+              <text
+                id="txt_221"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="326"
+                x="353"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room221"
+              ></text>
+              <text
+                id="txt_220"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="386"
+                x="353"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room220"
+              ></text>
+              <text
+                id="txt_226"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="176"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room226"
+              ></text>
+              <text
+                id="txt_225"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="246"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room225"
+              ></text>
+              <text
+                id="txt_224"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="316"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room224"
+              ></text>
+              <text
+                id="txt_223"
+                xml:space="preserve"
+                text-anchor="middle"
+                y="416"
+                x="458"
+                stroke-linecap="null"
+                stroke-linejoin="null"
+                stroke-dasharray="null"
+                stroke-width="0"
+                stroke="#000000"
+                fill="#000000"
+                v-text="txtFloor2.room223"
+              ></text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Floor2",
+  data() {
+    return {
+      txtFloor2: {
+        room203: "203",
+        room205: "205",
+        room207: "207",
+        room218: "218",
+        room219: "219",
+        room220: "220",
+        room221: "221",
+        room222: "222",
+        room223: "223",
+        room224: "224",
+        room225: "225",
+        room226: "226"
+      }
+    };
+  },
+  methods: {
+    selectRoom(name) {
+      this.$parent.selectRoom(name);
+    }
+  }
+};
+</script>
+
+<style scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
+
+rect:hover {
+  stroke-width: 2;
+  stroke: #01579b;
+}
+</style>

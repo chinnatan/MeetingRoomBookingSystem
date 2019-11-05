@@ -14,7 +14,6 @@
             xmlns:se="http://svg-edit.googlecode.com"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             viewBox="0 0 600 440"
-            v-if="floor === 1"
           >
             <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
             <g style="pointer-events:all" stroke="none" fill="#000000" stroke-width="1px">
@@ -455,7 +454,6 @@ export default {
   name: "Floor1",
   data() {
     return {
-      floor: this.$parent.floor,
       txtFloor1: {
         auditorium: "Auditorium",
         room111: "111",
