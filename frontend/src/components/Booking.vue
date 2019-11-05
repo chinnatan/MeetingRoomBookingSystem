@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="row">
-              <div class="col-md-8 mx-auto my-auto">
+              <div class="col-md-12 mx-auto my-auto">
                 <div class="row mt-2">
                   <div class="col-md-12">
                     <h2 class="booking-font">{{ txtFloor }} {{ floor }}</h2>
@@ -16,478 +16,65 @@
                 </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <svg
-                      id="floor1"
-                      class="booking-font"
-                      width="100%"
-                      height="100%"
-                      x="605"
-                      y="270"
-                      overflow="visible"
-                      xmlns="http://www.w3.org/2000/svg"
-                      xmlns:se="http://svg-edit.googlecode.com"
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      viewBox="0 0 600 440"
-                      stroke="none"
-                      fill="#000000"
-                      stroke-width="1px"
-                      v-if="floor === 1"
-                    >
-                      <!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -->
-                      <g
-                        style="pointer-events:all"
-                        stroke="none"
-                        fill="#000000"
-                        stroke-width="1px"
-                      >
-                        <title
-                          style="pointer-events:inherit"
-                          stroke="none"
-                          fill="#000000"
-                          stroke-width="1px"
-                        >Floor 1</title>
-                        <rect
-                          fill="#aaffff"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="138"
-                          y="137"
-                          width="92"
-                          height="92"
-                          id="floor_1_service"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="138"
-                          y="237"
-                          width="92"
-                          height="92"
-                          id="floor_1_m04"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomM04)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="138"
-                          y="337"
-                          width="92"
-                          height="92"
-                          id="floor_1_m03"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomM03)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="437"
-                          y="137"
-                          width="92"
-                          height="92"
-                          id="floor_1_m23"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomM23)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="437"
-                          y="237"
-                          width="92"
-                          height="92"
-                          id="floor_1_m22"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomM22)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="437"
-                          y="337"
-                          width="92"
-                          height="92"
-                          id="floor_1_m21"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-on:click="selectRoom(txtFloor1.roomM21)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="290"
-                          y="250"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m14"
-                          v-on:click="selectRoom(txtFloor1.roomM14)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="342"
-                          y="250"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m18"
-                          v-on:click="selectRoom(txtFloor1.roomM18)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="290"
-                          y="300"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m13"
-                          v-on:click="selectRoom(txtFloor1.roomM13)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="342"
-                          y="300"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m17"
-                          v-on:click="selectRoom(txtFloor1.roomM17)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="290"
-                          y="350"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m12"
-                          v-on:click="selectRoom(txtFloor1.roomM12)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="342"
-                          y="350"
-                          width="45"
-                          height="45"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_m16"
-                          v-on:click="selectRoom(txtFloor1.roomM16)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="138"
-                          y="37"
-                          width="92"
-                          height="92"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_111"
-                          v-on:click="selectRoom(txtFloor1.room111)"
-                        />
-                        <rect
-                          class="cursor-pointer"
-                          fill="#bfbfbf"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          x="37"
-                          y="37"
-                          width="92"
-                          height="92"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="floor_1_auditorium"
-                          v-on:click="selectRoom(txtFloor1.auditorium)"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="184"
-                          y="220"
-                          id="txt_service"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          v-text="txtFloor1.roomService"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="184"
-                          y="320"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m04"
-                          v-text="txtFloor1.roomM04"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="184"
-                          y="420"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m03"
-                          v-text="txtFloor1.roomM03"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="485"
-                          y="220"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m23"
-                          v-text="txtFloor1.roomM23"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="484"
-                          y="320"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m22"
-                          v-text="txtFloor1.roomM22"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="484"
-                          y="420"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m21"
-                          v-text="txtFloor1.roomM21"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="184"
-                          y="120"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_111"
-                          v-text="txtFloor1.room111"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="83"
-                          y="120"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_auditorium"
-                          v-text="txtFloor1.auditorium"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="313"
-                          y="290"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m14"
-                          v-text="txtFloor1.roomM14"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="313"
-                          y="390"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m12"
-                          v-text="txtFloor1.roomM12"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="313"
-                          y="340"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m13"
-                          v-text="txtFloor1.roomM13"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="364"
-                          y="290"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m18"
-                          v-text="txtFloor1.roomM18"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="364"
-                          y="390"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m16"
-                          v-text="txtFloor1.roomM16"
-                        />
-                        <text
-                          fill="#000000"
-                          stroke="#000000"
-                          stroke-width="0px"
-                          stroke-dasharray="null"
-                          stroke-linejoin="null"
-                          stroke-linecap="null"
-                          x="364"
-                          y="340"
-                          text-anchor="middle"
-                          xml:space="preserve"
-                          fill-opacity="1"
-                          stroke-opacity="1"
-                          id="txt_m17"
-                          v-text="txtFloor1.roomM17"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="col-md-4 mx-auto my-auto">
-                  <div class="row mt-4">
-                    <div class="col-md-12">
-                      <div
-                        class="btn-toolbar"
-                        role="toolbar"
-                        aria-label="Toolbar with select Floor"
-                      >
+                    <div class="row">
+                      <div class="col-md-4">
                         <div
-                          class="btn-group mr-2 mx-auto my-auto shadow"
-                          role="group"
-                          aria-label="Select Floor"
+                          class="nav flex-column nav-pills"
+                          id="v-pills-tab"
+                          role="tablist"
+                          aria-orientation="vertical"
                         >
-                          <button type="button" class="booking-font btn btn-primary active">1</button>
-                          <button type="button" class="booking-font btn btn-primary">2</button>
-                          <button type="button" class="booking-font btn btn-primary">3</button>
+                          <a
+                            class="nav-link active booking-font"
+                            id="v-pills-floor1-tab"
+                            data-toggle="pill"
+                            href="#v-pills-floor1"
+                            role="tab"
+                            aria-controls="v-pills-floor1"
+                            aria-selected="true"
+                          >{{ txtFloor }} {{ floor }}</a>
+                          <a
+                            class="nav-link"
+                            id="v-pills-profile-tab"
+                            data-toggle="pill"
+                            href="#v-pills-profile"
+                            role="tab"
+                            aria-controls="v-pills-profile"
+                            aria-selected="false"
+                          >Profile</a>
+                          <a
+                            class="nav-link"
+                            id="v-pills-messages-tab"
+                            data-toggle="pill"
+                            href="#v-pills-messages"
+                            role="tab"
+                            aria-controls="v-pills-messages"
+                            aria-selected="false"
+                          >Messages</a>
+                        </div>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="tab-content" id="v-pills-tabContent">
+                          <div
+                            class="tab-pane fade show active"
+                            id="v-pills-floor1"
+                            role="tabpanel"
+                            aria-labelledby="v-pills-floor1-tab"
+                          >
+                            <Floor1 ref="floor1"></Floor1>
+                          </div>
+                          <div
+                            class="tab-pane fade"
+                            id="v-pills-profile"
+                            role="tabpanel"
+                            aria-labelledby="v-pills-profile-tab"
+                          >2</div>
+                          <div
+                            class="tab-pane fade"
+                            id="v-pills-messages"
+                            role="tabpanel"
+                            aria-labelledby="v-pills-messages-tab"
+                          >3</div>
                         </div>
                       </div>
                     </div>
@@ -527,6 +114,58 @@
                                 class="card-title booking-font"
                               >{{ txtBooking.lblRoom }} {{ txtBooking.lblNameRoom }}</h5>
                               <p class="card-text booking-font">{{ txtFloor }} {{ floor }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div
+                            class="d-flex align-items-center p-3 my-3 text-white-50 bg-title rounded shadow-sm"
+                          >
+                            <div class="lh-100">
+                              <h6
+                                class="mb-0 text-white lh-100 mitr-font"
+                              >{{ txtBooking.lblBookingSchedule }}</h6>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="table-responsive">
+                                <table class="table table-sm">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">First</th>
+                                      <th scope="col">Last</th>
+                                      <th scope="col">Handle</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <th scope="row">1</th>
+                                      <td>Mark</td>
+                                      <td>Otto</td>
+                                      <td>@mdo</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">2</th>
+                                      <td>Jacob</td>
+                                      <td>Thornton</td>
+                                      <td>@fat</td>
+                                    </tr>
+                                    <tr>
+                                      <th scope="row">3</th>
+                                      <td colspan="2">Larry the Bird</td>
+                                      <td>@twitter</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -645,10 +284,13 @@
 <script>
 import Navbar from "@/components/Navbar";
 
+import Floor1 from "@/components/Floor/Floor1";
+
 export default {
   name: "Booking",
   components: {
-    Navbar: Navbar
+    Navbar: Navbar,
+    Floor1: Floor1
   },
   created() {},
   data() {
@@ -680,6 +322,7 @@ export default {
         lblBookingStartTime: "เวลาเริ่มต้น",
         lblBookingEndTime: "เวลาสิ้นสุด",
         lblBookingDetail: "รายละเอียดการจอง",
+        lblBookingSchedule: "ตารางเวลา",
         lblNameRoom: "",
         btnBookingAccept: "ยืนยันการจอง",
         btnBookingReset: "คืนค่า"
@@ -724,6 +367,10 @@ export default {
 
 rect:hover {
   stroke-width: 2;
-  stroke:#01579B;
+  stroke: #01579b;
+}
+
+.bg-title {
+  background-color: #0277bd;
 }
 </style>
