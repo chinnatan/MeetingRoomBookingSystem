@@ -2,7 +2,7 @@ const express = require('express')
 const httpProxy = require('express-http-proxy')
 const app = express()
 
-const bookingServiceProxy = httpProxy('http://0.0.0.0:3001')
+const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
 
 // API Gateway Option
 const NAME = "API Gateway";
@@ -15,10 +15,22 @@ app.use((req, res, next) => {
     next()
 })
 
+// Set CORS
+app.use((req, res, next) => {
+    const allowedOrigins = [
+        'http://localhost:8080/'
+    ];
+    if (!allowedOrigins.includes(req.headers.origin)) {
+        res.header("Access-Control-Allow-Origin", req.headers.origin);
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    }
+    return next();
+})
+
 // Proxy request
 app.use('/api/', (req, res, next) => {
-    bookingServiceProxy(req, res, next)
+    mainServiceProxy(req, res, next)
 })
 
 app.listen(PORT, HOST);
-console.log(`${NAME} Running on http://${HOST}:${PORT}`);
+console.log(`[${NAME}] Running on http://${HOST}:${PORT}`);
