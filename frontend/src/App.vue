@@ -24,7 +24,7 @@ html, body {
 
 #app {
   font-family: "Mitr-Medium";
-  height: 100%;
+  height: auto !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
