@@ -26,9 +26,6 @@
             <li class="nav-item">
               <a class="nav-link" href="#">{{ navbar.booking }}</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">{{ navbar.history }}</a>
-            </li>
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <li class="nav-item dropdown">
@@ -46,7 +43,11 @@
                 <i class="fa fa-caret-down"></i>
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <router-link :to="'#'" v-on:click.native="Logout" class="dropdown-item">{{ navbar.account.logout }}</router-link>
+                <router-link
+                  :to="'#'"
+                  v-on:click.native="Logout"
+                  class="dropdown-item"
+                >{{ navbar.account.logout }}</router-link>
               </div>
             </li>
           </ul>
@@ -63,12 +64,11 @@ export default {
     return {
       navbar: {
         brand: "ระบบจองห้องประชุม",
-        booking: "รายละเอียดการจอง",
+        booking: "จัดการการจอง",
         home: "หน้าหลัก",
-        history: "ประวัติการใช้งาน",
         account: {
-            username: "test",
-            logout: "ออกจากระบบ"
+          username: "test",
+          logout: "ออกจากระบบ"
         }
       }
     };

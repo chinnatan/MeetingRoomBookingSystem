@@ -120,10 +120,27 @@
                               alt="..."
                             />
                             <div class="card-body">
-                              <h5
-                                class="card-title booking-font"
-                              >{{ txtBooking.lblRoom }} {{ txtBooking.lblNameRoom }}</h5>
-                              <p class="card-text booking-font">{{ txtFloor }} {{ floor }}</p>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <h5
+                                        class="card-title booking-font"
+                                      >{{ txtBooking.lblRoom }} {{ txtBooking.lblNameRoom }}</h5>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-md-12"
+                                    >{{ txtFloor }} {{ txtBooking.lblFloorRoom }}</div>
+                                  </div>
+                                  <div class="row">
+                                    <div
+                                      class="col-md-12"
+                                    >{{ txtBooking.lblSize }} {{ txtBooking.lblSizeRoom }} คน</div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -145,36 +162,51 @@
                         <div class="col-md-12">
                           <div class="card">
                             <div class="card-body">
-                              <div class="table-responsive">
-                                <table class="table table-sm">
-                                  <thead>
-                                    <tr>
-                                      <th scope="col">#</th>
-                                      <th scope="col">First</th>
-                                      <th scope="col">Last</th>
-                                      <th scope="col">Handle</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">1</th>
-                                      <td>Mark</td>
-                                      <td>Otto</td>
-                                      <td>@mdo</td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">2</th>
-                                      <td>Jacob</td>
-                                      <td>Thornton</td>
-                                      <td>@fat</td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">3</th>
-                                      <td colspan="2">Larry the Bird</td>
-                                      <td>@twitter</td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="row">
+                                        <div class="col-md-12">ติวหนังสือ</div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-12">21/11/2562</div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <div class="row">
+                                        <div class="col-md-12 align-self-center">09.00 - 10.00</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="col-md-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="row">
+                                        <div class="col-md-12">ประชุมกิจกรรม</div>
+                                      </div>
+                                      <div class="row">
+                                        <div class="col-md-12">21/11/2562</div>
+                                      </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                      <div class="row">
+                                        <div class="col-md-12 align-self-center">11.00 - 12.00</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -216,16 +248,29 @@
                               </div>
                             </div>
                             <div class="row">
-                              <div class="col-md-12">
+                              <div class="col-md-6">
                                 <div class="form-group">
                                   <label
-                                    for="lblBookingDate"
+                                    for="lblBookingStartDate"
                                     class="booking-font"
-                                  >{{ txtBooking.lblBookingDate }}</label>
+                                  >{{ txtBooking.lblBookingStartDate }}</label>
                                   <input
                                     type="date"
                                     class="form-control"
-                                    v-model="inputBookingDate"
+                                    v-model="inputBookingStartDate"
+                                  />
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label
+                                    for="lblBookingEndDate"
+                                    class="booking-font"
+                                  >{{ txtBooking.lblBookingEndDate }}</label>
+                                  <input
+                                    type="date"
+                                    class="form-control"
+                                    v-model="inputBookingEndDate"
                                   />
                                 </div>
                               </div>
@@ -315,13 +360,18 @@ export default {
       txtBooking: {
         lblTitle: "จองห้อง",
         lblRoom: "ห้อง :",
+        lblSize: "รองรับ : ",
         lblBookingTitle: "หัวข้อการจอง",
-        lblBookingDate: "วันที่ต้องการจอง",
+        lblBookingStartDate: "วันที่เริ่มต้นการจอง",
+        lblBookingEndDate: "วันที่สิ้นสุดการจอง",
         lblBookingStartTime: "เวลาเริ่มต้น",
         lblBookingEndTime: "เวลาสิ้นสุด",
         lblBookingDetail: "รายละเอียดการจอง",
         lblBookingSchedule: "ตารางเวลา",
         lblNameRoom: "",
+        lblSizeRoom: "",
+        lblFloorRoom: "",
+        lblPathImgRoom: "",
         btnBookingAccept: "ยืนยันการจอง",
         btnBookingReset: "คืนค่า"
       }
@@ -329,7 +379,7 @@ export default {
   },
   mounted() {},
   methods: {
-    selectRoom(name) {
+    selectRoom(name, size, floor, path) {
       this.selected = true;
       setTimeout(function() {
         document
@@ -337,6 +387,9 @@ export default {
           .scrollIntoView({ behavior: "smooth" });
       }, 100);
       this.txtBooking.lblNameRoom = name;
+      this.txtBooking.lblSizeRoom = size;
+      this.txtBooking.lblFloorRoom = floor;
+      this.txtBooking.lblPathImgRoom = path;
     },
     changeFloor(floor) {
       this.floor = floor;
