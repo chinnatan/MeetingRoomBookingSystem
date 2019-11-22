@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import SignIn from '@/components/SignIn'
 import Booking from '@/components/Booking'
-import History from '@/components/History'
+import ManageBooking from '@/components/ManageBooking'
 
 Vue.use(Router)
 
@@ -25,9 +25,9 @@ export default new Router({
       component: Booking
     },
     {
-      path: '/history',
-      name: 'History',
-      component: History
+      path: '/managebooking',
+      name: 'ManageBooking',
+      component: ManageBooking
     }
   ],
   mode: 'history'

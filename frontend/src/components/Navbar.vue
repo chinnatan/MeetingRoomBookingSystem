@@ -1,8 +1,10 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-primary bg-primary shadow fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-second bg-white shadow-sm fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">{{ navbar.brand }}</a>
+        <a class="navbar-brand" href="#">
+          <font color="black">{{ navbar.brand }}</font><font color="#2645ff">{{ navbar.brandMeeting }}</font>
+        </a>
         <button
           class="navbar-toggler"
           type="button"
@@ -63,7 +65,8 @@ export default {
   data() {
     return {
       navbar: {
-        brand: "ระบบจองห้องประชุม",
+        brand: "ระบบจอง",
+        brandMeeting: "ห้องประชุม",
         booking: "จัดการการจอง",
         home: "หน้าหลัก",
         account: {

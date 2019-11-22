@@ -16,12 +16,19 @@ export default {
 <style>
 @import './assets/css/styles.css';
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #app {
   font-family: "Mitr-Medium";
+  height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #f5f4ff;
 }
 </style>

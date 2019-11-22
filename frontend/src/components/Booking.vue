@@ -4,86 +4,113 @@
 
     <div>
       <div class="container">
-        <div class="row">
+        <div class="row mt-1">
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-12 mx-auto my-auto">
-                <div class="row mt-2">
+                <div class="row mt-5 p-3">
                   <div class="col-md-12">
-                    <h2 class="booking-font">{{ txtFloor }} {{ floor }}</h2>
-                    <hr />
+                    <h1 class="font-color-primary">{{ txtFloor }} {{ floor }}</h1>
+                    <small>แสดงชั้นที่คุณเลือก</small>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-12">
                     <div class="row">
                       <div class="col-md-4">
-                        <div
-                          class="nav flex-column nav-pills"
-                          id="v-pills-tab"
-                          role="tablist"
-                          aria-orientation="vertical"
-                        >
-                          <a
-                            class="nav-link active booking-font"
-                            id="v-pills-floor1-tab"
-                            data-toggle="pill"
-                            href="#v-pills-floor1"
-                            role="tab"
-                            aria-controls="v-pills-floor1"
-                            aria-selected="true"
-                            v-on:click="changeFloor(1)"
-                          >{{ txtFloor }} 1</a>
-                          <a
-                            class="nav-link"
-                            id="v-pills-floor2-tab"
-                            data-toggle="pill"
-                            href="#v-pills-floor2"
-                            role="tab"
-                            aria-controls="v-pills-floor2"
-                            aria-selected="false"
-                            v-on:click="changeFloor(2)"
-                          >{{ txtFloor }} 2</a>
-                          <a
-                            class="nav-link"
-                            id="v-pills-floor3-tab"
-                            data-toggle="pill"
-                            href="#v-pills-floor3"
-                            role="tab"
-                            aria-controls="v-pills-floor3"
-                            aria-selected="false"
-                            v-on:click="changeFloor(3)"
-                          >{{ txtFloor }} 3</a>
+                        <div class="col-md-12">
+                          <div
+                            class="nav flex-column nav-pills"
+                            id="v-pills-tab"
+                            role="tablist"
+                            aria-orientation="vertical"
+                          >
+                            <a
+                              class="nav-link active booking-font"
+                              id="v-pills-floor1-tab"
+                              data-toggle="pill"
+                              href="#v-pills-floor1"
+                              role="tab"
+                              aria-controls="v-pills-floor1"
+                              aria-selected="true"
+                              v-on:click="changeFloor(1)"
+                            >{{ txtFloor }} 1</a>
+                            <a
+                              class="nav-link"
+                              id="v-pills-floor2-tab"
+                              data-toggle="pill"
+                              href="#v-pills-floor2"
+                              role="tab"
+                              aria-controls="v-pills-floor2"
+                              aria-selected="false"
+                              v-on:click="changeFloor(2)"
+                            >{{ txtFloor }} 2</a>
+                            <a
+                              class="nav-link"
+                              id="v-pills-floor3-tab"
+                              data-toggle="pill"
+                              href="#v-pills-floor3"
+                              role="tab"
+                              aria-controls="v-pills-floor3"
+                              aria-selected="false"
+                              v-on:click="changeFloor(3)"
+                            >{{ txtFloor }} 3</a>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="card mt-2 mb-2 shadow-sm">
+                            <div class="card-body">
+                              <h5 class="font-color-primary">หมายเหตุ</h5>
+                              <ul class="list-unstyled">
+                                <li>
+                                  <font color="green">{{ lblNote.color.lblGreen }}</font> - {{ lblNote.detail.lblGreen }}
+                                </li>
+                                <li>
+                                  <font color="red">{{ lblNote.color.lblRed }}</font> - {{ lblNote.detail.lblRed }}
+                                </li>
+                                <li>
+                                  <font color="lightblue">{{ lblNote.color.lblLightBlue }}</font> - {{ lblNote.detail.lblLightBlue }}
+                                </li>
+                                <li>
+                                  <font color="gray">{{ lblNote.color.lblGray }}</font> - {{ lblNote.detail.lblGray }}
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-8">
-                        <div class="tab-content" id="v-pills-tabContent">
-                          <div
-                            class="tab-pane fade show active"
-                            id="v-pills-floor1"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-floor1-tab"
-                            v-if="floor === 1"
-                          >
-                            <Floor1></Floor1>
-                          </div>
-                          <div
-                            class="tab-pane fade"
-                            id="v-pills-floor2"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-floor2-tab"
-                            v-if="floor === 2"
-                          >
-                            <Floor2></Floor2>
-                          </div>
-                          <div
-                            class="tab-pane fade"
-                            id="v-pills-floor3"
-                            role="tabpanel"
-                            aria-labelledby="v-pills-floor3-tab"
-                            v-if="floor === 3"
-                          >
-                            <Floor3></Floor3>
+                      <div class="card col-md-8 shadow-sm">
+                        <div class="card-body">
+                          <div class="col-md-12">
+                            <div class="tab-content" id="v-pills-tabContent">
+                              <div
+                                class="tab-pane fade show active"
+                                id="v-pills-floor1"
+                                role="tabpanel"
+                                aria-labelledby="v-pills-floor1-tab"
+                                v-if="floor === 1"
+                              >
+                                <Floor1></Floor1>
+                              </div>
+                              <div
+                                class="tab-pane fade"
+                                id="v-pills-floor2"
+                                role="tabpanel"
+                                aria-labelledby="v-pills-floor2-tab"
+                                v-if="floor === 2"
+                              >
+                                <Floor2></Floor2>
+                              </div>
+                              <div
+                                class="tab-pane fade"
+                                id="v-pills-floor3"
+                                role="tabpanel"
+                                aria-labelledby="v-pills-floor3-tab"
+                                v-if="floor === 3"
+                              >
+                                <Floor3></Floor3>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -374,6 +401,20 @@ export default {
         lblPathImgRoom: "",
         btnBookingAccept: "ยืนยันการจอง",
         btnBookingReset: "คืนค่า"
+      },
+      lblNote: {
+        color: {
+          lblGreen: "สีเขียว",
+          lblRed: "สีแดง",
+          lblLightBlue: "สีฟ้า",
+          lblGray: "สีเทา"
+        },
+        detail: {
+          lblGreen: "ห้องว่าง ณ ขณะนั้น",
+          lblRed: "ห้องไม่ว่าง ณ ขณะนั้น",
+          lblLightBlue: "ห้องบริการการศึกษา",
+          lblGray: "ห้องไม่เปิดให้ใช้งาน"
+        }
       }
     };
   },
