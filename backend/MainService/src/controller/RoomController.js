@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bookingService = require("../service/BookingService");
+const roomService = require("../service/RoomService");
 
 var bodyParser = require("body-parser");
 
@@ -8,7 +8,8 @@ var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.get("/room/all", bookingService.getAllRoom);
-router.get("/room/:roomid", bookingService.getRoomById);
+router.get("/all", roomService.getAllRoom);
+router.get("/:roomid", roomService.getRoomById);
+router.get("/floor/:roomfloor", roomService.getRoomByFloor);
 
 module.exports = router;

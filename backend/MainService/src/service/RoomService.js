@@ -1,7 +1,7 @@
 const MySQL = require("mysql");
 const mysqlConfig = require("../config");
 
-const NAME = "Booking Service";
+const NAME = "Room Service";
 
 // MySQL Option
 const HOST_MYSQL = mysqlConfig.HOST;
@@ -20,8 +20,14 @@ var mysqlCon = MySQL.createConnection({
   insecureAuth: true
 });
 
-mysqlCon.connect();
-console.log(`[${NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
+mysqlCon.connect(function (err) {
+  if (err) {
+    console.log(`[${NAME}] Error -> ${err.message}`);
+  } else {
+    console.log(`[${NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
+  }
+});
+
 
 exports.getAllRoom = (req, res) => {
   mysqlCon.query("select * from room", function (err, results, fields) {
@@ -45,6 +51,21 @@ exports.getRoomById = (req, res) => {
     } else {
       if (results.length) {
         console.log(`[${NAME}] -> Get Room By ID Success`);
+        return res.status(200).json(results);
+      }
+    }
+  });
+};
+
+exports.getRoomByFloor = (req, res) => {
+  var roomFloor = req.params.roomfloor;
+
+  mysqlCon.query("select * from room where room_floor = ?", [roomFloor], function (err, results, fields) {
+    if (err) {
+      return res.json(err);
+    } else {
+      if (results.length) {
+        console.log(`[${NAME}] -> Get Room By Floor Success`);
         return res.status(200).json(results);
       }
     }

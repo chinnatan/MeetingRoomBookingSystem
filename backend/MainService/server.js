@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 // Booking Option
-const NAME = "Booking Service";
+const NAME = "Main Service";
 const PORT = process.env.PORT || 3001;
 const HOST = "0.0.0.0";
 
@@ -12,8 +12,8 @@ const HOST = "0.0.0.0";
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const bookingController = require("./src/controller/BookingController");
-app.use("/", bookingController);
+const roomController = require("./src/controller/RoomController");
+app.use("/room", roomController);
 
 app.listen(PORT, HOST);
-console.log(`${NAME} Running on http://${HOST}:${PORT}`);
+console.log(`[${NAME}] Running on http://${HOST}:${PORT}`);
