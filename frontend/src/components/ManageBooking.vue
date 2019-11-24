@@ -5,8 +5,8 @@
     <div id="title" class="container">
       <div class="row mt-5 p-3">
         <div class="col-md-12">
-          <h1 class="mb-0 lh-100 font-color-primary">{{ lblHistoryTitle }}</h1>
-          <small>สำหรับใช้ยกเลิกการจองหรือดูรายการการจองทั้งหมด</small>
+          <h1 class="mb-0 lh-100 font-color-primary">{{ lblManageBooking }}</h1>
+          <small>{{ lblManageBookingDetail }}</small>
         </div>
       </div>
     </div>
@@ -20,7 +20,7 @@
               <h5 class="card-title">ติวหนังสือสอบ</h5>
               <p class="card-text">ติวหนังสือสอบวิชา OOP</p>
               <p class="card-text">
-                <small class="text-muted">วันที่ 22/11/2562 เวลา 9.00 - 10.00 น.</small>
+                <small class="text-muted">วันที่ 22/11/2562 เวลา 11.00 - 12.00 น.</small>
               </p>
               <button type="button" class="btn btn-danger">{{ lblCancelBooking }}</button>
             </div>
@@ -42,7 +42,7 @@
               <h5 class="card-title">ทำ Project OOP</h5>
               <p class="card-text">ทำ Midterm Project OOP</p>
               <p class="card-text">
-                <small class="text-muted">วันที่ 22/11/2562 เวลา 11.00 - 12.00 น.</small>
+                <small class="text-muted">วันที่ 22/11/2562 เวลา 09.00 - 10.00 น.</small>
               </p>
               <button type="button" class="btn btn-danger">{{ lblCancelBooking }}</button>
             </div>
@@ -71,23 +71,10 @@ export default {
   },
   data() {
     return {
-      lblHistoryTitle: "จัดการการจอง",
-      lblCancelBooking: "ยกเลิกการจอง"
+      lblManageBooking: "จัดการการจอง",
+      lblCancelBooking: "ยกเลิกการจอง",
+      lblManageBookingDetail: "สำหรับใช้ยกเลิกการจองหรือดูรายการการจองทั้งหมด"
     };
   }
 };
 </script>
-
-<style scoped>
-.bg-history-title {
-  background-color: #0277bd;
-}
-
-.button-color {
-  background-color: rgb(38, 69, 255);
-}
-
-.bg-color {
-  background-color: rgb(245, 244, 255);
-}
-</style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import ReportDamaged from '@/components/ReportDamaged'
 import SignIn from '@/components/SignIn'
 import Booking from '@/components/Booking'
 import ManageBooking from '@/components/ManageBooking'
@@ -10,12 +10,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      path: '/report/damaged',
+      name: 'ReportDamaged',
+      component: ReportDamaged
     },
     {
-      path: '/signin',
+      path: '/',
       name: 'SignIn',
       component: SignIn
     },
