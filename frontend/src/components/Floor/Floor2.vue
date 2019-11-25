@@ -25,7 +25,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room226)"
+                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg)"
               />
               <rect
                 id="floor_2_225"
@@ -36,7 +36,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room225)"
+                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg)"
               />
               <rect
                 id="floor_2_223"
@@ -47,7 +47,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room223)"
+                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg)"
               />
               <rect
                 id="floor_2_224"
@@ -58,7 +58,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room224)"
+                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg)"
               />
               <rect
                 id="floor_2_207"
@@ -69,7 +69,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room207)"
+                v-on:click="selectRoom(txtFloor[2].id, txtFloor[2].name, txtFloor[2].size, txtFloor[2].floor, txtFloor[2].pathImg)"
               />
               <rect
                 id="floor_2_205"
@@ -80,7 +80,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room205)"
+                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg)"
               />
               <rect
                 id="floor_2_203"
@@ -91,7 +91,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room203)"
+                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg)"
               />
               <rect
                 id="floor_2_219"
@@ -102,7 +102,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room219)"
+                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg)"
               />
               <rect
                 id="floor_2_218"
@@ -113,7 +113,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room218)"
+                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg)"
               />
               <rect
                 id="floor_2_222"
@@ -124,7 +124,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room222)"
+                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg)"
               />
               <rect
                 id="floor_2_221"
@@ -135,7 +135,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room221)"
+                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg)"
               />
               <rect
                 id="floor_2_220"
@@ -146,7 +146,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor2.room220)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg)"
               />
               <text
                 xml:space="preserve"
@@ -160,7 +160,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room207"
+                v-if="txtFloors"
+                v-text="txtFloor[2].name"
               ></text>
               <text
                 id="txt_205"
@@ -174,7 +175,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room205"
+                v-if="txtFloors"
+                v-text="txtFloor[1].name"
               ></text>
               <text
                 id="txt_203"
@@ -188,7 +190,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room203"
+                v-if="txtFloors"
+                v-text="txtFloor[0].name"
               ></text>
               <text
                 id="txt_219"
@@ -202,7 +205,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room219"
+                v-if="txtFloors"
+                v-text="txtFloor[4].name"
               ></text>
               <text
                 id="txt_218"
@@ -216,7 +220,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room218"
+                v-if="txtFloors"
+                v-text="txtFloor[3].name"
               ></text>
               <text
                 id="txt_222"
@@ -230,7 +235,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room222"
+                v-if="txtFloors"
+                v-text="txtFloor[7].name"
               ></text>
               <text
                 id="txt_221"
@@ -244,7 +250,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room221"
+                v-if="txtFloors"
+                v-text="txtFloor[6].name"
               ></text>
               <text
                 id="txt_220"
@@ -258,7 +265,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room220"
+                v-if="txtFloors"
+                v-text="txtFloor[5].name"
               ></text>
               <text
                 id="txt_226"
@@ -272,7 +280,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room226"
+                v-if="txtFloors"
+                v-text="txtFloor[11].name"
               ></text>
               <text
                 id="txt_225"
@@ -286,7 +295,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room225"
+                v-if="txtFloors"
+                v-text="txtFloor[10].name"
               ></text>
               <text
                 id="txt_224"
@@ -300,7 +310,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room224"
+                v-if="txtFloors"
+                v-text="txtFloor[9].name"
               ></text>
               <text
                 id="txt_223"
@@ -314,7 +325,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-text="txtFloor2.room223"
+                v-if="txtFloors"
+                v-text="txtFloor[8].name"
               ></text>
             </g>
           </svg>
@@ -325,29 +337,65 @@
 </template>
 
 <script>
+import axios from "axios";
+const axiosConfig = require("../../assets/config.json");
+
 export default {
   name: "Floor2",
+  created() {
+    this.getRoomByFloor(2);
+  },
   data() {
     return {
-      txtFloor2: {
-        room203: "203",
-        room205: "205",
-        room207: "207",
-        room218: "218",
-        room219: "219",
-        room220: "220",
-        room221: "221",
-        room222: "222",
-        room223: "223",
-        room224: "224",
-        room225: "225",
-        room226: "226"
-      }
+      txtFloor: []
     };
   },
+  computed: {
+    txtFloors() {
+      return this.txtFloor.length;
+    }
+  },
   methods: {
-    selectRoom(name) {
-      this.$parent.selectRoom(name);
+    selectRoom(id, name, size, floor, path) {
+      if (id != null && name != null && size != null && floor != null && path != null) {
+        this.$parent.selectRoom(id, name, size, floor, path);
+      }
+    },
+    getRoomByFloor(floor) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/" +
+        axiosConfig.PATH.getRoomByFloor +
+        "/" +
+        floor;
+
+      try {
+        axios
+          .get(path)
+          .then(res => {
+            var roomArrary = res.data;
+            this.updateTxtFloor(roomArrary);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    updateTxtFloor(room) {
+      for (var roomIndex in room) {
+        this.txtFloor.push({
+          id: room[roomIndex].room_id,
+          name: room[roomIndex].room_name,
+          size: room[roomIndex].room_size,
+          floor: room[roomIndex].room_floor,
+          pathImg: room[roomIndex].room_pathImage
+        });
+      }
     }
   }
 };

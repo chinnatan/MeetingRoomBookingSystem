@@ -46,7 +46,7 @@
                 id="floor_1_m04"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg)"
+                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -59,7 +59,7 @@
                 id="floor_1_m03"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg)"
+                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -72,7 +72,7 @@
                 id="floor_1_m23"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[13].name, txtFloor[13].size, txtFloor[13].floor, txtFloor[13].pathImg)"
+                v-on:click="selectRoom(txtFloor[13].id, txtFloor[13].name, txtFloor[13].size, txtFloor[13].floor, txtFloor[13].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -85,7 +85,7 @@
                 id="floor_1_m22"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[12].name, txtFloor[12].size, txtFloor[12].floor, txtFloor[12].pathImg)"
+                v-on:click="selectRoom(txtFloor[12].id, txtFloor[12].name, txtFloor[12].size, txtFloor[12].floor, txtFloor[12].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -98,7 +98,7 @@
                 id="floor_1_m21"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg)"
+                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -111,7 +111,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m14"
-                v-on:click="selectRoom(txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg)"
+                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -124,7 +124,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m18"
-                v-on:click="selectRoom(txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg)"
+                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -137,7 +137,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m13"
-                v-on:click="selectRoom(txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -150,7 +150,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m17"
-                v-on:click="selectRoom(txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -163,7 +163,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m12"
-                v-on:click="selectRoom(txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -176,7 +176,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m16"
-                v-on:click="selectRoom(txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg)"
+                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -189,7 +189,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_111"
-                v-on:click="selectRoom(txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg)"
+                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg)"
               />
               <rect
                 fill="#bfbfbf"
@@ -202,7 +202,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_auditorium"
-                v-on:click="selectRoom(txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg)"
+                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg)"
               />
               <text
                 fill="#000000"
@@ -470,9 +470,9 @@ export default {
     }
   },
   methods: {
-    selectRoom(name, size, floor, path) {
-      if (name != null && size != null && floor != null && path != null) {
-        this.$parent.selectRoom(name, size, floor, path);
+    selectRoom(id, name, size, floor, path) {
+      if (id != null && name != null && size != null && floor != null && path != null) {
+        this.$parent.selectRoom(id, name, size, floor, path);
       }
     },
     getRoomByFloor(floor) {
@@ -503,6 +503,7 @@ export default {
     updateTxtFloor(room) {
       for (var roomIndex in room) {
         this.txtFloor.push({
+          id: room[roomIndex].room_id,
           name: room[roomIndex].room_name,
           size: room[roomIndex].room_size,
           floor: room[roomIndex].room_floor,

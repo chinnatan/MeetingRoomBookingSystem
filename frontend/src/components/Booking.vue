@@ -395,6 +395,7 @@ export default {
         lblBookingEndTime: "เวลาสิ้นสุด",
         lblBookingDetail: "รายละเอียดการจอง",
         lblBookingSchedule: "ตารางเวลา",
+        lblRoomId: "",
         lblNameRoom: "",
         lblSizeRoom: "",
         lblFloorRoom: "",
@@ -420,13 +421,14 @@ export default {
   },
   mounted() {},
   methods: {
-    selectRoom(name, size, floor, path) {
+    selectRoom(id, name, size, floor, path) {
       this.selected = true;
       setTimeout(function() {
         document
           .getElementById("form-booking")
           .scrollIntoView({ behavior: "smooth" });
       }, 100);
+      this.txtBooking.lblRoomId = id;
       this.txtBooking.lblNameRoom = name;
       this.txtBooking.lblSizeRoom = size;
       this.txtBooking.lblFloorRoom = floor;
