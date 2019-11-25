@@ -25,7 +25,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[9].id, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg)"
+                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg, txtFloor[10].active)"
               />
               <rect
                 id="floor_3_334"
@@ -36,7 +36,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg)"
+                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg, txtFloor[9].active)"
               />
               <rect
                 id="floor_3_332"
@@ -47,7 +47,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[2].id, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg)"
+                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg, txtFloor[7].active)"
               />
               <rect
                 id="floor_3_333"
@@ -58,7 +58,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[2].id, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg)"
+                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg, txtFloor[8].active)"
               />
               <rect
                 id="floor_3_308"
@@ -69,7 +69,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[2].id, txtFloor[2].name, txtFloor[2].size, txtFloor[2].floor, txtFloor[2].pathImg)"
+                v-on:click="selectRoom(txtFloor[2].id, txtFloor[2].name, txtFloor[2].size, txtFloor[2].floor, txtFloor[2].pathImg, txtFloor[2].active)"
               />
               <rect
                 id="floor_3_306"
@@ -80,7 +80,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg)"
+                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg, txtFloor[1].active)"
               />
               <rect
                 id="floor_3_304"
@@ -91,7 +91,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg)"
+                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg, txtFloor[0].active)"
               />
               <rect
                 id="floor_3_331"
@@ -102,7 +102,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg)"
+                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg, txtFloor[6].active)"
               />
               <rect
                 id="floor_3_330"
@@ -113,7 +113,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg, txtFloor[5].active)"
               />
               <rect
                 id="floor_3_328"
@@ -124,7 +124,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg)"
+                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg, txtFloor[3].active)"
               />
               <rect
                 id="floor_3_329"
@@ -135,7 +135,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg)"
+                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg, txtFloor[4].active)"
               />
               <text
                 xml:space="preserve"
@@ -329,10 +329,21 @@ export default {
       return this.txtFloor.length;
     }
   },
+  beforeUpdate() {
+    this.updateRoomStatusByFloor()
+  },
   methods: {
-    selectRoom(id, name, size, floor, path) {
-      if (id != null && name != null && size != null && floor != null && path != null) {
-        this.$parent.selectRoom(id, name, size, floor, path);
+    selectRoom(id, name, size, floor, path, active) {
+      if (
+        id != null &&
+        name != null &&
+        size != null &&
+        floor != null &&
+        path != null
+      ) {
+        if (active == "Y") {
+          this.$parent.selectRoom(id, name, size, floor, path);
+        }
       }
     },
     getRoomByFloor(floor) {
@@ -367,9 +378,98 @@ export default {
           name: room[roomIndex].room_name,
           size: room[roomIndex].room_size,
           floor: room[roomIndex].room_floor,
-          pathImg: room[roomIndex].room_pathImage
+          pathImg: room[roomIndex].room_pathImage,
+          active: room[roomIndex].room_active
         });
       }
+    },
+    getRoomStatusById(roomId, roomActive, rectId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/" +
+        axiosConfig.PATH.getRoomStatusById +
+        "/" +
+        roomId;
+
+      try {
+        axios
+          .get(path)
+          .then(res => {
+            var roomStatusArrary = res.data;
+            if (roomActive != "N") {
+              if (roomStatusArrary) {
+                document
+                  .getElementById(rectId)
+                  .setAttribute("fill", "lightgreen");
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    updateRoomStatusByFloor() {
+      this.getRoomStatusById(
+        this.txtFloor[0].id,
+        this.txtFloor[0].active,
+        "floor_3_304"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[1].id,
+        this.txtFloor[1].active,
+        "floor_3_306"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[2].id,
+        this.txtFloor[2].active,
+        "floor_3_308"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[3].id,
+        this.txtFloor[3].active,
+        "floor_3_328"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[4].id,
+        this.txtFloor[4].active,
+        "floor_3_329"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[5].id,
+        this.txtFloor[5].active,
+        "floor_3_330"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[6].id,
+        this.txtFloor[6].active,
+        "floor_3_331"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[7].id,
+        this.txtFloor[7].active,
+        "floor_3_332"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[8].id,
+        this.txtFloor[8].active,
+        "floor_3_333"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[9].id,
+        this.txtFloor[9].active,
+        "floor_3_334"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[10].id,
+        this.txtFloor[10].active,
+        "floor_3_335"
+      );
     }
   }
 };

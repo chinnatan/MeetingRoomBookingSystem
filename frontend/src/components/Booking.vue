@@ -63,16 +63,20 @@
                               <h5 class="font-color-primary">หมายเหตุ</h5>
                               <ul class="list-unstyled">
                                 <li>
-                                  <font color="green">{{ lblNote.color.lblGreen }}</font> - {{ lblNote.detail.lblGreen }}
+                                  <font color="green">{{ lblNote.color.lblGreen }}</font>
+                                  - {{ lblNote.detail.lblGreen }}
                                 </li>
                                 <li>
-                                  <font color="red">{{ lblNote.color.lblRed }}</font> - {{ lblNote.detail.lblRed }}
+                                  <font color="red">{{ lblNote.color.lblRed }}</font>
+                                  - {{ lblNote.detail.lblRed }}
                                 </li>
                                 <li>
-                                  <font color="lightblue">{{ lblNote.color.lblLightBlue }}</font> - {{ lblNote.detail.lblLightBlue }}
+                                  <font color="lightblue">{{ lblNote.color.lblLightBlue }}</font>
+                                  - {{ lblNote.detail.lblLightBlue }}
                                 </li>
                                 <li>
-                                  <font color="gray">{{ lblNote.color.lblGray }}</font> - {{ lblNote.detail.lblGray }}
+                                  <font color="gray">{{ lblNote.color.lblGray }}</font>
+                                  - {{ lblNote.detail.lblGray }}
                                 </li>
                               </ul>
                             </div>
@@ -132,6 +136,11 @@
               <div class="row">
                 <div class="col-md-12">
                   <h2 class="booking-font">{{ txtBooking.lblTitle }}</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="alert alert-danger" role="alert" v-if="alert">{{ alertMessage }}</div>
                 </div>
               </div>
               <div class="row mt-4">
@@ -243,7 +252,7 @@
                     <div class="col-md-8 text-left">
                       <div class="row">
                         <div class="col-md-12">
-                          <form>
+                          <form method="POST" @submit.prevent="onSendBooking">
                             <div class="row">
                               <div class="col-md-12">
                                 <div class="form-group">
@@ -283,6 +292,7 @@
                                   >{{ txtBooking.lblBookingStartDate }}</label>
                                   <input
                                     type="date"
+                                    :min="currentDate"
                                     class="form-control"
                                     v-model="inputBookingStartDate"
                                   />
@@ -296,6 +306,7 @@
                                   >{{ txtBooking.lblBookingEndDate }}</label>
                                   <input
                                     type="date"
+                                    :min="currentDate"
                                     class="form-control"
                                     v-model="inputBookingEndDate"
                                   />
@@ -311,6 +322,8 @@
                                   >{{ txtBooking.lblBookingStartTime }}</label>
                                   <input
                                     type="time"
+                                    min="09:00:00"
+                                    max="17:00:00"
                                     class="form-control"
                                     v-model="inputBookingStartTime"
                                   />
@@ -324,6 +337,8 @@
                                   >{{ txtBooking.lblBookingEndTime }}</label>
                                   <input
                                     type="time"
+                                    min="09:00:00"
+                                    max="17:00:00"
                                     class="form-control"
                                     v-model="inputBookingEndTime"
                                   />
@@ -336,6 +351,7 @@
                                   <button
                                     type="submit"
                                     class="btn btn-primary col-md-12 booking-font"
+                                    @click="onSendBooking()"
                                   >{{ txtBooking.btnBookingAccept }}</button>
                                 </div>
                               </div>
@@ -344,6 +360,7 @@
                                   <button
                                     type="reset"
                                     class="btn btn-danger col-md-12 booking-font"
+                                    @click="onReset()"
                                   >{{ txtBooking.btnBookingReset }}</button>
                                 </div>
                               </div>
@@ -370,6 +387,10 @@ import Floor1 from "@/components/Floor/Floor1";
 import Floor2 from "@/components/Floor/Floor2";
 import Floor3 from "@/components/Floor/Floor3";
 
+import axios from "axios";
+
+const axiosConfig = require("../assets/config.json");
+
 export default {
   name: "Booking",
   components: {
@@ -382,6 +403,8 @@ export default {
   data() {
     return {
       selected: false,
+      alert: false,
+      alertMessage: null,
       floor: 1,
       txtFloor: "ชั้นที่ :",
       txtBooking: {
@@ -416,10 +439,17 @@ export default {
           lblLightBlue: "ห้องบริการการศึกษา",
           lblGray: "ห้องไม่เปิดให้ใช้งาน"
         }
-      }
+      },
+      inputBookingTitle: null,
+      inputBookingDetail: null,
+      inputBookingStartDate: null,
+      inputBookingEndDate: null,
+      inputBookingStartTime: null,
+      inputBookingEndTime: null,
+      currentDate: null,
+      currentTime: null
     };
   },
-  mounted() {},
   methods: {
     selectRoom(id, name, size, floor, path) {
       this.selected = true;
@@ -433,10 +463,88 @@ export default {
       this.txtBooking.lblSizeRoom = size;
       this.txtBooking.lblFloorRoom = floor;
       this.txtBooking.lblPathImgRoom = path;
+
+      // Set Up Current Date
+      var dateFormat = require("dateformat");
+      this.currentDate = new Date();
+      this.currentTime = dateFormat(this.currentDate, "HH:MM");
+      this.currentDate = dateFormat(this.currentDate, "yyyy-mm-dd");
+
+      this.inputBookingStartDate = this.currentDate;
+      this.inputBookingStartTime = this.currentTime;
     },
     changeFloor(floor) {
       this.floor = floor;
       this.selected = false;
+    },
+    onSendBooking() {
+      // Validate
+      if (
+        this.inputBookingTitle != null &&
+        this.inputBookingDetail != null &&
+        this.inputBookingStartDate != null &&
+        this.inputBookingEndDate != null &&
+        this.inputBookingStartTime != null &&
+        this.inputBookingEndTime != null
+      ) {
+        const results = {
+          title: this.inputBookingTitle,
+          detail: this.inputBookingDetail,
+          startDate: this.inputBookingStartDate,
+          endDate: this.inputBookingEndDate,
+          startTime: this.inputBookingStartTime,
+          endTime: this.inputBookingEndTime,
+          UID: "test",
+          roomId: this.txtBooking.lblRoomId
+        };
+
+        this.SendBooking(results);
+      } else {
+        this.alertDanger("กรุณากรอกข้อมูลให้ครบถ้วน")
+      }
+    },
+    SendBooking(results) {
+      const path = "http://" + axiosConfig.APIGATEWAY.HOST + ":" + axiosConfig.APIGATEWAY.PORT + "/api/" + axiosConfig.PATH.increaseBooking;
+
+        try {
+          axios
+            .post(path, results)
+            .then(res => {
+              // this.alertSuccessDisplay(res.data.success);
+              this.alert = false;
+            })
+            .catch(error => {
+              console.log(error);
+              // this.errorMessage = error.response.data.error;
+              // this.alertErrorDisplay();
+              this.alert = true;
+            });
+        } catch (err) {
+          console.log(err);
+        }
+    },
+    onReset(){
+      this.inputBookingTitle = null
+      this.inputBookingDetail = null
+      this.inputBookingStartDate = null
+      this.inputBookingEndDate = null
+      this.inputBookingStartTime = null
+      this.inputBookingEndTime = null
+      this.currentDate = null
+      this.currentTime = null
+
+      // Set Up Current Date
+      var dateFormat = require("dateformat");
+      this.currentDate = new Date();
+      this.currentTime = dateFormat(this.currentDate, "HH:MM");
+      this.currentDate = dateFormat(this.currentDate, "yyyy-mm-dd");
+
+      this.inputBookingStartDate = this.currentDate;
+      this.inputBookingStartTime = this.currentTime;
+    },
+    alertDanger(message) {
+      this.alert = true;
+      this.alertMessage = message;
     }
   }
 };

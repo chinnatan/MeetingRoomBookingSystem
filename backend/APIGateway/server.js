@@ -1,6 +1,7 @@
 const express = require('express')
 const httpProxy = require('express-http-proxy')
 const app = express()
+const http = require('http').Server(app);
 
 const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
 
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
     if (!allowedOrigins.includes(req.headers.origin)) {
         res.header("Access-Control-Allow-Origin", req.headers.origin);
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header("Access-Control-Allow-Credentials", true);
     }
     return next();
 })
@@ -32,5 +34,5 @@ app.use('/api/', (req, res, next) => {
     mainServiceProxy(req, res, next)
 })
 
-app.listen(PORT, HOST);
+http.listen(PORT, HOST);
 console.log(`[${NAME}] Running on http://${HOST}:${PORT}`);

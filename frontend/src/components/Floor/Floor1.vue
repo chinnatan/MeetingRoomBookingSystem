@@ -46,7 +46,7 @@
                 id="floor_1_m04"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg)"
+                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg, txtFloor[4].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -59,7 +59,7 @@
                 id="floor_1_m03"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg)"
+                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg, txtFloor[3].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -72,7 +72,7 @@
                 id="floor_1_m23"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[13].id, txtFloor[13].name, txtFloor[13].size, txtFloor[13].floor, txtFloor[13].pathImg)"
+                v-on:click="selectRoom(txtFloor[13].id, txtFloor[13].name, txtFloor[13].size, txtFloor[13].floor, txtFloor[13].pathImg, txtFloor[13].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -85,7 +85,7 @@
                 id="floor_1_m22"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[12].id, txtFloor[12].name, txtFloor[12].size, txtFloor[12].floor, txtFloor[12].pathImg)"
+                v-on:click="selectRoom(txtFloor[12].id, txtFloor[12].name, txtFloor[12].size, txtFloor[12].floor, txtFloor[12].pathImg, txtFloor[12].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -98,7 +98,7 @@
                 id="floor_1_m21"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg)"
+                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg, txtFloor[11].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -111,7 +111,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m14"
-                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg)"
+                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg, txtFloor[7].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -124,7 +124,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m18"
-                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg)"
+                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg, txtFloor[10].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -137,7 +137,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m13"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg)"
+                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg, txtFloor[6].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -150,7 +150,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m17"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg)"
+                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg, txtFloor[9].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -163,7 +163,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m12"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg)"
+                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg, txtFloor[5].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -176,7 +176,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m16"
-                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg)"
+                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg, txtFloor[8].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -189,7 +189,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_111"
-                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg)"
+                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg, txtFloor[1].active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -202,7 +202,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_auditorium"
-                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg)"
+                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg, txtFloor[0].active)"
               />
               <text
                 fill="#000000"
@@ -452,6 +452,7 @@
 
 <script>
 import axios from "axios";
+
 const axiosConfig = require("../../assets/config.json");
 
 export default {
@@ -469,10 +470,22 @@ export default {
       return this.txtFloor.length;
     }
   },
+  mounted() {},
+  updated() {
+    this.updateRoomStatusByFloor();
+  },
   methods: {
-    selectRoom(id, name, size, floor, path) {
-      if (id != null && name != null && size != null && floor != null && path != null) {
-        this.$parent.selectRoom(id, name, size, floor, path);
+    selectRoom(id, name, size, floor, path, active) {
+      if (
+        id != null &&
+        name != null &&
+        size != null &&
+        floor != null &&
+        path != null
+      ) {
+        if (active == "Y") {
+          this.$parent.selectRoom(id, name, size, floor, path);
+        }
       }
     },
     getRoomByFloor(floor) {
@@ -507,9 +520,108 @@ export default {
           name: room[roomIndex].room_name,
           size: room[roomIndex].room_size,
           floor: room[roomIndex].room_floor,
-          pathImg: room[roomIndex].room_pathImage
+          pathImg: room[roomIndex].room_pathImage,
+          active: room[roomIndex].room_active
         });
       }
+    },
+    getRoomStatusById(roomId, roomActive, rectId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/" +
+        axiosConfig.PATH.getRoomStatusById +
+        "/" +
+        roomId;
+
+      try {
+        axios
+          .get(path)
+          .then(res => {
+            var roomStatusArrary = res.data;
+            if (roomActive != "N") {
+              if (roomStatusArrary) {
+                document
+                  .getElementById(rectId)
+                  .setAttribute("fill", "lightgreen");
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    updateRoomStatusByFloor() {
+      this.getRoomStatusById(
+        this.txtFloor[0].id,
+        this.txtFloor[0].active,
+        "floor_1_auditorium"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[1].id,
+        this.txtFloor[1].active,
+        "floor_1_111"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[3].id,
+        this.txtFloor[3].active,
+        "floor_1_m03"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[4].id,
+        this.txtFloor[4].active,
+        "floor_1_m04"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[5].id,
+        this.txtFloor[5].active,
+        "floor_1_m12"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[6].id,
+        this.txtFloor[6].active,
+        "floor_1_m13"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[7].id,
+        this.txtFloor[7].active,
+        "floor_1_m14"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[8].id,
+        this.txtFloor[8].active,
+        "floor_1_m16"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[9].id,
+        this.txtFloor[9].active,
+        "floor_1_m17"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[10].id,
+        this.txtFloor[10].active,
+        "floor_1_m18"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[11].id,
+        this.txtFloor[11].active,
+        "floor_1_m21"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[12].id,
+        this.txtFloor[12].active,
+        "floor_1_m22"
+      );
+      this.getRoomStatusById(
+        this.txtFloor[13].id,
+        this.txtFloor[13].active,
+        "floor_1_m23"
+      );
     }
   }
 };

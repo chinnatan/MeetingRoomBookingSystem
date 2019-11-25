@@ -1,7 +1,7 @@
 const MySQL = require("mysql");
 const mysqlConfig = require("../config");
 
-const NAME = "Room Service";
+const NAME = "Booking Service";
 
 // MySQL Option
 const HOST_MYSQL = mysqlConfig.HOST;
@@ -28,17 +28,29 @@ mysqlCon.connect(function (err) {
   }
 });
 
-exports.getAllRoom = (req, res) => {
-  mysqlCon.query("select * from room", function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get All Room Data Success`);
-        return res.status(200).json(results);
-      }
-    }
-  });
+exports.increaseBooking = (req, res) => {
+    var bookingTitle = req.body.title
+    var bookintDetail = req.body.detail
+    var bookingStartDate = req.body.startDate
+    var bookingEndDate = req.body.endDate
+    var bookingStartTime = req.body.startTime
+    var bookingEndTime = req.body.endTime
+    var bookingUID = req.body.UID
+    var roomId = req.body.roomId
+
+    console.log(bookingStartTime)
+
+
+//   mysqlCon.query("select * from room", function (err, results, fields) {
+//     if (err) {
+//       return res.json(err);
+//     } else {
+//       if (results.length) {
+//         console.log(`[${NAME}] -> Get All Room Data Success`);
+//         return res.status(200).json(results);
+//       }
+//     }
+//   });
 };
 
 exports.getRoomById = (req, res) => {
