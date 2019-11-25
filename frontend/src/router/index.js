@@ -6,6 +6,8 @@ import ManageBooking from '@/components/ManageBooking'
 import ReportDamaged from '@/components/ReportDamaged'
 import Setting from '@/components/Setting'
 import Blacklist from '@/components/Blacklist'
+import ManageReportDamaged from '@/components/ManageReportDamaged'
+import ManageReportRoom from '@/components/ManageReportRoom'
 
 Vue.use(Router)
 
@@ -22,7 +24,7 @@ export default new Router({
       component: Booking
     },
     {
-      path: '/managebooking',
+      path: '/manage/booking',
       name: 'ManageBooking',
       component: ManageBooking
     },
@@ -40,6 +42,16 @@ export default new Router({
       path: '/blacklist',
       name: 'Blacklist',
       component: Blacklist
+    },
+    {
+      path: '/manage/report/damaged',
+      name: 'ManageReportDamaged',
+      component: ManageReportDamaged
+    },
+    {
+      path: '/manage/report/room',
+      name: 'ManageReportRoom',
+      component: ManageReportRoom
     }
   ],
   mode: 'history'
