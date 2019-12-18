@@ -1,48 +1,51 @@
-const ldap = require('ldapjs');
-const ldapConfig = require('../config')
+const ldapClient = require("simple-ldap-client")
+const config = require('../config')
+const jwt = require("jwt-simple");
 
-const ldapOption = {
-    url: ldapConfig.url,
-    connectTimeout: 30000,
+class Client {
+    constructor(url, baseDn) {
+        this.ldap = new ldapClient(url, baseDn);
+    }
+
+    async authenticate(upn, password) {
+        try {
+            await this.ldap.authenticate({ upn, password });
+            return true;
+        } catch (ex) {
+            console.error(ex);
+            return false;
+        }
+    }
+
+    async getUser(upn, password) {
+        const result = await this.ldap.getUser({ upn, password });
+        return result;
+    }
 }
 
-exports.login = (req, res) => {
-    var adminClient = ldap.createClient(ldapOption)
-    adminClient.bind(ldapConfig.username, ldapConfig.password, function (err) {
-        if (err) {
-            console.log('[LDAP Admin Client] Not Connected')
-        } else {
-            console.log('[LDAP Admin Client] Connected')
+exports.login = async (req, res) => {
+    const url = config.url;
+    const baseDn = config.baseDn;
+    const upn = req.body.username + "@it.kmitl.ac.th";
+    const password = req.body.password;
 
-            adminClient.search('ou=Student, dc=it, dc=kmitl, dc=ac, dc=th', function (error, search) {
-                console.log('[LDAP Admin Client] Searching.....');
+    const client = new Client(url, baseDn);
+    const isAuthenticated = await client.authenticate(upn, password);
 
-                search.on('searchEntry', function (entry) {
-                    console.log('entry: ' + JSON.stringify(entry.object));
-                    res.send(JSON.stringify(entry.object))
-                });
-                search.on('error', function (err) {
-                    console.error('error: ' + err.message);
-                    res.send(JSON.stringify(err.message))
-                });
+    const payload = {
+        sub: req.body.username,
+        iat: new Date().getTime()//มาจากคำว่า issued at time (สร้างเมื่อ)
+     };
+     const SECRET = config.MY_SECRET
 
-                // adminClient.unbind(function (error) { if (error) { console.log(error.message); } else { console.log('[LDAP Client] Disconnected'); } });
-            });
-        }
-    })
-
-    // if (username && password) {
-    //     connect.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function (err, results, fields) {
-    //         console.log(results);
-    //         if (results.length) {
-    //             res.status(200).send({"account_id": results[0].account_id, "username": results[0].username, "account_type": results[0].account_type, "isLogin": true})
-    //         } else {
-    //             res.status(400).send({"isLogin": 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'});
-    //         }
-    //         res.end();
-    //     });
-    // } else {
-    //     res.status(400).send({"isLogin": 'กรุณากรอกชื่อผู้ใช้และรหัสผ่าน'});
-    //     res.end();
-    // }
+    if (isAuthenticated) {
+        const userData = await client.getUser(upn, password);
+        console.log("+ Authenticated successfully");
+        console.log("userData", userData);
+        // return res.status(200).json(userData)
+        return res.send(jwt.encode(payload, SECRET));
+    } else {
+        console.log("- Authenticated unsuccessfully");
+        return res.status(401).json({"message" : "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"})
+    }
 }

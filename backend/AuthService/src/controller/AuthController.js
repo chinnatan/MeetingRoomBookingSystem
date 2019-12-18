@@ -8,6 +8,6 @@ var bodyParser = require('body-parser')
 router.use(bodyParser.urlencoded({ extended : true }));
 router.use(bodyParser.json());
 
-router.get("/login", authService.login);
+router.post("/login", authService.login);
 
 module.exports = router;
