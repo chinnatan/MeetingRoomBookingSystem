@@ -3,17 +3,34 @@ const httpProxy = require('express-http-proxy')
 const app = express()
 const http = require('http').Server(app);
 
-const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
+const config = require('./config.json')
+const jwt = require("jwt-simple");
+
+const mainServiceProxy = httpProxy('http://0.0.0.0:3000')
 
 // API Gateway Option
 const NAME = "API Gateway";
 const PORT = process.env.PORT || 4000;
 const HOST = "0.0.0.0";
 
-// Authentication
+// Middleware Authentication
 app.use((req, res, next) => {
     // TODO: my authentication logic
-    next()
+    const SECRET = config.MY_SECRET
+
+    if (req.headers.authorization !== "undefined") {
+        if(req.headers.authorization === "login") {
+            return next();
+        } else {
+            const token = req.headers.authorization
+            const decodeToken = jwt.decode(token, SECRET)
+        }
+    } else {
+        // No authorization header exists on the incoming
+        // request, return not authorized and throw a new error 
+        res.status(500).json({ error: "Not Authorized" });
+        throw new Error("Not Authorized");
+    }
 })
 
 // Set CORS
