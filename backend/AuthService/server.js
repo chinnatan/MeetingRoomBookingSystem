@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const authController = require('./src/controller/AuthController')
-app.use("/auth/", authController);
+app.use("/", authController);
 
 app.listen(PORT, HOST);
 console.log(`Auth Service Running on http://${HOST}:${PORT}`);
