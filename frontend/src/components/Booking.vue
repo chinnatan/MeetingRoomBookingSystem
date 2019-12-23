@@ -498,40 +498,48 @@ export default {
           roomId: this.txtBooking.lblRoomId
         };
 
-        this.SendBooking(results);
+        this.alertSuccess();
+        this.alert = null;
+        // this.SendBooking(results);
       } else {
-        this.alertDanger("กรุณากรอกข้อมูลให้ครบถ้วน")
+        this.alertDanger("กรุณากรอกข้อมูลให้ครบถ้วน");
       }
     },
     SendBooking(results) {
-      const path = "http://" + axiosConfig.APIGATEWAY.HOST + ":" + axiosConfig.APIGATEWAY.PORT + "/api/" + axiosConfig.PATH.increaseBooking;
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/" +
+        axiosConfig.PATH.increaseBooking;
 
-        try {
-          axios
-            .post(path, results)
-            .then(res => {
-              // this.alertSuccessDisplay(res.data.success);
-              this.alert = false;
-            })
-            .catch(error => {
-              console.log(error);
-              // this.errorMessage = error.response.data.error;
-              // this.alertErrorDisplay();
-              this.alert = true;
-            });
-        } catch (err) {
-          console.log(err);
-        }
+      try {
+        axios
+          .post(path, results)
+          .then(res => {
+            // this.alertSuccessDisplay(res.data.success);
+            this.alert = false;
+          })
+          .catch(error => {
+            console.log(error);
+            // this.errorMessage = error.response.data.error;
+            // this.alertErrorDisplay();
+            this.alert = true;
+          });
+      } catch (err) {
+        console.log(err);
+      }
     },
-    onReset(){
-      this.inputBookingTitle = null
-      this.inputBookingDetail = null
-      this.inputBookingStartDate = null
-      this.inputBookingEndDate = null
-      this.inputBookingStartTime = null
-      this.inputBookingEndTime = null
-      this.currentDate = null
-      this.currentTime = null
+    onReset() {
+      this.inputBookingTitle = null;
+      this.inputBookingDetail = null;
+      this.inputBookingStartDate = null;
+      this.inputBookingEndDate = null;
+      this.inputBookingStartTime = null;
+      this.inputBookingEndTime = null;
+      this.currentDate = null;
+      this.currentTime = null;
 
       // Set Up Current Date
       var dateFormat = require("dateformat");
@@ -545,6 +553,10 @@ export default {
     alertDanger(message) {
       this.alert = true;
       this.alertMessage = message;
+    },
+    alertSuccess() {
+      this.$swal("จองสำเร็จ", "รหัสผ่าน 132458", "success");
+      this.selected = false;
     }
   }
 };

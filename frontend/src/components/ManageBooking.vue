@@ -22,7 +22,12 @@
               <p class="card-text">
                 <small class="text-muted">วันที่ 22/11/2562 เวลา 11.00 - 12.00 น.</small>
               </p>
-              <button type="button" class="btn btn-danger">{{ lblCancelBooking }}</button>
+              <button type="button" class="btn btn-primary">{{ lblEditBooking }}</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deletePopup"
+              >{{ lblCancelBooking }}</button>
             </div>
           </div>
           <div class="card shadow">
@@ -33,7 +38,12 @@
               <p class="card-text">
                 <small class="text-muted">วันที่ 22/11/2562 เวลา 10.00 - 11.00 น.</small>
               </p>
-              <button type="button" class="btn btn-danger">{{ lblCancelBooking }}</button>
+              <button type="button" class="btn btn-primary">{{ lblEditBooking }}</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deletePopup"
+              >{{ lblCancelBooking }}</button>
             </div>
           </div>
           <div class="card shadow">
@@ -44,7 +54,12 @@
               <p class="card-text">
                 <small class="text-muted">วันที่ 22/11/2562 เวลา 09.00 - 10.00 น.</small>
               </p>
-              <button type="button" class="btn btn-danger">{{ lblCancelBooking }}</button>
+              <button type="button" class="btn btn-primary">{{ lblEditBooking }}</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="deletePopup"
+              >{{ lblCancelBooking }}</button>
             </div>
           </div>
         </div>
@@ -72,9 +87,35 @@ export default {
   data() {
     return {
       lblManageBooking: "จัดการการจอง",
-      lblCancelBooking: "ยกเลิกการจอง",
+      lblEditBooking: "แก้ไข",
+      lblCancelBooking: "ยกเลิก",
       lblManageBookingDetail: "สำหรับใช้ยกเลิกการจองหรือดูรายการการจองทั้งหมด"
     };
+  },
+  methods: {
+    deletePopup() {
+      this.$swal({
+        title: "คุณแน่ใจหรือไม่",
+        text: "",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+        cancelButtonColor: '#d33',
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then(result => {
+        if (result.value) {
+          this.$swal(
+            "สำเร็จ",
+            "คุณได้ทำการยกเลิกการจองสำเร็จ",
+            "success"
+          );
+        } else {
+          this.$swal("ไม่สำเร็จ", "การจองของคุณยังเหมือนเดิม", "info");
+        }
+      });
+    }
   }
 };
 </script>

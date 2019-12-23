@@ -54,5 +54,6 @@ export default new Router({
       component: ManageReportRoom
     }
   ],
-  mode: 'history'
+  mode: 'history',
+  linkActiveClass: "active"
 })

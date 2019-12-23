@@ -3,7 +3,8 @@
     <nav class="navbar navbar-expand-lg navbar-second bg-white shadow-sm fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <font color="black">{{ navbar.brand }}</font><font color="#2645ff">{{ navbar.brandMeeting }}</font>
+          <font color="black">{{ navbar.brand }}</font>
+          <font color="#2645ff">{{ navbar.brandMeeting }}</font>
         </a>
         <button
           class="navbar-toggler"
@@ -19,14 +20,26 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="#">
                 {{ navbar.home }}
                 <span class="sr-only">(current)</span>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">{{ navbar.booking }}</a>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarBookingDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >{{ navbar.bookingTitle }}</a>
+              <div class="dropdown-menu" aria-labelledby="navbarBookingDropdown">
+                <router-link :to="{path: '/booking' }" class="dropdown-item" replace>{{ navbar.bookingDropdown.booking }}</router-link>
+                <router-link :to="{path: '/manage/booking' }" class="dropdown-item" replace>{{ navbar.bookingDropdown.bookingInformation }}</router-link>
+              </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">{{ navbar.reportDamaged }}</a>
@@ -70,11 +83,15 @@ export default {
       navbar: {
         brand: "ระบบจอง",
         brandMeeting: "ห้องประชุม",
-        booking: "จัดการการจอง",
+        bookingTitle: "จัดการการจอง",
+        bookingDropdown: {
+          booking: "จองห้อง",
+          bookingInformation: "ข้อมูลการจอง"
+        },
         reportDamaged: "แจ้งอุปกรณ์เสียหาย",
         home: "หน้าหลัก",
         account: {
-          username: "test",
+          username: "ชินธันย์ ชาติทอง",
           logout: "ออกจากระบบ"
         }
       }

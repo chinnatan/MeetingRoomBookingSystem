@@ -39,8 +39,9 @@
                       <div class="col-md-12">
                         <div class="form-group">
                           <button
-                            type="submit"
+                            type="button"
                             class="btn btn-success col-md-12"
+                            @click="savePopup()"
                           >{{ lblSettingForm.btnSubmit }}</button>
                         </div>
                       </div>
@@ -78,6 +79,16 @@ export default {
         btnSubmit: "บันทึก"
       }
     };
+  },
+  methods: {
+    savePopup() {
+      this.$swal({
+        title: "สำเร็จ",
+        text: "บันทึกการตั้งค่าสำเร็จ",
+        type: "success",
+        confirmButtonText: "ตกลง"
+      })
+    }
   }
 };
 </script>
