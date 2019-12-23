@@ -1,6 +1,6 @@
 const ldapClient = require("simple-ldap-client")
 const config = require('../config')
-const jwt = require("jwt-simple");
+const jwt = require("jsonwebtoken");
 
 class Client {
     constructor(url, baseDn) {
@@ -32,18 +32,29 @@ exports.login = async (req, res) => {
     const client = new Client(url, baseDn);
     const isAuthenticated = await client.authenticate(upn, password);
 
-    const payload = {
-        sub: req.body.username,
-        iat: new Date().getTime()//มาจากคำว่า issued at time (สร้างเมื่อ)
-     };
      const SECRET = config.MY_SECRET
 
     if (isAuthenticated) {
         const userData = await client.getUser(upn, password);
         console.log("+ Authenticated successfully");
         console.log("userData", userData);
-        // return res.status(200).json(userData)
-        return res.send(jwt.encode(payload, SECRET));
+
+        const payload = {
+            _id: req.body.username,
+            fullname: userData.name,
+            mail: userData.mail,
+            role: userData.description,
+            iat: new Date().getTime(), //มาจากคำว่า issued at time (สร้างเมื่อ)
+            exp: Math.floor(Date.now() / 1000) + (60 * 60)
+         };
+
+        jwt.sign(payload, SECRET,  function(err, token) {
+            if(err) {
+                throw new Error(err)
+            } else {
+                return res.status(200).json({"accesstoken" : token, "message" : "เข้าสู่ระบบสำเร็จ"})
+            }
+        })
     } else {
         console.log("- Authenticated unsuccessfully");
         return res.status(401).json({"message" : "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"})
