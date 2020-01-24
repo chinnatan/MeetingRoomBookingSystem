@@ -8,10 +8,6 @@
     src: url("../font/Roboto_Mono/RobotoMono-Medium.ttf") format('truetype');
 }
 
-.h-100 {
-    height: 100vh;
-}
-
 /* Custom Color Navbar */
 /* NAVBAR SECOND */
 .navbar-second .navbar-brand {
@@ -64,11 +60,27 @@
 }
 
 /* Custom Font */
-
 .mitr-font {
     font-family: "Mitr-Medium";
 }
 
 .font-color-primary {
     color: #2645ff;
-  }
+}
+
+/* Custom Button Color */
+.btn-outline-variasi-warna{
+    color:#2645ff;border-color:#2645ff
+}
+.btn-outline-variasi-warna:hover{
+    color:#fff;
+    background-color:#2645ff;
+    border-color:#2645ff;
+}
+.btn-outline-variasi-warna.focus,.btn-outline-variasi-warna:focus{
+    box-shadow:0 0 0 .2rem rgba(0,123,255,.5)
+}
+.btn-outline-variasi-warna.disabled,.btn-outline-variasi-warna:disabled{
+    color:#2645ff;background-color:transparent
+}
+.btn-outline-variasi-warna:not(:disabled):not(.disabled).active,.btn-outline-variasi-warna:not(:disabled):not(.disabled):active,.show>.btn-outline-variasi-warna.dropdown-toggle{color:#fff;background-color:#2645ff;border-color:#2645ff}.btn-outline-variasi-warna:not(:disabled):not(.disabled).active:focus,.btn-outline-variasi-warna:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-variasi-warna.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(0,123,255,.5)}

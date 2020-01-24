@@ -3,8 +3,9 @@
     <nav class="navbar navbar-expand-lg navbar-second bg-white shadow-sm fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <font color="black">{{ navbar.brand }}</font>
-          <font color="#2645ff">{{ navbar.brandMeeting }}</font>
+          <!-- <font color="black">{{navbar.brand}}</font>
+          <font color="#2645ff">{{navbar.brandMeeting}}</font> -->
+          <font color="black">{{navbar.brand}}{{navbar.brandMeeting}}</font>
         </a>
         <button
           class="navbar-toggler"
@@ -21,10 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#">
-                {{ navbar.home }}
-                <span class="sr-only">(current)</span>
-              </a>
+              <router-link :to="{path: '/home' }" class="nav-link" replace>{{ navbar.home }}</router-link>
             </li>
             <li class="nav-item dropdown">
               <a
