@@ -4,7 +4,7 @@ import SignIn from '@/components/SignIn'
 import Home from '@/components/Home'
 import Booking from '@/components/Booking'
 import ManageBooking from '@/components/ManageBooking'
-import ReportDamaged from '@/components/ReportDamaged'
+import ReportToolBroken from '@/components/ReportToolBroken'
 import Setting from '@/components/Setting'
 import Blacklist from '@/components/Blacklist'
 import ManageReportDamaged from '@/components/ManageReportDamaged'
@@ -35,9 +35,9 @@ export default new Router({
       component: ManageBooking
     },
     {
-      path: '/report/damaged',
-      name: 'ReportDamaged',
-      component: ReportDamaged
+      path: '/report/tool',
+      name: 'ReportToolBroken',
+      component: ReportToolBroken
     },
     {
       path: '/setting',

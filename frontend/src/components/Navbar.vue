@@ -2,11 +2,9 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-second bg-white shadow-sm fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">
-          <!-- <font color="black">{{navbar.brand}}</font>
-          <font color="#2645ff">{{navbar.brandMeeting}}</font> -->
+        <router-link :to="{path: '/home' }" class="navbar-brand" replace>
           <font color="black">{{navbar.brand}}{{navbar.brandMeeting}}</font>
-        </a>
+        </router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -35,12 +33,20 @@
                 aria-expanded="false"
               >{{ navbar.bookingTitle }}</a>
               <div class="dropdown-menu" aria-labelledby="navbarBookingDropdown">
-                <router-link :to="{path: '/booking' }" class="dropdown-item" replace>{{ navbar.bookingDropdown.booking }}</router-link>
-                <router-link :to="{path: '/manage/booking' }" class="dropdown-item" replace>{{ navbar.bookingDropdown.bookingInformation }}</router-link>
+                <router-link
+                  :to="{path: '/booking' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.bookingDropdown.booking }}</router-link>
+                <router-link
+                  :to="{path: '/manage/booking' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.bookingDropdown.bookingInformation }}</router-link>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">{{ navbar.reportDamaged }}</a>
+              <router-link :to="{path: '/report/tool' }" class="nav-link" replace>{{ navbar.reportDamaged }}</router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
