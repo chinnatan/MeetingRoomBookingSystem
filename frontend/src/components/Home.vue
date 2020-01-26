@@ -10,17 +10,17 @@
           <div class="row">
             <div class="col-md-12">
               <h1 class="font-color-primary text-left">
-                MRBS
-                <small class="text-muted">Meeting Room Booking System</small>
+                {{ content.text.title }}
+                <small class="text-muted">{{ content.text.description }}</small>
               </h1>
               <hr class="my-4" />
               <ul class="list-unstyled text-left">
                 <li>
-                  <h3 class="text-left">นโยบายสำหรับการใช้งานระบบ</h3>
+                  <h3 class="text-left">{{ content.text.policy.title }}</h3>
                   <ul>
-                    <li>เมื่อมีการจองห้องแล้วผู้จองสามารถยกเลิกการจองห้องได้ภายในระยะเวลาที่กำหนดให้แก่ระบบ</li>
-                    <li>เมื่อจองห้องแล้วผู้จองต้องมาใช้งานห้องภายในระยะเวลาที่จอง</li>
-                    <li>สามารถมาเข้าใช้งานได้ช้าภายในระยะเวลาที่กำหนดให้แก่ระบบ</li>
+                    <li>{{ content.text.policy.no1 }}</li>
+                    <li>{{ content.text.policy.no2 }}</li>
+                    <li>{{ content.text.policy.no3 }}</li>
                   </ul>
                 </li>
               </ul>
@@ -28,7 +28,9 @@
           </div>
           <div class="row">
               <div class="col-md-12">
-                  <button type="button" class="btn btn-lg btn-outline-variasi-warna">เริ่มต้นใช้งาน</button>
+                <router-link :to="{path: '/booking' }" replace>
+                  <button type="button" class="btn btn-lg btn-outline-variasi-warna">{{ content.button.start }}</button>
+                </router-link>
               </div>
           </div>
         </div>
@@ -47,15 +49,20 @@ export default {
   },
   data() {
     return {
-      title: {
-        nameEn: "Meeting Room Booking System",
-        nameTh: "ระบบจองห้องประชุม"
-      },
-      signin: {
-        title: "Sign In",
-        txtUsername: "Username",
-        txtPassword: "Password",
-        txtLogin: "Login"
+      content: {
+        text: {
+          title: "MRBS",
+          description: "Meeting Room Booking System",
+          policy: {
+            title: "นโยบายสำหรับการใช้งานระบบ",
+            no1: "เมื่อมีการจองห้องแล้วผู้จองสามารถยกเลิกการจองห้องได้ภายในระยะเวลาที่กำหนดให้แก่ระบบ",
+            no2: "เมื่อจองห้องแล้วผู้จองต้องมาใช้งานห้องภายในระยะเวลาที่จอง",
+            no3: "สามารถมาเข้าใช้งานได้ช้าภายในระยะเวลาที่กำหนดให้แก่ระบบ"
+          }
+        },
+        button: {
+          start: "เริ่มต้นใช้งาน"
+        }
       }
     };
   }
