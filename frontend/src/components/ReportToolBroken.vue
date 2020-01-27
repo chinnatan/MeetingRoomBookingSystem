@@ -14,7 +14,12 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <button type="button" class="btn btn-outline-variasi-warna col-md-12">{{ content.button.report_problem }}</button>
+              <button
+                type="button"
+                class="btn btn-outline-variasi-warna col-md-12"
+                data-toggle="modal"
+                data-target="#report-problem-modal"
+              >{{ button.report_problem }}</button>
             </div>
           </div>
           <div class="row mt-3 mb-5">
@@ -134,6 +139,65 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade text-left"
+      id="report-problem-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form>
+            <div class="modal-header">
+              <h5 class="modal-title font-color-primary" id="report-title">{{ modal.text.title }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="room-name-select">{{ modal.text.room_name }}</label>
+                <select class="form-control" id="room-name-select">
+                  <option selected disabled hidden>{{ modal.text.option.room_name }}</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+                <small
+                  id="room-name-select-help"
+                  class="form-text text-muted"
+                >{{ modal.text.description.room_name }}</small>
+              </div>
+              <div class="form-group">
+                <label for="tool-name-select">{{ modal.text.tool_name }}</label>
+                <select class="form-control" id="tool-name-select">
+                  <option selected disabled hidden>{{ modal.text.option.tool_name }}</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </select>
+                <small
+                  id="tool-name-select-help"
+                  class="form-text text-muted"
+                >{{ modal.text.description.tool_name }}</small>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ button.close }}</button>
+              <button type="reset" class="btn btn-danger">{{ button.reset }}</button>
+              <button type="submit" class="btn btn-success">{{ button.accept }}</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -154,9 +218,27 @@ export default {
           inprocess: "กำลังดำเนินการแก้ไขปัญหา",
           completed: "แก้ไขปัญหาเรียบร้อย",
           no_data: "ไม่พบข้อมูล"
-        },
-        button: {
-          report_problem: "แจ้งปัญหา"
+        }
+      },
+      button: {
+          report_problem: "แจ้งปัญหา",
+          close: "ปิด",
+          reset: "คืนค่าเริ่มต้น",
+          accept: "ยืนยัน"
+      },
+      modal: {
+        text: {
+          title: "แจ้งอุปกรณ์เสียหาย",
+          room_name: "ชื่อห้อง",
+          tool_name: "ชื่ออุปกรณ์",
+          description: {
+            room_name: "แสดงเฉพาะที่ได้ทำการเข้าใช้งานเท่านั้น",
+            tool_name: "แสดงเฉพาะอุปกรณ์ที่มีภายในห้องที่เลือกเท่านั้น"
+          },
+          option: {
+            room_name: "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--",
+            tool_name: "--กรุณาเลือกอุปกรณ์ที่ต้องการแจ้งปัญหา--"
+          }
         }
       }
     };
