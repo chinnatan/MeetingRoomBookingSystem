@@ -5,10 +5,10 @@ import Home from '@/components/Home'
 import Booking from '@/components/Booking'
 import ManageBooking from '@/components/ManageBooking'
 import ReportToolBroken from '@/components/ReportToolBroken'
-import Setting from '@/components/Setting'
-import Blacklist from '@/components/Blacklist'
-import ManageReportDamaged from '@/components/ManageReportDamaged'
-import ManageReportRoom from '@/components/ManageReportRoom'
+import Setting from '@/components/Admin/Setting'
+import Blacklist from '@/components/Admin/Blacklist'
+import ManageReportDamaged from '@/components/Admin/ManageReport/ManageReportDamaged'
+import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
 
 Vue.use(Router)
 
