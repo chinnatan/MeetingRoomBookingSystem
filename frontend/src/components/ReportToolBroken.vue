@@ -160,8 +160,8 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="room-name-select">{{ modal.text.room_name }}</label>
-                <select class="form-control" id="room-name-select">
-                  <option selected disabled hidden>{{ modal.text.option.room_name }}</option>
+                <select class="form-control" id="room-name-select" required>
+                  <option value="none" selected disabled hidden>{{ modal.text.option.room_name }}</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
@@ -175,8 +175,8 @@
               </div>
               <div class="form-group">
                 <label for="tool-name-select">{{ modal.text.tool_name }}</label>
-                <select class="form-control" id="tool-name-select">
-                  <option selected disabled hidden>{{ modal.text.option.tool_name }}</option>
+                <select class="form-control" id="tool-name-select" required>
+                  <option value="none" selected disabled hidden>{{ modal.text.option.tool_name }}</option>
                   <option>1</option>
                   <option>2</option>
                   <option>3</option>
