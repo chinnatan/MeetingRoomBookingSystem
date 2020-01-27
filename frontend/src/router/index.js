@@ -9,6 +9,7 @@ import Setting from '@/components/Admin/Setting'
 import Blacklist from '@/components/Admin/Blacklist'
 import ManageReportDamaged from '@/components/Admin/ManageReport/ManageReportDamaged'
 import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
+import NotFound404 from '@/components/404'
 
 Vue.use(Router)
 
@@ -58,6 +59,11 @@ export default new Router({
       path: '/manage/report/room',
       name: 'ManageReportRoom',
       component: ManageReportRoom
+    },
+    {
+      path: '*',
+      name: "NotFound404",
+      component: NotFound404
     }
   ],
   mode: 'history',
