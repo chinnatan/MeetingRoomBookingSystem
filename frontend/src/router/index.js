@@ -56,7 +56,7 @@ export default new Router({
       component: ManageReportToolBroken
     },
     {
-      path: '/manage/report/room',
+      path: '/admin/manage/report/room',
       name: 'ManageReportRoom',
       component: ManageReportRoom
     },

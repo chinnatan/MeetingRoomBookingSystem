@@ -9,8 +9,8 @@
         <div class="col-md-12">
           <div class="row mt-5 p-3">
             <div class="col-md-12">
-              <h1 class="font-color-primary">จัดการรายงาน</h1>
-              <small>สำหรับจัดการรายงานสรุปการแจ้งอุปกรณ์เสียหาย</small>
+              <h1 class="font-color-primary">{{ content.text.title }}</h1>
+              <small>{{ content.text.title_description }}</small>
             </div>
           </div>
           <div class="row">
@@ -19,7 +19,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-12">
-                      <h5 class="card-title">กรองข้อมูลตาม</h5>
+                      <h5 class="card-title">{{ content.text.filter.title }}</h5>
                     </div>
                   </div>
                   <div class="row">
@@ -27,14 +27,14 @@
                       <div class="form-row text-left">
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="select-room">เลือกห้องที่ต้องการ</label>
+                            <label for="select-room">{{ content.text.filter.select_room_label }}</label>
                             <select class="form-control" id="select-room">
                               <option
                                 value="none"
                                 selected
                                 disabled
                                 hidden
-                              >--กรุณาเลือกห้องที่ต้องการ--</option>
+                              >{{ content.text.filter.option.default_select_room }}</option>
                               <option>1</option>
                               <option>2</option>
                               <option>3</option>
@@ -45,13 +45,13 @@
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="select-start-date">เลือกวันที่ต้องการเริ่มต้น</label>
+                            <label for="select-start-date">{{ content.text.filter.select_start_date_label }}</label>
                             <input type="date" class="form-control" id="select-start-date" />
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="select-end-date">เลือกวันที่ต้องการสิ้นสุด</label>
+                            <label for="select-end-date">{{ content.text.filter.select_end_date_label }}</label>
                             <input type="date" class="form-control" id="select-end-date" />
                           </div>
                         </div>
@@ -68,7 +68,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-12">
-                      <h5 class="card-title">รายงานสรุปการแจ้งอุปกรณ์เสียหาย</h5>
+                      <h5 class="card-title">{{ content.text.report.title }}</h5>
                     </div>
                   </div>
                   <div class="row">
@@ -77,11 +77,11 @@
                         <table class="table">
                           <thead>
                             <tr>
-                              <th scope="col">#</th>
-                              <th scope="col">ชื่ออุปกรณ์</th>
-                              <th scope="col">ชื่อห้อง</th>
-                              <th scope="col">สถานะของอุปกรณ์</th>
-                              <th scope="col">สถานะของรายงาน</th>
+                              <th scope="col">{{ content.text.report.table.thead_no0 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no1 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no2 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -144,7 +144,7 @@
           <div class="row mt-2 mb-5">
             <div class="col-md-12">
               <button type="button" class="btn btn-outline-variasi-warna col-md-12">
-                พิมพ์รายงาน
+                {{ button.print_report }}
                 <i class="fa fa-print"></i>
               </button>
             </div>
@@ -153,123 +153,45 @@
       </div>
     </div>
   </div>
-  <!-- <div>
-    <navbar></navbar>
-
-    <div id="title" class="container">
-      <div class="row mt-5 p-3">
-        <div class="col-md-12">
-          <h1 class="mb-0 lh-100 font-color-primary">{{ ManageReportDamaged }}</h1>
-          <small>{{ ManageReportDamagedDetail }}</small>
-        </div>
-      </div>
-    </div>
-
-    <div id="content" class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-3">
-          <div class="row">
-            <div class="col-md-12">
-              <form>
-                <div class="form-group">
-                  <label for="lblRoomSelect">{{ ManageReportDamagedForm.lblRoomSelect }}</label>
-                  <select class="form-control" id="optRoomSelect">
-                    <option value="" selected disabled hidden>เลือก</option>
-                    <option>M03</option>
-                    <option>M04</option>
-                    <option>M21</option>
-                    <option>M22</option>
-                    <option>M23</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="lblStartDateSelect">{{ ManageReportDamagedForm.lblStartDateSelect }}</label>
-                  <input type="date" class="form-control" id="dteStartDateSelect" />
-                </div>
-                <div class="form-group">
-                  <label for="lblEndDateSelect">{{ ManageReportDamagedForm.lblEndDateSelect }}</label>
-                  <input type="date" class="form-control" id="dteEndDateSelect" />
-                </div>
-                <div class="form-group">
-                  <button
-                    type="button"
-                    class="btn btn-info col-md-12"
-                  >{{ ManageReportDamagedForm.btnMakeReport }}</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-9">
-          <div class="card shadow">
-            <div class="card-body">
-              <div class="table-responsive text-left">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">{{ ManageReportDamagedTable.lblRoomName }}</th>
-                      <th scope="col">{{ ManageReportDamagedTable.lblDetailReport }}</th>
-                      <th scope="col">{{ ManageReportDamagedTable.lblNameReport }}</th>
-                      <th scope="col">{{ ManageReportDamagedTable.lblDateReport }}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>M23</td>
-                      <td>แอร์ไม่ค่อยเย็น</td>
-                      <td>ชินธันย์ ชาติทอง</td>
-                      <td>22/11/2562</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>M21</td>
-                      <td>Projector ใช้งานไม่ได้</td>
-                      <td>ฐานเศรษฐ์ ลิ้มธารากร</td>
-                      <td>21/11/2562</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">3</th>
-                      <td>M22</td>
-                      <td>Projector ใช้งานไม่ได้</td>
-                      <td>ณัฐวัฒน์ เลาหะสัมพันธพร</td>
-                      <td>21/11/2562</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>-->
 </template>
 
 <script>
 import Navbar from "@/components/Navbar";
 
 export default {
-  name: "ManageReportDamaged",
+  name: "ManageReportToolBroken",
   components: {
     Navbar: Navbar
   },
   data() {
     return {
-      ManageReportDamaged: "จัดการรายงาน",
-      ManageReportDamagedDetail: "สำหรับจัดการรายงานสรุปการแจ้งอุปกรณ์เสียหาย",
-      ManageReportDamagedTable: {
-        lblRoomName: "ชื่อห้อง",
-        lblDetailReport: "รายละเอียด",
-        lblNameReport: "ชื่อผู้แจ้ง",
-        lblDateReport: "วันที่แจ้ง"
+      content: {
+        text: {
+          title: "จัดการรายงาน",
+          title_description: "สำหรับจัดการรายงานสรุปการแจ้งอุปกรณ์เสียหาย",
+          filter: {
+            title: "กรองข้อมูลตาม",
+            select_room_label: "เลือกห้องที่ต้องการ",
+            select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
+            select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
+            option: {
+              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--",
+            }
+          },
+          report: {
+            title: "รายงานสรุปการแจ้งอุปกรณ์เสียหาย",
+            table: {
+              thead_no0: "#",
+              thead_no1: "ชื่ออุปกรณ์",
+              thead_no2: "ชื่อห้อง",
+              thead_no3: "สถานะของอุปกรณ์",
+              thead_no4: "สถานะของรายงาน"
+            }
+          }
+        }
       },
-      ManageReportDamagedForm: {
-        lblRoomSelect: "เลือกห้องที่ต้องการ",
-        lblStartDateSelect: "เลือกวันที่ต้องการเริ่มต้น",
-        lblEndDateSelect: "เลือกวันที่ต้องการสิ้นสุด",
-        btnMakeReport: "ทำรายงาน"
+      button: {
+        print_report: "พิมพ์รายงาน"
       }
     };
   }
