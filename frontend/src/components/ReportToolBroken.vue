@@ -16,121 +16,140 @@
             <div class="col-md-12">
               <button
                 type="button"
+                class="btn btn-outline-danger col-md-12"
+                data-toggle="modal"
+                data-target="#report-problem-modal"
+              >{{ button.report_problem_now }}</button>
+            </div>
+          </div>
+          <div class="row mt-2">
+            <div class="col-md-12">
+              <button
+                type="button"
                 class="btn btn-outline-variasi-warna col-md-12"
                 data-toggle="modal"
                 data-target="#report-problem-modal"
               >{{ button.report_problem }}</button>
             </div>
           </div>
-          <div class="row mt-3 mb-5">
+          <div class="row mt-2">
             <div class="col-md-12">
-              <div class="accordion shadow" id="accordion-report">
-                <div class="card">
-                  <div
-                    class="card-header bg-primary text-white"
-                    id="acknowledge"
-                    data-toggle="collapse"
-                    data-target="#collapse-acknowledge"
-                    aria-expanded="true"
-                    aria-controls="collapse-acknowledge"
-                  >
-                    <h6 class="mb-0">{{ content.text.acknowledge }}</h6>
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h5 class="card-title">{{ content.text.filter.title }}</h5>
+                    </div>
                   </div>
-
-                  <div
-                    id="collapse-acknowledge"
-                    class="collapse show"
-                    aria-labelledby="acknowledge"
-                    data-parent="#accordion-report"
-                  >
-                    <div class="card-body">
-                      <div class="card-deck">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p
-                              class="card-text"
-                            >This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                            <p class="card-text">
-                              <small class="text-muted">Last updated 3 mins ago</small>
-                            </p>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-row text-left">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="select-room">{{ content.text.filter.select_room_label }}</label>
+                            <select class="form-control" id="select-room">
+                              <option
+                                value="none"
+                                selected
+                                disabled
+                                hidden
+                              >{{ content.text.filter.option.default_select_room }}</option>
+                              <option>1</option>
+                              <option>2</option>
+                              <option>3</option>
+                              <option>4</option>
+                              <option>5</option>
+                            </select>
                           </div>
                         </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p
-                              class="card-text"
-                            >This card has supporting text below as a natural lead-in to additional content.</p>
-                            <p class="card-text">
-                              <small class="text-muted">Last updated 3 mins ago</small>
-                            </p>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="select-start-date">{{ content.text.filter.select_start_date_label }}</label>
+                            <input type="date" class="form-control" id="select-start-date" />
                           </div>
                         </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p
-                              class="card-text"
-                            >This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                            <p class="card-text">
-                              <small class="text-muted">Last updated 3 mins ago</small>
-                            </p>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p
-                              class="card-text"
-                            >This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                            <p class="card-text">
-                              <small class="text-muted">Last updated 3 mins ago</small>
-                            </p>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="select-end-date">{{ content.text.filter.select_end_date_label }}</label>
+                            <input type="date" class="form-control" id="select-end-date" />
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="card">
-                  <div
-                    class="card-header bg-warning text-dark"
-                    id="inprocess"
-                    data-toggle="collapse"
-                    data-target="#collapse-inprocess"
-                    aria-expanded="false"
-                    aria-controls="collapse-inprocess"
-                  >
-                    <h6 class="mb-0">{{ content.text.inprocess }}</h6>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3 mb-5">
+            <div class="col-md-12">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">{{ content.text.report.table.thead_no0 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no1 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no2 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">1</th>
+                              <td>ไมโครโฟน</td>
+                              <td>M21</td>
+                              <td>ใช้งานได้</td>
+                              <td>แก้ไขเรียบร้อย</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">2</th>
+                              <td>ไมโครโฟน</td>
+                              <td>M22</td>
+                              <td>ใช้งานไม่ได้</td>
+                              <td>กำลังดำเนินการแก้ไข</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">3</th>
+                              <td>ไมโครโฟน</td>
+                              <td>M23</td>
+                              <td>ใช้งานไม่ได้</td>
+                              <td>กำลังดำเนินการแก้ไข</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                   </div>
-                  <div
-                    id="collapse-inprocess"
-                    class="collapse"
-                    aria-labelledby="inprocess"
-                    data-parent="#accordion-report"
-                  >
-                    <div class="card-body">{{ content.text.no_data }}</div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div
-                    class="card-header bg-success text-white"
-                    id="compelete"
-                    data-toggle="collapse"
-                    data-target="#collapse-compelete"
-                    aria-expanded="false"
-                    aria-controls="collapse-compelete"
-                  >
-                    <h6 class="mb-0">{{ content.text.completed }}</h6>
-                  </div>
-                  <div
-                    id="collapse-compelete"
-                    class="collapse"
-                    aria-labelledby="compelete"
-                    data-parent="#accordion-report"
-                  >
-                    <div class="card-body">{{ content.text.no_data }}</div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">ก่อนหน้า</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">1</a>
+                          </li>
+                          <li class="page-item active">
+                            <a class="page-link" href="#">
+                              2
+                              <span class="sr-only">(current)</span>
+                            </a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                          </li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">ต่อไป</a>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -190,7 +209,11 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ button.close }}</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >{{ button.close }}</button>
               <button type="reset" class="btn btn-danger">{{ button.reset }}</button>
               <button type="submit" class="btn btn-success">{{ button.accept }}</button>
             </div>
@@ -217,14 +240,33 @@ export default {
           acknowledge: "แจ้งปัญหาเรียบร้อย",
           inprocess: "กำลังดำเนินการแก้ไขปัญหา",
           completed: "แก้ไขปัญหาเรียบร้อย",
-          no_data: "ไม่พบข้อมูล"
+          no_data: "ไม่พบข้อมูล",
+          filter: {
+            title: "กรองข้อมูลตาม",
+            select_room_label: "เลือกห้องที่ต้องการ",
+            select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
+            select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
+            option: {
+              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--",
+            }
+          },
+          report: {
+            table: {
+              thead_no0: "#",
+              thead_no1: "ชื่ออุปกรณ์",
+              thead_no2: "ชื่อห้อง",
+              thead_no3: "สถานะของอุปกรณ์",
+              thead_no4: "สถานะของรายงาน"
+            }
+          }
         }
       },
       button: {
-          report_problem: "แจ้งปัญหา",
-          close: "ปิด",
-          reset: "คืนค่าเริ่มต้น",
-          accept: "ยืนยัน"
+        report_problem: "แจ้งปัญหา",
+        report_problem_now: "แจ้งปัญหาแบบทันที",
+        close: "ปิด",
+        reset: "คืนค่าเริ่มต้น",
+        accept: "ยืนยัน"
       },
       modal: {
         text: {

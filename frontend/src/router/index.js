@@ -6,7 +6,7 @@ import Booking from '@/components/Booking'
 import ManageBooking from '@/components/ManageBooking'
 import ReportToolBroken from '@/components/ReportToolBroken'
 import Setting from '@/components/Admin/Setting'
-import Blacklist from '@/components/Admin/Blacklist'
+import ManageUser from '@/components/Admin/ManageUser'
 import ManageReportToolBroken from '@/components/Admin/ManageReport/ManageReportToolBroken'
 import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
 import NotFound404 from '@/components/404'
@@ -41,14 +41,14 @@ export default new Router({
       component: ReportToolBroken
     },
     {
-      path: '/setting',
+      path: '/admin/setting',
       name: 'Setting',
       component: Setting
     },
     {
-      path: '/blacklist',
-      name: 'Blacklist',
-      component: Blacklist
+      path: '/admin/manage/user',
+      name: 'ManageUser',
+      component: ManageUser
     },
     {
       path: '/admin/manage/report/tool',
