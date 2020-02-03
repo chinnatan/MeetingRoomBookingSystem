@@ -64,13 +64,17 @@
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="select-start-date">{{ content.text.filter.select_start_date_label }}</label>
+                            <label
+                              for="select-start-date"
+                            >{{ content.text.filter.select_start_date_label }}</label>
                             <input type="date" class="form-control" id="select-start-date" />
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="select-end-date">{{ content.text.filter.select_end_date_label }}</label>
+                            <label
+                              for="select-end-date"
+                            >{{ content.text.filter.select_end_date_label }}</label>
                             <input type="date" class="form-control" id="select-end-date" />
                           </div>
                         </div>
@@ -207,6 +211,10 @@
                   class="form-text text-muted"
                 >{{ modal.text.description.tool_name }}</small>
               </div>
+              <div class="form-group">
+                <label for="detail-for-problem">{{ modal.text.detail_problem }}</label>
+                <textarea class="form-control" id="detail-for-problem" rows="3"></textarea>
+              </div>
             </div>
             <div class="modal-footer">
               <button
@@ -247,7 +255,7 @@ export default {
             select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
             select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
             option: {
-              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--",
+              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--"
             }
           },
           report: {
@@ -273,6 +281,7 @@ export default {
           title: "แจ้งอุปกรณ์เสียหาย",
           room_name: "ชื่อห้อง",
           tool_name: "ชื่ออุปกรณ์",
+          detail_problem: "รายละเอียดของปัญหาที่ต้องการแจ้ง",
           description: {
             room_name: "แสดงเฉพาะที่ได้ทำการเข้าใช้งานเท่านั้น",
             tool_name: "แสดงเฉพาะอุปกรณ์ที่มีภายในห้องที่เลือกเท่านั้น"
