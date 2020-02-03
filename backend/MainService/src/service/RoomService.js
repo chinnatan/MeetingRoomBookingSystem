@@ -1,7 +1,8 @@
 const MySQL = require("mysql");
 const mysqlConfig = require("../config");
 
-const NAME = "Room Service";
+const SERVICE_NAME = "ROOM SERVICE";
+const MYSQL_NAME = "MYSQL"
 
 // MySQL Option
 const HOST_MYSQL = mysqlConfig.HOST;
@@ -22,67 +23,88 @@ var mysqlCon = MySQL.createConnection({
 
 mysqlCon.connect(function (err) {
   if (err) {
-    console.log(`[${NAME}] Error -> ${err.message}`);
+    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Error -> ${err.message}`);
   } else {
-    console.log(`[${NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
+    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Connected -> ${HOST_MYSQL}:${PORT_MYSQL}`);
   }
 });
 
+// แสดงข้อมูลห้องทั้งหมดที่มีในฐานข้อมูล
 exports.getAllRoom = (req, res) => {
-  mysqlCon.query("select * from room", function (err, results, fields) {
+  const FUNCTION_NAME = "GET ALL ROOM"
+  mysqlCon.query("select * from Room", function (err, results, fields) {
     if (err) {
-      return res.json(err);
+      return res.status(500).json(err);
     } else {
       if (results.length) {
-        console.log(`[${NAME}] -> Get All Room Data Success`);
-        return res.status(200).json(results);
-      }
-    }
-  });
-};
-
-exports.getRoomById = (req, res) => {
-  var roomId = req.params.roomid;
-
-  mysqlCon.query("select * from room where room_id = ?", [roomId], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room By ID Success`);
-        return res.status(200).json(results);
-      }
-    }
-  });
-};
-
-exports.getRoomByFloor = (req, res) => {
-  var roomFloor = req.params.roomfloor;
-
-  mysqlCon.query("select * from room where room_floor = ?", [roomFloor], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room By Floor Success`);
-        return res.status(200).json(results);
-      }
-    }
-  });
-};
-
-exports.getRoomStatusById = (req, res) => {
-  var roomId = req.params.roomid;
-
-  mysqlCon.query("select * from room join booking on (room.room_id = booking.room_id) where room.room_id = ?", [roomId], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room Status By ID Success`);
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get All Room Data Found`);
         return res.status(200).json(results);
       } else {
-        return res.status(200).json(true);
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> All Room Data Not Found`);
+        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+      }
+    }
+  });
+};
+
+// แสดงข้อมูลห้องด้วย ROOM ID
+exports.getRoomById = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM BY ID"
+
+  var roomId = req.params.roomid;
+
+  mysqlCon.query("select * from Room where RoomId = ?", [roomId], function (err, results, fields) {
+    if (err) {
+      return res.status(500).json(err);
+    } else {
+      if (results.length) {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
+        return res.status(200).json(results);
+      } else {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Not Found`);
+        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+      }
+    }
+  });
+};
+
+// แสดงข้อมูลของห้องทั้งหมดในชั้นที่ต้องการ
+exports.getRoomByFloor = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM BY FLOOR"
+
+  var roomFloor = req.params.roomfloor;
+
+  mysqlCon.query("select * from Room where RoomFloor = ?", [roomFloor], function (err, results, fields) {
+    if (err) {
+      return res.status(500).json(err);
+    } else {
+      if (results.length) {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Floor Found`);
+        return res.status(200).json(results);
+      } else {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Floor Not Found`);
+        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+      }
+    }
+  });
+};
+
+// แสดงรายการการจองของห้องทั้งหมดโดยใช้ ROOM ID
+exports.getRoomBookingStatusById = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM BOOKING STATUS BY ID"
+
+  var roomId = req.params.roomid;
+
+  mysqlCon.query("select * from Room join Booking on (Room.RoomId = Booking.RoomId) where Room.RoomId = ?", [roomId], function (err, results, fields) {
+    if (err) {
+      return res.status(500).json(err);
+    } else {
+      if (results.length) {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Found`);
+        return res.status(200).json(results);
+      } else {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Not Found`);
+        return res.status(404).json(true);
       }
     }
   });

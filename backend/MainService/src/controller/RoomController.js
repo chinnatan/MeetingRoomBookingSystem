@@ -11,6 +11,6 @@ router.use(bodyParser.json());
 router.get("/all", roomService.getAllRoom);
 router.get("/:roomid", roomService.getRoomById);
 router.get("/floor/:roomfloor", roomService.getRoomByFloor);
-router.get("/status/:roomid", roomService.getRoomStatusById);
+router.get("/status/:roomid", roomService.getRoomBookingStatusById);
 
 module.exports = router;
