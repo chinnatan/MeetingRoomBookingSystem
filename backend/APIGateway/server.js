@@ -30,7 +30,8 @@ app.use((req, res, next) => {
                 if(err) {
                     return res.status(401).json(err)
                 } else {
-                    return res.status(200).json(detoken) // Verify สำเร็จ แสดงข้อมูลในรูปแบบ JSON
+                    return next()
+                    // return res.status(200).json(detoken) // Verify สำเร็จ แสดงข้อมูลในรูปแบบ JSON
                 }
             })
         }
