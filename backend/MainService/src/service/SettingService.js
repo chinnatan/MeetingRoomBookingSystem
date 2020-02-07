@@ -23,13 +23,16 @@ exports.getSetting = (req, res) => {
     } else { // ไม่พบไฟล์
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> File Setting Not Found`);
         var setting = {
-            "MaximumTimeBookingPerTime": 0, // เวลาที่สามารถจองได้สูงสุดต่อครั้ง และต่อวัน (ชั่วโมง)
-            "MaximumDayBookingPerTime": 0, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
-            "DelayedAuthen": 0, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
+            "HighestPeriodPerTime": 0, // ระยะเวลาที่สามารถจองได้สูงสุดต่อครั้ง (ชั่วโมง)
+            "HighestDatePerTime": 0, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
+            "SlowestActivation": 0, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
             "AdvanceBooking": 0, // เวลาในการทำการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
             "AdvanceCancel": 0, // เวลาในการยกเลิกการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
-            "option": {
-                "AdvanceBooking": "วัน", 
+            "Unit": {
+                "HighestPeriodPerTime": "ชั่วโมง",
+                "HighestDatePerTime": "วัน",
+                "SlowestActivation": "นาที",
+                "AdvanceBooking": "วัน",
                 "AdvanceCancel": "วัน"
             }
         }
@@ -51,14 +54,17 @@ exports.updateSetting = (req, res) => {
     const FUNCTION_NAME = "UPDATE SETTING"
 
     var setting = {
-        "MaximumTimeBookingPerTime": req.body.MaximumTimeBookingPerTime, // เวลาที่สามารถจองได้สูงสุดต่อครั้ง และต่อวัน (ชั่วโมง)
-        "MaximumDayBookingPerTime": req.body.MaximumDayBookingPerTime, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
-        "DelayedAuthen": req.body.DelayedAuthen, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
+        "HighestPeriodPerTime": req.body.HighestPeriodPerTime, // ระยะเวลาที่สามารถจองได้สูงสุดต่อครั้ง (ชั่วโมง)
+        "HighestDatePerTime": req.body.HighestDatePerTime, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
+        "SlowestActivation": req.body.SlowestActivation, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
         "AdvanceBooking": req.body.AdvanceBooking, // เวลาในการทำการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
         "AdvanceCancel": req.body.AdvanceCancel, // เวลาในการยกเลิกการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
-        "option": {
-            "AdvanceBooking": req.body.option.AdvanceBooking, 
-            "AdvanceCancel": req.body.option.AdvanceCancel
+        "Unit": {
+            "HighestPeriodPerTime": req.body.Unit.HighestPeriodPerTime,
+            "HighestDatePerTime": req.body.Unit.HighestDatePerTime,
+            "SlowestActivation": req.body.Unit.SlowestActivation,
+            "AdvanceBooking": req.body.Unit.AdvanceBooking,
+            "AdvanceCancel": req.body.Unit.AdvanceCancel
         }
     }
 
@@ -69,7 +75,7 @@ exports.updateSetting = (req, res) => {
             throw err;
         } else {
             console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Write File Setting`);
-            return res.status(200).json({"message": "บันทึกเรียบร้อย"});
+            return res.status(200).json({ "message": "บันทึกเรียบร้อย" });
         }
     })
 }
