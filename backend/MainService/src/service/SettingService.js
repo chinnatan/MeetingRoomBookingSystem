@@ -32,8 +32,14 @@ exports.getSetting = (req, res) => {
                 "HighestPeriodPerTime": "ชั่วโมง",
                 "HighestDatePerTime": "วัน",
                 "SlowestActivation": "นาที",
-                "AdvanceBooking": "วัน",
-                "AdvanceCancel": "วัน"
+                "AdvanceBooking": {
+                    "ShortName": "H",
+                    "LongName": "ชั่วโมง"
+                },
+                "AdvanceCancel": {
+                    "ShortName": "H",
+                    "LongName": "ชั่วโมง"
+                }
             }
         }
         // เขียนไฟล์ขึ้นมาใหม่และแสดงผล
@@ -63,8 +69,14 @@ exports.updateSetting = (req, res) => {
             "HighestPeriodPerTime": req.body.Unit.HighestPeriodPerTime,
             "HighestDatePerTime": req.body.Unit.HighestDatePerTime,
             "SlowestActivation": req.body.Unit.SlowestActivation,
-            "AdvanceBooking": req.body.Unit.AdvanceBooking,
-            "AdvanceCancel": req.body.Unit.AdvanceCancel
+            "AdvanceBooking": {
+                "ShortName": req.body.Unit.AdvanceBooking.ShortName,
+                "LongName": req.body.Unit.AdvanceBooking.LongName
+            },
+            "AdvanceCancel": {
+                "ShortName": req.body.Unit.AdvanceCancel.ShortName,
+                "LongName": req.body.Unit.AdvanceCancel.LongName
+            }
         }
     }
 

@@ -1,1 +1,20 @@
-{"MaximumTimeBookingPerTime":1,"MaximumDayBookingPerTime":0,"DelayedAuthen":0,"AdvanceBooking":0,"AdvanceCancel":0,"option":{"AdvanceBooking":"นาที","AdvanceCancel":"วัน"}}
+{
+    "HighestPeriodPerTime": 1,
+    "HighestDatePerTime": 1,
+    "SlowestActivation": 0,
+    "AdvanceBooking": 1,
+    "AdvanceCancel": 0,
+    "Unit": {
+        "HighestPeriodPerTime": "ชั่วโมง",
+        "HighestDatePerTime": "วัน",
+        "SlowestActivation": "นาที",
+        "AdvanceBooking": {
+            "ShortName": "H",
+            "LongName": "ชั่วโมง"
+        },
+        "AdvanceCancel": {
+            "ShortName": "H",
+            "LongName": "ชั่วโมง"
+        }
+    }
+}
