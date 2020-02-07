@@ -8,9 +8,6 @@ var bodyParser = require("body-parser");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.post("/send", BookingService.increaseBooking);
-router.get("/:roomid", BookingService.getRoomById);
-router.get("/floor/:roomfloor", BookingService.getRoomByFloor);
-router.get("/status/:roomid", BookingService.getRoomStatusById);
+router.post("/send", BookingService.addBooking);
 
 module.exports = router;

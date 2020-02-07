@@ -24,6 +24,7 @@ var mysqlCon = MySQL.createConnection({
 mysqlCon.connect(function (err) {
   if (err) {
     console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Error -> ${err.message}`);
+    throw new Error(err);
   } else {
     console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Connected -> ${HOST_MYSQL}:${PORT_MYSQL}`);
   }

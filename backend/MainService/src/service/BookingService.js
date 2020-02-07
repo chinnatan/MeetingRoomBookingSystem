@@ -1,7 +1,9 @@
 const MySQL = require("mysql");
 const mysqlConfig = require("../config");
+const setting = require("../setting.json")
 
-const NAME = "Booking Service";
+const SERVICE_NAME = "BOOKING SERVICE";
+const MYSQL_NAME = "MYSQL"
 
 // MySQL Option
 const HOST_MYSQL = mysqlConfig.HOST;
@@ -22,80 +24,118 @@ var mysqlCon = MySQL.createConnection({
 
 mysqlCon.connect(function (err) {
   if (err) {
-    console.log(`[${NAME}] Error -> ${err.message}`);
+    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Error -> ${err.message}`);
+    throw new Error(err);
   } else {
-    console.log(`[${NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
+    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Connected -> ${HOST_MYSQL}:${PORT_MYSQL}`);
   }
 });
 
-exports.increaseBooking = (req, res) => {
-    var bookingTitle = req.body.title
-    var bookintDetail = req.body.detail
-    var bookingStartDate = req.body.startDate
-    var bookingEndDate = req.body.endDate
-    var bookingStartTime = req.body.startTime
-    var bookingEndTime = req.body.endTime
-    var bookingUID = req.body.UID
-    var roomId = req.body.roomId
+function padZeroLeft(str, max) {
+  str = str.toString();
+  return str.length < max ? padZeroLeft("0" + str, max) : str;
+}
 
-    console.log(bookingStartTime)
+function generatePin(UserId) {
+  const FUNCTION_NAME = "GENERATE PIN"
 
+  console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Generate PIN`);
+  var fourDigitPin = Math.floor(1000 + Math.random() * 9000);
+  var sixDigitPin = padZeroLeft(UserId, 2) + fourDigitPin.toString()
 
-//   mysqlCon.query("select * from room", function (err, results, fields) {
-//     if (err) {
-//       return res.json(err);
-//     } else {
-//       if (results.length) {
-//         console.log(`[${NAME}] -> Get All Room Data Success`);
-//         return res.status(200).json(results);
-//       }
-//     }
-//   });
-};
+  return sixDigitPin
+}
 
-exports.getRoomById = (req, res) => {
-  var roomId = req.params.roomid;
+exports.addBooking = (req, res) => {
+  const FUNCTION_NAME = "ADD BOOKING"
 
-  mysqlCon.query("select * from room where room_id = ?", [roomId], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room By ID Success`);
-        return res.status(200).json(results);
+  // var BookingTitle = req.body.BookingTitle
+  // var BookingDetail = req.body.BookingDetail
+  var BookingPin = generatePin(req.body.UserId)
+  // var BookingDate = req.body.BookingDate
+  var BookingStartDate = req.body.BookingStartDate
+  var BookingEndDate = req.body.BookingEndDate
+  var BookingStartTime = req.body.BookingStartTime
+  var BookingEndTime = req.body.BookingEndTime
+  // var BookingStatus = req.BookingStatus
+  // var UserId = req.body.UserId
+  // var RoomId = req.body.RoomId
+
+  let [startDateYear, startDateMonth, startDateDay] = BookingStartDate.split('-')
+  let [startTimeHour, startTimeMinute, startTimeSecond] = BookingStartTime.split(':')
+  let [endDateYear, endDateMonth, endDateDay] = BookingEndDate.split('-')
+  let [endTimeHour, endTimeMinute, endTimeSecond] = BookingEndTime.split(':')
+
+  var startDateTime = new Date(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMinute, startTimeSecond)
+  var endDateTime = new Date(endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMinute, endTimeSecond)
+  var dateNow = new Date()
+
+  try {
+    if (setting.Unit.AdvanceBooking.ShortName == 'D') {
+      var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000))
+
+      if (diffDay < setting.AdvanceBooking) {
+        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw message
+      }
+    } else if (setting.Unit.AdvanceBooking.ShortName == 'H') {
+      var diffHours = startDateTime.getHours() - dateNow.getHours()
+
+      if (diffHours < 0) {
+        var message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+        throw message
+      } else if (diffHours < setting.AdvanceBooking) {
+        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw message
+      }
+    } else if (setting.Unit.AdvanceBooking.ShortName == 'M') {
+      var diffMinutes = startDateTime.getMinutes() - dateNow.getMinutes()
+
+      if (diffMinutes < 0) {
+        var message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+        throw message
+      } else if (diffMinutes < setting.AdvanceBooking) {
+        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw message
       }
     }
-  });
-};
 
-exports.getRoomByFloor = (req, res) => {
-  var roomFloor = req.params.roomfloor;
+    // คิดระยะเวลา
+    var diffH = endDateTime.getHours() - startDateTime.getHours()
+    var diffMin = Math.abs(endDateTime.getMinutes() - startDateTime.getMinutes())
 
-  mysqlCon.query("select * from room where room_floor = ?", [roomFloor], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room By Floor Success`);
-        return res.status(200).json(results);
-      }
+    // คิดจำนวนวัน
+    var diffDate = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000) + 1)
+
+    // รวมชั่วโมงและนาทีเป็น string
+    var diffTime = diffH.toString() + "." + diffMin.toString()
+
+    // แปลงระยะเวลาเป็น float
+    var diffTime = parseFloat(diffTime)
+
+    // ตรวจสอบระยะเวลาและวันที่กับการตั้งค่าที่ระบบกำหนด
+    if (diffTime < setting.HighestPeriodPerTime) {
+      var message = "ไม่สามารถทำรายการได้ เนื่องจากระยะเวลาที่ต้องการจองเกินกำหนด (" + setting.HighestPeriodPerTime + " " + setting.Unit.HighestPeriodPerTime + ")"
+
+      throw message
+    } else if (diffDate > setting.HighestDatePerTime) {
+      var message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ต้องการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
+
+      throw message
     }
-  });
-};
+  } catch (err) {
+    return res.status(200).json({ "message": err })
+  }
 
-exports.getRoomStatusById = (req, res) => {
-  var roomId = req.params.roomid;
+  // เมื่อผ่านเงือนไขทั้งหมด
+  return res.status(200).json({ "message": "เข้าสู่ระบบ" })
 
-  mysqlCon.query("select * from room join booking on (room.room_id = booking.room_id) where room.room_id = ?", [roomId], function (err, results, fields) {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${NAME}] -> Get Room Status By ID Success`);
-        return res.status(200).json(results);
-      } else {
-        return res.status(200).json(true);
-      }
-    }
-  });
+  // mysqlCon.beginTransaction(function(err) {
+  //   if(err) {
+  //     console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+  //     throw err
+  //   } else {
+  //     var sqlInsertBooking = "insert into Booking "
+  //   }
+  // })
 };
