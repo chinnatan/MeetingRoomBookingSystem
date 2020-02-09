@@ -32,7 +32,7 @@ mysqlCon.connect(function (err) {
 });
 
 function padZeroLeft(str, max) {
-  str = str.toString();
+  str = str.toString().substring(str.length - 2, str.length);
   return str.length < max ? padZeroLeft("0" + str, max) : str;
 }
 
@@ -49,60 +49,76 @@ function generatePin(UserId) {
 exports.addBooking = (req, res) => {
   const FUNCTION_NAME = "ADD BOOKING"
 
-  // var BookingTitle = req.body.BookingTitle
-  // var BookingDetail = req.body.BookingDetail
+  var BookingTitle = req.body.BookingTitle
+  var BookingDetail = req.body.BookingDetail
   var BookingPin = generatePin(req.body.UserId)
-  // var BookingDate = req.body.BookingDate
+  var BookingDate = new Date()
   var BookingStartDate = req.body.BookingStartDate
   var BookingEndDate = req.body.BookingEndDate
   var BookingStartTime = req.body.BookingStartTime
   var BookingEndTime = req.body.BookingEndTime
-  // var BookingStatus = req.BookingStatus
-  // var UserId = req.body.UserId
-  // var RoomId = req.body.RoomId
+  var BookingStatus = req.body.BookingStatus
+  var UserId = req.body.UserId
+  var RoomId = req.body.RoomId
 
-  let [startDateYear, startDateMonth, startDateDay] = BookingStartDate.split('-')
   let [startTimeHour, startTimeMinute, startTimeSecond] = BookingStartTime.split(':')
-  let [endDateYear, endDateMonth, endDateDay] = BookingEndDate.split('-')
   let [endTimeHour, endTimeMinute, endTimeSecond] = BookingEndTime.split(':')
 
-  var startDateTime = new Date(startDateYear, startDateMonth, startDateDay, startTimeHour, startTimeMinute, startTimeSecond)
-  var endDateTime = new Date(endDateYear, endDateMonth, endDateDay, endTimeHour, endTimeMinute, endTimeSecond)
+  var startTime = new Date()
+  startTime.setHours(startTimeHour)
+  startTime.setMinutes(startTimeMinute)
+  startTime.setSeconds(startTimeSecond)
+  var endTime = new Date()
+  endTime.setHours(endTimeHour)
+  endTime.setMinutes(endTimeMinute)
+  endTime.setSeconds(endTimeSecond)
+
+  var startDateTime = Date.parse(BookingStartDate)
+  startDateTime = new Date(startDateTime)
+  var endDateTime = Date.parse(BookingEndDate)
+  endDateTime = new Date(endDateTime)
   var dateNow = new Date()
 
   try {
-    if (setting.Unit.AdvanceBooking.ShortName == 'D') {
-      var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000))
+    var error_message
 
-      if (diffDay < setting.AdvanceBooking) {
-        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
-        throw message
+    // กระบวนการตรวจสอบเงื่อนไขการจอง
+    // 1.ตรวจสอบเวลาในการทำการจองล่วงหน้าในการตั้งค่าของระบบว่ามีหน่วยอะไร (นาที = M / ชั่วโมง = H / วัน = D)
+    // 2.เมื่อทราบแล้วว่าในการตั้งค่าของระบบเป็นหน่วยอะไร จะทำการคำนวณตามหน่วยนั้นๆ
+    // 3.นำสิ่งที่คำนวณได้มาตรวจสอบตามการตั้งค่าของระบบ ถ้าไม่ผ่านให้โยน Error Message กลับไปหาผู้ใช้
+
+    if (setting.Unit.AdvanceBooking.ShortName == 'D') { // 1
+      var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000)) // 2
+
+      if (diffDay < setting.AdvanceBooking) { // 3
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw error_message
       }
-    } else if (setting.Unit.AdvanceBooking.ShortName == 'H') {
-      var diffHours = startDateTime.getHours() - dateNow.getHours()
+    } else if (setting.Unit.AdvanceBooking.ShortName == 'H') { // 1
+      var diffHours = startTime.getHours() - dateNow.getHours() // 2
 
-      if (diffHours < 0) {
-        var message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
-        throw message
+      if (diffHours < 0) { // 3
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+        throw error_message
       } else if (diffHours < setting.AdvanceBooking) {
-        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
-        throw message
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw error_message
       }
-    } else if (setting.Unit.AdvanceBooking.ShortName == 'M') {
-      var diffMinutes = startDateTime.getMinutes() - dateNow.getMinutes()
+    } else if (setting.Unit.AdvanceBooking.ShortName == 'M') { // 1
+      var diffMinutes = startTime.getMinutes() - dateNow.getMinutes() // 2
 
-      if (diffMinutes < 0) {
-        var message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
-        throw message
+      if (diffMinutes < 0) { // 3
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+        throw error_message
       } else if (diffMinutes < setting.AdvanceBooking) {
-        var message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
-        throw message
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        throw error_message
       }
     }
 
     // คิดระยะเวลา
-    var diffH = endDateTime.getHours() - startDateTime.getHours()
-    var diffMin = Math.abs(endDateTime.getMinutes() - startDateTime.getMinutes())
+    var diffH = endTime.getHours() - startTime.getHours()
+    var diffMin = Math.abs(endTime.getMinutes() - startTime.getMinutes())
 
     // คิดจำนวนวัน
     var diffDate = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000) + 1)
@@ -114,28 +130,85 @@ exports.addBooking = (req, res) => {
     var diffTime = parseFloat(diffTime)
 
     // ตรวจสอบระยะเวลาและวันที่กับการตั้งค่าที่ระบบกำหนด
-    if (diffTime < setting.HighestPeriodPerTime) {
-      var message = "ไม่สามารถทำรายการได้ เนื่องจากระยะเวลาที่ต้องการจองเกินกำหนด (" + setting.HighestPeriodPerTime + " " + setting.Unit.HighestPeriodPerTime + ")"
+    if (diffTime > setting.HighestPeriodPerTime) {
+      error_message = "ไม่สามารถทำรายการได้ เนื่องจากระยะเวลาที่ต้องการจองเกินกำหนด (" + setting.HighestPeriodPerTime + " " + setting.Unit.HighestPeriodPerTime + ")"
 
-      throw message
+      throw error_message
     } else if (diffDate > setting.HighestDatePerTime) {
-      var message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ต้องการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
+      error_message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ที่ต้องการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
 
-      throw message
+      throw error_message
     }
+
+    // เมื่อผ่านเงือนไขทั้งหมดจะทำการเพิ่มข้อมูลการจองทั้งหมดลงฐานข้อมูล
+    mysqlCon.beginTransaction(function (err) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+        throw err
+      } else {
+        var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, UserId, RoomId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        mysqlCon.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, UserId, RoomId], function (err, results, fields) {
+          if (err) {
+            mysqlCon.rollback(function () {
+              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+              error_message = "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ"
+              throw error_message
+            })
+          }
+          mysqlCon.commit(function (err) {
+            if (err) {
+              return mysqlCon.rollback(function () {
+                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+                error_message = "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ"
+                throw error_message
+              })
+            }
+
+            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Booking Successfully"`);
+
+            // ส่งรหัสผ่านสำหรับการเข้าใช้งานห้องไปที่ Email ของผู้ใช้งาน
+            const nodemailer = require('nodemailer');
+            const gmailConfig = require("../config");
+
+            // config สำหรับของ gmail
+            const transporter = nodemailer.createTransport({
+              service: 'gmail',
+              secure: false, // use SSL
+              port: 25, // port for secure SMTP
+              auth: {
+                user: gmailConfig.GMAIL.USER, // your email
+                pass: gmailConfig.GMAIL.PWD // your email password
+              },
+              tls: {
+                rejectUnauthorized: false
+              }
+            });
+
+            let mailOptions = {
+              from: gmailConfig.GMAIL.USER,                // sender
+              to: '59070040@it.kmitl.ac.th',                // list of receivers
+              subject: '[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง',              // Mail subject
+              html: `<b>หมายเลขประจำห้องที่ทำการจอง : </b>${RoomId}<br>
+              <b>หัวข้อการจอง : </b>${BookingTitle}<br>
+              <b>วันที่จอง : </b>${startDateTime.toDateString()} - ${endDateTime.toDateString()}<br>
+              <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
+            };
+
+            transporter.sendMail(mailOptions, function (err, info) {
+              if (err)
+                console.log(err)
+              else {
+                console.log(info);
+                transporter.close(); // shut down the connection pool, no more messages
+              }
+            });
+
+            res.status(200).json({ "Pin": BookingPin, "message": "จองห้องสำเร็จ" })
+          })
+        })
+      }
+    })
   } catch (err) {
     return res.status(200).json({ "message": err })
   }
-
-  // เมื่อผ่านเงือนไขทั้งหมด
-  return res.status(200).json({ "message": "เข้าสู่ระบบ" })
-
-  // mysqlCon.beginTransaction(function(err) {
-  //   if(err) {
-  //     console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
-  //     throw err
-  //   } else {
-  //     var sqlInsertBooking = "insert into Booking "
-  //   }
-  // })
 };
