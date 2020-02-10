@@ -10,5 +10,6 @@ router.use(bodyParser.json());
 
 router.post("/send", BookingService.addBooking);
 router.put("/update", BookingService.editBooking);
+router.put("/cancel", BookingService.cancelBooking);
 
 module.exports = router;
