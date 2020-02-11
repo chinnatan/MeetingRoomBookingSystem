@@ -184,7 +184,7 @@ exports.addBooking = (req, res) => {
               }
             });
 
-            let mailOptions = {
+            let addMailOptions = {
               from: gmailConfig.GMAIL.USER,                // sender
               to: '59070040@it.kmitl.ac.th',                // list of receivers
               subject: '[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง',              // Mail subject
@@ -194,7 +194,7 @@ exports.addBooking = (req, res) => {
               <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
             };
 
-            transporter.sendMail(mailOptions, function (err, info) {
+            transporter.sendMail(addMailOptions, function (err, info) {
               if (err)
                 console.log(err)
               else {
@@ -358,7 +358,7 @@ exports.editBooking = (req, res) => {
                 }
               });
 
-              let mailOptions = {
+              let editMailOptions = {
                 from: gmailConfig.GMAIL.USER,                // sender
                 to: '59070040@it.kmitl.ac.th',                // list of receivers
                 subject: '[MRBS][แก้ไขการจอง] รหัสผ่านสำหรับการเข้าใช้งานห้อง',              // Mail subject
@@ -368,7 +368,7 @@ exports.editBooking = (req, res) => {
               <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
               };
 
-              transporter.sendMail(mailOptions, function (err, info) {
+              transporter.sendMail(editMailOptions, function (err, info) {
                 if (err)
                   console.log(err)
                 else {
@@ -413,7 +413,6 @@ exports.cancelBooking = (req, res) => {
       startDateTime.setSeconds(startTimeSecond)
 
       var dateNow = new Date()
-      dateNow.setHours(17)
 
       if (setting.Unit.AdvanceCancel.ShortName == 'D') { // 1
         var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000)) // 2
@@ -474,7 +473,6 @@ exports.cancelBooking = (req, res) => {
         })
       })
     } catch (err) {
-      console.log("CATCH")
       return res.status(500).json({ "message": err })
     }
   })

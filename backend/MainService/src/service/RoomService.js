@@ -35,14 +35,15 @@ exports.getAllRoom = (req, res) => {
   const FUNCTION_NAME = "GET ALL ROOM"
   mysqlCon.query("select * from Room", function (err, results, fields) {
     if (err) {
-      return res.status(500).json(err);
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
     } else {
       if (results.length) {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get All Room Data Found`);
         return res.status(200).json(results);
       } else {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> All Room Data Not Found`);
-        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+        return res.status(404).json({ "message": "ไม่พบข้อมูล" });
       }
     }
   });
@@ -56,14 +57,15 @@ exports.getRoomById = (req, res) => {
 
   mysqlCon.query("select * from Room where RoomId = ?", [roomId], function (err, results, fields) {
     if (err) {
-      return res.status(500).json(err);
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
     } else {
       if (results.length) {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
         return res.status(200).json(results);
       } else {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Not Found`);
-        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+        return res.status(404).json({ "message": "ไม่พบข้อมูล" });
       }
     }
   });
@@ -77,14 +79,15 @@ exports.getRoomByFloor = (req, res) => {
 
   mysqlCon.query("select * from Room where RoomFloor = ?", [roomFloor], function (err, results, fields) {
     if (err) {
-      return res.status(500).json(err);
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
     } else {
       if (results.length) {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Floor Found`);
         return res.status(200).json(results);
       } else {
         console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Floor Not Found`);
-        return res.status(404).json({"message": "ไม่พบข้อมูล"});
+        return res.status(404).json({ "message": "ไม่พบข้อมูล" });
       }
     }
   });
@@ -96,17 +99,33 @@ exports.getRoomBookingStatusById = (req, res) => {
 
   var roomId = req.params.roomid;
 
-  mysqlCon.query("select * from Room join Booking on (Room.RoomId = Booking.RoomId) where Room.RoomId = ?", [roomId], function (err, results, fields) {
+  var sqlQueryRoom = "select * from Room where RoomId = ?"
+  mysqlCon.query(sqlQueryRoom, [roomId], function (err, results) {
     if (err) {
-      return res.status(500).json(err);
-    } else {
-      if (results.length) {
-        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Found`);
-        return res.status(200).json(results);
-      } else {
-        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Not Found`);
-        return res.status(404).json(true);
-      }
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
     }
-  });
+
+    if (results.length) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
+      var sqlQueryRoomBooking = "select * from Room join Booking on (Room.RoomId = Booking.RoomId) where Room.RoomId = ? and Booking.BookingStatus = ?"
+      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+        if (err) {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+          return res.status(500).json({ "sql_error_message": err.message });
+        }
+
+        if (results.length) {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Found`);
+          return res.status(200).json(results);
+        } else {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Not Found`);
+          return res.status(404).json({ "message": "พร้อมใช้งาน" });
+        }
+      });
+    } else {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Not Found`);
+      return res.status(404).json({ "message": "ไม่พบห้องที่ต้องการ" });
+    }
+  })
 };
