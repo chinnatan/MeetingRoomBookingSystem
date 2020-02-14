@@ -160,7 +160,7 @@ exports.addBooking = (req, res) => {
       }
 
       var diffDay = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000)) + 1
-      if (diffDay >= 1) {
+      if (diffDay > 1) {
         for (var count = 0; count < diffDay; count++) {
           startDateTime.setDate(startDateTime.getDate() + count)
           var bookingStartDateCount = startDateTime.getFullYear() + "-" + startDateTime.getMonth() + "-" + startDateTime.getDate()
@@ -215,6 +215,10 @@ exports.addBooking = (req, res) => {
 
           if (results.length) {
             var roomName = results[0].RoomName
+            var convertBookingStartDate = Date.parse(BookingStartDate)
+            convertBookingStartDate = new Date(convertBookingStartDate)
+            var convertBookingEndDate = Date.parse(BookingEndDate)
+            convertBookingEndDate = new Date(convertBookingEndDate)
             if (startDateTime.getHours() == 0) {
               var bookingStartTime = "24:" + startDateTime.getMinutes()
             } else {
@@ -231,7 +235,7 @@ exports.addBooking = (req, res) => {
               subject: `[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง ${roomName}`,              // Mail subject
               html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
             <b>หัวข้อการจอง : </b>${BookingTitle}<br>
-            <b>วันที่จอง : </b>${BookingStartDate} - ${BookingEndDate}<br>
+            <b>วันที่จอง : </b>${convertBookingStartDate.toDateString()} - ${convertBookingEndDate.toDateString()}<br>
             <b>เวลาที่จอง : </b>${bookingStartTime} - ${bookingEndTime}<br>
             <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
             };
