@@ -660,6 +660,99 @@ exports.cancelBooking = (req, res) => {
   })
 }
 
-exports.confirmBookingUse = (req, res) => {
+exports.startBookingUse = (req, res) => {
+  const FUNCTION_NAME = "START BOOKING USE"
 
+  var bookingId = req.body.BookingId
+  var bookingPin = req.body.BookingPin
+
+  var sqlQueryBooking = "select BookingPin, BookingStartDate, BookingStartTime, UserId, RoomId from Booking where BookingId = ?"
+  mysqlCon.query(sqlQueryBooking, [bookingId], function (err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
+      return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if (results.length) {
+      try {
+        var error_message = String.empty
+        var bookingStartDate = results[0].BookingStartDate
+        var bookingStartTime = results[0].BookingStartTime
+        var userId = results[0].UserId
+        var roomId = results[0].RoomId
+
+        let [startTimeHour, startTimeMinute, startTimeSecond] = bookingStartTime.split(':')
+
+        var startDateTime = Date.parse(bookingStartDate)
+        startDateTime = new Date(startDateTime)
+        startDateTime.setHours(startTimeHour)
+        startDateTime.setMinutes(startTimeMinute)
+        startDateTime.setSeconds(startTimeSecond)
+        var dateNow = new Date()
+
+        if ((startDateTime.getHours() != dateNow.getHours()) && (startDateTime.getMinutes() != dateNow.getMinutes())) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากยังไม่ถึงเวลาเข้าใช้งาน"
+          throw error_message
+        } else if ((startDateTime.getHours() < dateNow.getHours()) && (startDateTime.getMinutes() <= dateNow.getMinutes())) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากยังไม่ถึงเวลาเข้าใช้งาน"
+          throw error_message
+        }
+
+        if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+          if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+            var diffHours = (24 - startDateTime.getHours()) * 60
+          } else {
+            var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+          }
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+        var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+        var diffHoursMinute = Math.abs(diffHours - diffMinute)
+
+        if (diffHoursMinute > setting.SlowestActivation) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากเข้าใช้งานช้ากว่าที่ระบบกำหนด (เข้าช้าได้ " + setting.SlowestActivation + " " + setting.Unit.SlowestActivation + ")"
+          throw error_message
+        }
+
+        if (bookingPin != results[0].BookingPin) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากรหัสผ่านสำหรับเข้าใช้งานไม่ถูกต้อง"
+          throw error_message
+        }
+
+        mysqlCon.beginTransaction(function (err) {
+          if (err) {
+            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
+            return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+          }
+
+          var sqlInsertRoomAccess = "insert into RoomAccess (StartDate, EndDate, UserId, RoomId) values (?, ?, ?, ?)"
+          mysqlCon.query(sqlInsertRoomAccess, [dateNow, null, userId, roomId], function(err) {
+            if(err) {
+              mysqlCon.rollback(function () {
+                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+              })
+            }
+
+            mysqlCon.commit(function (err) {
+              if (err) {
+                mysqlCon.rollback(function () {
+                  console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                  return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                })
+              }
+  
+              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Room Access Successfully"`);
+  
+              return res.status(200).json({ "message": "ยืนยันการเข้าใช้งานสำเร็จ ประตูจะถูกปลดล็อคเป็นเวลา 5 วินาที" })
+            })
+          })
+        })
+
+      } catch (err) {
+        return res.status(500).json({ "error_message": err })
+      }
+    }
+  })
 }
