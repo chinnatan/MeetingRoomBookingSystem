@@ -112,20 +112,42 @@ exports.addBooking = (req, res) => {
         throw error_message
       }
     } else if (setting.Unit.AdvanceBooking.ShortName == 'H') {
-      var diffHours = startDateTime.getHours() - dateNow.getHours()
-      if (diffHours < 0) {
+      if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+        if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+          var diffHours = (24 - startDateTime.getHours()) * 60
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+      } else {
+        var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+      }
+      var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+      var diffHoursMinute = diffHours - diffMinute
+
+      if (diffHoursMinute < 0) {
         error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
         throw error_message
-      } else if (diffHours < setting.AdvanceBooking) {
+      } else if (diffHoursMinute < setting.AdvanceBooking * 60) {
         error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
     } else if (setting.Unit.AdvanceBooking.ShortName == 'M') {
-      var diffMinutes = startDateTime.getMinutes() - dateNow.getMinutes()
-      if (diffMinutes < 0) {
+      if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+        if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+          var diffHours = (24 - startDateTime.getHours()) * 60
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+      } else {
+        var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+      }
+      var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+      var diffHoursMinute = diffHours - diffMinute
+
+      if (diffHoursMinute < 0) {
         error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
         throw error_message
-      } else if (diffMinutes < setting.AdvanceBooking) {
+      } else if (diffHoursMinute < setting.AdvanceBooking) {
         error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
@@ -199,7 +221,7 @@ exports.addBooking = (req, res) => {
             transporter.sendMail(addMailOptions, function (err, info) {
               if (err) {
                 mysqlCon.rollback(function () {
-                  console.log(`[TRANSPORTER][EDIT MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
+                  console.log(`[TRANSPORTER][ADD MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
                   return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                 })
               } else {
@@ -261,18 +283,18 @@ exports.editBooking = (req, res) => {
     var error_message = String.empty
 
     if ((startDateTime.getDate() < dateNow.getDate()) && (startDateTime.getMonth() <= dateNow.getMonth()) && (startDateTime.getFullYear() <= dateNow.getFullYear())) {
-      error_message = "ไม่สามารถจองห้องย้อนหลังได้"
+      error_message = "ไม่สามารถแก้ไขการจองห้องย้อนหลังได้"
       throw error_message
     }
 
     if ((startDateTime.getHours() <= dateNow.getHours()) && (startDateTime.getMinutes() <= dateNow.getMinutes())) {
-      error_message = "ไม่สามารถจองห้องย้อนหลังได้"
+      error_message = "ไม่สามารถแก้ไขการจองห้องย้อนหลังได้"
       throw error_message
     }
 
     var bookingDateTotal = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000) + 1)
     if (bookingDateTotal > setting.HighestDatePerTime) {
-      error_message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ที่ต้องการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
+      error_message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ที่ต้องการแก้ไขการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
       throw error_message
     }
 
@@ -287,32 +309,54 @@ exports.editBooking = (req, res) => {
       error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาเริ่มต้นใช้งานมากกว่าหรือเท่ากับเวลาสิ้นสุดการใช้งาน"
       throw error_message
     } else if (diffHoursMinute > (setting.HighestPeriodPerTime * 60)) {
-      error_message = "ไม่สามารถทำรายการได้ เนื่องจากระยะเวลาที่ต้องการจองเกินกำหนด (" + setting.HighestPeriodPerTime + " " + setting.Unit.HighestPeriodPerTime + ")"
+      error_message = "ไม่สามารถทำรายการได้ เนื่องจากระยะเวลาที่ต้องการแก้ไขการจองเกินกำหนด (" + setting.HighestPeriodPerTime + " " + setting.Unit.HighestPeriodPerTime + ")"
       throw error_message
     }
 
     if (setting.Unit.AdvanceBooking.ShortName == 'D') {
       var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000))
       if (diffDay > setting.AdvanceBooking) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการแก้ไขการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
     } else if (setting.Unit.AdvanceBooking.ShortName == 'H') {
-      var diffHours = startDateTime.getHours() - dateNow.getHours()
-      if (diffHours < 0) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+      if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+        if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+          var diffHours = (24 - startDateTime.getHours()) * 60
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+      } else {
+        var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+      }
+      var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+      var diffHoursMinute = diffHours - diffMinute
+
+      if (diffHoursMinute < 0) {
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการแก้ไขการจองผ่านมาเรียบร้อยแล้ว"
         throw error_message
-      } else if (diffHours < setting.AdvanceBooking) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+      } else if (diffHoursMinute < setting.AdvanceBooking * 60) {
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการแก้ไขการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
     } else if (setting.Unit.AdvanceBooking.ShortName == 'M') {
-      var diffMinutes = startDateTime.getMinutes() - dateNow.getMinutes()
-      if (diffMinutes < 0) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+      if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+        if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+          var diffHours = (24 - startDateTime.getHours()) * 60
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+      } else {
+        var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+      }
+      var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+      var diffHoursMinute = diffHours - diffMinute
+
+      if (diffHoursMinute < 0) {
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการแก้ไขการจองผ่านมาเรียบร้อยแล้ว"
         throw error_message
-      } else if (diffMinutes < setting.AdvanceBooking) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+      } else if (diffHoursMinute < setting.AdvanceBooking) {
+        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการแก้ไขการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
     }
@@ -327,7 +371,7 @@ exports.editBooking = (req, res) => {
       mysqlCon.query(sqlUpdateBooking, [BookingTitle, BookingDetail, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingPartner, BookingId], function (err, results) {
         if (err) {
           mysqlCon.rollback(function () {
-            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL INSERT ERROR -> ${err}`);
+            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL UPDATE ERROR -> ${err}`);
             return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
           })
         }
@@ -388,7 +432,7 @@ exports.editBooking = (req, res) => {
                 let editMailOptions = {
                   from: gmailConfig.GMAIL.USER,                // sender
                   to: '59070040@it.kmitl.ac.th',                // list of receivers
-                  subject: `[MRBS][แก้ไขข้อมูล] รหัสผ่านสำหรับการเข้าใช้งานห้อง ${roomName}`,              // Mail subject
+                  subject: `[MRBS][แก้ไข] แก้ไขข้อมูลการจองห้อง ${roomName} สำเร็จ`,              // Mail subject
                   html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
                   <b>หัวข้อการจอง : </b>${BookingTitle}<br>
                   <b>วันที่จอง : </b>${startDateTime.toDateString()} - ${endDateTime.toDateString()}<br>
@@ -422,7 +466,7 @@ exports.editBooking = (req, res) => {
 
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Edit Booking Successfully"`);
 
-          return res.status(200).json({"message": "แก้ไขสำเร็จ" })
+          return res.status(200).json({ "message": "แก้ไขสำเร็จ" })
         })
       })
     })
@@ -439,84 +483,179 @@ exports.cancelBooking = (req, res) => {
   var sqlQueryBooking = "select BookingStartDate, BookingStartTime from Booking where BookingId = ?"
   mysqlCon.query(sqlQueryBooking, [BookingId], function (err, results) {
     if (err) {
-      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
-      throw err
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
+      return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
     }
 
     try {
-      var BookingStartDate = results[0].BookingStartDate
-      var BookingStartTime = results[0].BookingStartTime
+      var error_message = String.empty
 
-      let [startTimeHour, startTimeMinute, startTimeSecond] = BookingStartTime.split(':')
+      var bookingStartDate = results[0].BookingStartDate
+      var bookingStartTime = results[0].BookingStartTime
 
-      var startDateTime = Date.parse(BookingStartDate)
+      let [startTimeHour, startTimeMinute, startTimeSecond] = bookingStartTime.split(':')
+
+      var startDateTime = Date.parse(bookingStartDate)
       startDateTime = new Date(startDateTime)
       startDateTime.setHours(startTimeHour)
       startDateTime.setMinutes(startTimeMinute)
       startDateTime.setSeconds(startTimeSecond)
-
       var dateNow = new Date()
 
-      if (setting.Unit.AdvanceCancel.ShortName == 'D') { // 1
-        var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000)) // 2
+      if ((startDateTime.getDate() < dateNow.getDate()) && (startDateTime.getMonth() <= dateNow.getMonth()) && (startDateTime.getFullYear() <= dateNow.getFullYear())) {
+        error_message = "ไม่สามารถยกเลิกการจองย้อนหลังได้"
+        throw error_message
+      }
 
-        if (diffDay < setting.AdvanceCancel) { // 3
-          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการยกเลิกล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
+      if ((startDateTime.getHours() <= dateNow.getHours()) && (startDateTime.getMinutes() <= dateNow.getMinutes())) {
+        error_message = "ไม่สามารถยกเลิกการจองย้อนหลังได้"
+        throw error_message
+      }
+
+      if (setting.Unit.AdvanceCancel.ShortName == 'D') {
+        var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000))
+        if (diffDay > setting.AdvanceCancel) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
           throw error_message
         }
-      } else if (setting.Unit.AdvanceCancel.ShortName == 'H') { // 1
-        var diffHours = startDateTime.getHours() - dateNow.getHours() // 2
+      } else if (setting.Unit.AdvanceCancel.ShortName == 'H') {
+        if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+          if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+            var diffHours = (24 - startDateTime.getHours()) * 60
+          } else {
+            var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+          }
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+        var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+        var diffHoursMinute = diffHours - diffMinute
 
-        if (diffHours < 0) { // 3
+        if (diffHoursMinute < 0) {
           error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการยกเลิกผ่านมาเรียบร้อยแล้ว"
           throw error_message
-        } else if (diffHours < setting.AdvanceCancel) {
-          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการยกเลิกล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
+        } else if (diffHoursMinute < setting.AdvanceCancel * 60) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องยกเลิกการจองล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
           throw error_message
         }
-      } else if (setting.Unit.AdvanceCancel.ShortName == 'M') { // 1
-        var diffMinutes = startDateTime.getMinutes() - dateNow.getMinutes() // 2
+      } else if (setting.Unit.AdvanceCancel.ShortName == 'M') {
+        if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
+          if (startDateTime.getHours() >= 10 && startDateTime.getHours() <= 23) {
+            var diffHours = (24 - startDateTime.getHours()) * 60
+          } else {
+            var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+          }
+        } else {
+          var diffHours = (startDateTime.getHours() - dateNow.getHours()) * 60
+        }
+        var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
+        var diffHoursMinute = diffHours - diffMinute
 
-        if (diffMinutes < 0) { // 3
+        if (diffHoursMinute < 0) {
           error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการยกเลิกผ่านมาเรียบร้อยแล้ว"
           throw error_message
-        } else if (diffMinutes < setting.AdvanceCancel) {
-          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการยกเลิกล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
+        } else if (diffHoursMinute < setting.AdvanceCancel) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องยกเลิกการจองล่วงหน้าก่อน " + setting.AdvanceCancel + " " + setting.Unit.AdvanceCancel.LongName
           throw error_message
         }
       }
 
       mysqlCon.beginTransaction(function (err) {
         if (err) {
-          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
-          throw err
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
+          return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
         }
 
         var sqlUpdateBooking = "update Booking set BookingStatus = ? where BookingId = ?"
-        mysqlCon.query(sqlUpdateBooking, ["C", BookingId], function (err) {
+        mysqlCon.query(sqlUpdateBooking, ["C", BookingId], function (err, results) {
           if (err) {
             mysqlCon.rollback(function () {
-              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
-              error_message = "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ"
-              return res.status(500).json({ "message": error_message })
+              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL UPDATE ERROR -> ${err}`);
+              return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
             })
           }
+
+          // ส่งรหัสผ่านสำหรับการเข้าใช้งานห้องไปที่ Email ของผู้ใช้งาน
+          const nodemailer = require('nodemailer');
+          const gmailConfig = require("../config");
+
+          // config สำหรับของ gmail
+          const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            secure: false, // use SSL
+            port: 25, // port for secure SMTP
+            auth: {
+              user: gmailConfig.GMAIL.USER, // your email
+              pass: gmailConfig.GMAIL.PWD // your email password
+            },
+            tls: {
+              rejectUnauthorized: false
+            }
+          });
+
+          var sqlQueryBooking = "select RoomId from Booking where BookingId = ?"
+          mysqlCon.query(sqlQueryBooking, [BookingId], function (err, booking_results) {
+            if (err) {
+              mysqlCon.rollback(function () {
+                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+              })
+            }
+
+            if (booking_results.length) {
+              var roomId = booking_results[0].RoomId
+
+              var sqlQueryRoom = "select RoomName from Room where RoomId = ?"
+              mysqlCon.query(sqlQueryRoom, [roomId], function (err, results) {
+                if (err) {
+                  mysqlCon.rollback(function () {
+                    console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                    return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                  })
+                }
+
+                if (results.length) {
+                  var roomName = results[0].RoomName
+
+                  let cancelMailOptions = {
+                    from: gmailConfig.GMAIL.USER,                // sender
+                    to: '59070040@it.kmitl.ac.th',                // list of receivers
+                    subject: `[MRBS][ยกเลิก] ยกเลิกการจองห้อง ${roomName} สำเร็จ`,              // Mail subject
+                    html: `<b>ห้องที่ทำการจอง : </b>${roomName} <b><font color='red'>ยกเลิกสำเร็จ</font></b>`   // HTML body
+                  };
+
+                  transporter.sendMail(cancelMailOptions, function (err, info) {
+                    if (err) {
+                      mysqlCon.rollback(function () {
+                        console.log(`[TRANSPORTER][CANCEL MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
+                        return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                      })
+                    } else {
+                      console.log(info);
+                      transporter.close(); // shut down the connection pool, no more messages
+                    }
+                  });
+                }
+              })
+            }
+          })
 
           mysqlCon.commit(function (err) {
             if (err) {
               mysqlCon.rollback(function () {
-                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
-                error_message = "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ"
-                return res.status(500).json({ "message": error_message })
+                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
               })
             }
 
-            return res.status(200).json({ "message": "ยกเลิกการจองสำเร็จ" })
+            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Cancel Booking Successfully"`);
+
+            return res.status(200).json({ "message": "ยกเลิกสำเร็จ" })
           })
         })
       })
     } catch (err) {
-      return res.status(500).json({ "message": err })
+      return res.status(500).json({ "error_message": err })
     }
   })
 }
