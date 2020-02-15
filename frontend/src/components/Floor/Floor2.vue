@@ -25,7 +25,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg, txtFloor[11].active)"
+                v-on:click="selectRoom(text.room.room226.id, text.room.room226.name, text.room.room226.size, text.room.room226.floor, text.room.room226.path, text.room.room226.active)"
               />
               <rect
                 id="floor_2_225"
@@ -36,7 +36,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg, txtFloor[10].active)"
+                v-on:click="selectRoom(text.room.room225.id, text.room.room225.name, text.room.room225.size, text.room.room225.floor, text.room.room225.path, text.room.room225.active)"
               />
               <rect
                 id="floor_2_223"
@@ -47,7 +47,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg, txtFloor[8].active)"
+                v-on:click="selectRoom(text.room.room223.id, text.room.room223.name, text.room.room223.size, text.room.room223.floor, text.room.room223.path, text.room.room223.active)"
               />
               <rect
                 id="floor_2_224"
@@ -58,7 +58,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg, txtFloor[9].active)"
+                v-on:click="selectRoom(text.room.room224.id, text.room.room224.name, text.room.room224.size, text.room.room224.floor, text.room.room224.path, text.room.room224.active)"
               />
               <rect
                 id="floor_2_207"
@@ -69,7 +69,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[2].id, txtFloor[2].name, txtFloor[2].size, txtFloor[2].floor, txtFloor[2].pathImg, txtFloor[2].active)"
+                v-on:click="selectRoom(text.room.room207.id, text.room.room207.name, text.room.room207.size, text.room.room207.floor, text.room.room207.path, text.room.room207.active)"
               />
               <rect
                 id="floor_2_205"
@@ -80,7 +80,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg, txtFloor[1].active)"
+                v-on:click="selectRoom(text.room.room205.id, text.room.room205.name, text.room.room205.size, text.room.room205.floor, text.room.room205.path, text.room.room205.active)"
               />
               <rect
                 id="floor_2_203"
@@ -91,7 +91,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg, txtFloor[0].active)"
+                v-on:click="selectRoom(text.room.room203.id, text.room.room203.name, text.room.room203.size, text.room.room203.floor, text.room.room203.path, text.room.room203.active)"
               />
               <rect
                 id="floor_2_219"
@@ -102,7 +102,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg, txtFloor[4].active)"
+                v-on:click="selectRoom(text.room.room219.id, text.room.room219.name, text.room.room219.size, text.room.room219.floor, text.room.room219.path, text.room.room219.active)"
               />
               <rect
                 id="floor_2_218"
@@ -113,7 +113,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg, txtFloor[3].active)"
+                v-on:click="selectRoom(text.room.room218.id, text.room.room218.name, text.room.room218.size, text.room.room218.floor, text.room.room218.path, text.room.room218.active)"
               />
               <rect
                 id="floor_2_222"
@@ -124,7 +124,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg, txtFloor[7].active)"
+                v-on:click="selectRoom(text.room.room222.id, text.room.room222.name, text.room.room222.size, text.room.room222.floor, text.room.room222.path, text.room.room222.active)"
               />
               <rect
                 id="floor_2_221"
@@ -135,7 +135,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg, txtFloor[6].active)"
+                v-on:click="selectRoom(text.room.room221.id, text.room.room221.name, text.room.room221.size, text.room.room221.floor, text.room.room221.path, text.room.room221.active)"
               />
               <rect
                 id="floor_2_220"
@@ -146,7 +146,7 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#bfbfbf"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg, txtFloor[5].active)"
+                v-on:click="selectRoom(text.room.room220.id, text.room.room220.name, text.room.room220.size, text.room.room220.floor, text.room.room220.path, text.room.room220.active)"
               />
               <text
                 xml:space="preserve"
@@ -160,8 +160,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[2].name"
+                v-if="text.room.room207.id"
+                v-text="text.room.room207.name"
               ></text>
               <text
                 id="txt_205"
@@ -175,8 +175,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[1].name"
+                v-if="text.room.room205.id"
+                v-text="text.room.room205.name"
               ></text>
               <text
                 id="txt_203"
@@ -190,8 +190,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[0].name"
+                v-if="text.room.room203.id"
+                v-text="text.room.room203.name"
               ></text>
               <text
                 id="txt_219"
@@ -205,8 +205,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[4].name"
+                v-if="text.room.room219.id"
+                v-text="text.room.room219.name"
               ></text>
               <text
                 id="txt_218"
@@ -220,8 +220,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[3].name"
+                v-if="text.room.room218.id"
+                v-text="text.room.room218.name"
               ></text>
               <text
                 id="txt_222"
@@ -235,8 +235,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[7].name"
+                v-if="text.room.room222.id"
+                v-text="text.room.room222.name"
               ></text>
               <text
                 id="txt_221"
@@ -250,8 +250,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[6].name"
+                v-if="text.room.room221.id"
+                v-text="text.room.room221.name"
               ></text>
               <text
                 id="txt_220"
@@ -265,8 +265,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[5].name"
+                v-if="text.room.room220.id"
+                v-text="text.room.room220.name"
               ></text>
               <text
                 id="txt_226"
@@ -280,8 +280,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[11].name"
+                v-if="text.room.room226.id"
+                v-text="text.room.room226.name"
               ></text>
               <text
                 id="txt_225"
@@ -295,8 +295,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[10].name"
+                v-if="text.room.room225.id"
+                v-text="text.room.room225.name"
               ></text>
               <text
                 id="txt_224"
@@ -310,8 +310,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[9].name"
+                v-if="text.room.room224.id"
+                v-text="text.room.room224.name"
               ></text>
               <text
                 id="txt_223"
@@ -325,8 +325,8 @@
                 stroke-width="0"
                 stroke="#000000"
                 fill="#000000"
-                v-if="txtFloors"
-                v-text="txtFloor[8].name"
+                v-if="text.room.room223.id"
+                v-text="text.room.room223.name"
               ></text>
             </g>
           </svg>
@@ -343,26 +343,170 @@ const axiosConfig = require("../../assets/config.json");
 export default {
   name: "Floor2",
   created() {
-    this.getRoomByFloor(2);
+    this.getRoomByName("203");
+    this.getRoomByName("205");
+    this.getRoomByName("207");
+    this.getRoomByName("218");
+    this.getRoomByName("219");
+    this.getRoomByName("220");
+    this.getRoomByName("221");
+    this.getRoomByName("222");
+    this.getRoomByName("223");
+    this.getRoomByName("224");
+    this.getRoomByName("225");
+    this.getRoomByName("226");
   },
   data() {
     return {
-      txtFloor: []
+      text: {
+        room: {
+          room203: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room205: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room207: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room218: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room219: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room220: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room221: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room222: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room223: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room224: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room225: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room226: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          }
+        }
+      }
     };
   },
   computed: {
-    txtFloors() {
-      return this.txtFloor.length;
-    }
+
   },
   mounted() {
     
   },
   beforeUpdate() {
-    this.updateRoomStatusByFloor();
+    this.updateRoomActiveAllFloor();
   },
   update() {
-    
+    this.updateRoomActiveAllFloor();
   },
   methods: {
     selectRoom(id, name, size, floor, path, active) {
@@ -373,28 +517,28 @@ export default {
         floor != null &&
         path != null
       ) {
-        if (active == "Y") {
+        if (active) {
           this.$parent.selectRoom(id, name, size, floor, path);
         }
       }
     },
-    getRoomByFloor(floor) {
+    getRoomByName(name) {
       const path =
         "http://" +
         axiosConfig.APIGATEWAY.HOST +
         ":" +
         axiosConfig.APIGATEWAY.PORT +
-        "/api/" +
-        axiosConfig.PATH.getRoomByFloor +
+        "/api" +
+        axiosConfig.PATH.getRoomByName +
         "/" +
-        floor;
+        name;
 
       try {
         axios
           .get(path)
           .then(res => {
-            var roomArrary = res.data;
-            this.updateTxtFloor(roomArrary);
+            var room = res.data;
+            this.setRoomInMap(room[0].RoomName, room);
           })
           .catch(error => {
             console.log(error);
@@ -403,108 +547,194 @@ export default {
         console.log(err);
       }
     },
-    updateTxtFloor(room) {
-      for (var roomIndex in room) {
-        this.txtFloor.push({
-          id: room[roomIndex].room_id,
-          name: room[roomIndex].room_name,
-          size: room[roomIndex].room_size,
-          floor: room[roomIndex].room_floor,
-          pathImg: room[roomIndex].room_pathImage,
-          active: room[roomIndex].room_active
-        });
+    setRoomInMap(name, room) {
+      name = name.toLowerCase();
+      if (name == "203") {
+        this.text.room.room203.id = room[0].RoomId;
+        this.text.room.room203.name = room[0].RoomName;
+        this.text.room.room203.size = room[0].RoomSize;
+        this.text.room.room203.floor = room[0].RoomFloor;
+        this.text.room.room203.path = room[0].RoomPathImage;
+        this.text.room.room203.student = room[0].RoomPermissionStudent;
+        this.text.room.room203.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room203.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room203.active = room[0].RoomActive;
+      } else if (name == "205") {
+        this.text.room.room205.id = room[0].RoomId;
+        this.text.room.room205.name = room[0].RoomName;
+        this.text.room.room205.size = room[0].RoomSize;
+        this.text.room.room205.floor = room[0].RoomFloor;
+        this.text.room.room205.path = room[0].RoomPathImage;
+        this.text.room.room205.student = room[0].RoomPermissionStudent;
+        this.text.room.room205.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room205.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room205.active = room[0].RoomActive;
+      } else if (name == "207") {
+        this.text.room.room207.id = room[0].RoomId;
+        this.text.room.room207.name = room[0].RoomName;
+        this.text.room.room207.size = room[0].RoomSize;
+        this.text.room.room207.floor = room[0].RoomFloor;
+        this.text.room.room207.path = room[0].RoomPathImage;
+        this.text.room.room207.student = room[0].RoomPermissionStudent;
+        this.text.room.room207.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room207.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room207.active = room[0].RoomActive;
+      } else if (name == "218") {
+        this.text.room.room218.id = room[0].RoomId;
+        this.text.room.room218.name = room[0].RoomName;
+        this.text.room.room218.size = room[0].RoomSize;
+        this.text.room.room218.floor = room[0].RoomFloor;
+        this.text.room.room218.path = room[0].RoomPathImage;
+        this.text.room.room218.student = room[0].RoomPermissionStudent;
+        this.text.room.room218.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room218.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room218.active = room[0].RoomActive;
+      } else if (name == "219") {
+        this.text.room.room219.id = room[0].RoomId;
+        this.text.room.room219.name = room[0].RoomName;
+        this.text.room.room219.size = room[0].RoomSize;
+        this.text.room.room219.floor = room[0].RoomFloor;
+        this.text.room.room219.path = room[0].RoomPathImage;
+        this.text.room.room219.student = room[0].RoomPermissionStudent;
+        this.text.room.room219.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room219.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room219.active = room[0].RoomActive;
+      } else if (name == "220") {
+        this.text.room.room220.id = room[0].RoomId;
+        this.text.room.room220.name = room[0].RoomName;
+        this.text.room.room220.size = room[0].RoomSize;
+        this.text.room.room220.floor = room[0].RoomFloor;
+        this.text.room.room220.path = room[0].RoomPathImage;
+        this.text.room.room220.student = room[0].RoomPermissionStudent;
+        this.text.room.room220.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room220.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room220.active = room[0].RoomActive;
+      } else if (name == "221") {
+        this.text.room.room221.id = room[0].RoomId;
+        this.text.room.room221.name = room[0].RoomName;
+        this.text.room.room221.size = room[0].RoomSize;
+        this.text.room.room221.floor = room[0].RoomFloor;
+        this.text.room.room221.path = room[0].RoomPathImage;
+        this.text.room.room221.student = room[0].RoomPermissionStudent;
+        this.text.room.room221.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room221.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room221.active = room[0].RoomActive;
+      } else if (name == "222") {
+        this.text.room.room222.id = room[0].RoomId;
+        this.text.room.room222.name = room[0].RoomName;
+        this.text.room.room222.size = room[0].RoomSize;
+        this.text.room.room222.floor = room[0].RoomFloor;
+        this.text.room.room222.path = room[0].RoomPathImage;
+        this.text.room.room222.student = room[0].RoomPermissionStudent;
+        this.text.room.room222.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room222.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room222.active = room[0].RoomActive;
+      } else if (name == "223") {
+        this.text.room.room223.id = room[0].RoomId;
+        this.text.room.room223.name = room[0].RoomName;
+        this.text.room.room223.size = room[0].RoomSize;
+        this.text.room.room223.floor = room[0].RoomFloor;
+        this.text.room.room223.path = room[0].RoomPathImage;
+        this.text.room.room223.student = room[0].RoomPermissionStudent;
+        this.text.room.room223.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room223.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room223.active = room[0].RoomActive;
+      } else if (name == "224") {
+        this.text.room.room224.id = room[0].RoomId;
+        this.text.room.room224.name = room[0].RoomName;
+        this.text.room.room224.size = room[0].RoomSize;
+        this.text.room.room224.floor = room[0].RoomFloor;
+        this.text.room.room224.path = room[0].RoomPathImage;
+        this.text.room.room224.student = room[0].RoomPermissionStudent;
+        this.text.room.room224.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room224.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room224.active = room[0].RoomActive;
+      } else if (name == "225") {
+        this.text.room.room225.id = room[0].RoomId;
+        this.text.room.room225.name = room[0].RoomName;
+        this.text.room.room225.size = room[0].RoomSize;
+        this.text.room.room225.floor = room[0].RoomFloor;
+        this.text.room.room225.path = room[0].RoomPathImage;
+        this.text.room.room225.student = room[0].RoomPermissionStudent;
+        this.text.room.room225.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room225.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room225.active = room[0].RoomActive;
+      } else if (name == "226") {
+        this.text.room.room226.id = room[0].RoomId;
+        this.text.room.room226.name = room[0].RoomName;
+        this.text.room.room226.size = room[0].RoomSize;
+        this.text.room.room226.floor = room[0].RoomFloor;
+        this.text.room.room226.path = room[0].RoomPathImage;
+        this.text.room.room226.student = room[0].RoomPermissionStudent;
+        this.text.room.room226.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room226.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room226.active = room[0].RoomActive;
       }
     },
-    getRoomStatusById(roomId, roomActive, rectId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/" +
-        axiosConfig.PATH.getRoomStatusById +
-        "/" +
-        roomId;
-
-      try {
-        axios
-          .get(path)
-          .then(res => {
-            var roomStatusArrary = res.data;
-            if (roomActive != "N") {
-              if (roomStatusArrary) {
-                document
-                  .getElementById(rectId)
-                  .setAttribute("fill", "lightgreen");
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } catch (err) {
-        console.log(err);
+    getRoomActiveById(roomId, roomActive, rectId) {
+      if (roomActive) {
+        document.getElementById(rectId).setAttribute("fill", "lightgreen");
       }
     },
-    updateRoomStatusByFloor() {
-      this.getRoomStatusById(
-        this.txtFloor[0].id,
-        this.txtFloor[0].active,
+    updateRoomActiveAllFloor() {
+      this.getRoomActiveById(
+        this.text.room.room203.id,
+        this.text.room.room203.active,
         "floor_2_203"
       );
-      this.getRoomStatusById(
-        this.txtFloor[1].id,
-        this.txtFloor[1].active,
+      this.getRoomActiveById(
+        this.text.room.room205.id,
+        this.text.room.room205.active,
         "floor_2_205"
       );
-      this.getRoomStatusById(
-        this.txtFloor[2].id,
-        this.txtFloor[2].active,
+      this.getRoomActiveById(
+        this.text.room.room207.id,
+        this.text.room.room207.active,
         "floor_2_207"
       );
-      this.getRoomStatusById(
-        this.txtFloor[3].id,
-        this.txtFloor[3].active,
+      this.getRoomActiveById(
+        this.text.room.room218.id,
+        this.text.room.room218.active,
         "floor_2_218"
       );
-      this.getRoomStatusById(
-        this.txtFloor[4].id,
-        this.txtFloor[4].active,
+      this.getRoomActiveById(
+        this.text.room.room219.id,
+        this.text.room.room219.active,
         "floor_2_219"
       );
-      this.getRoomStatusById(
-        this.txtFloor[5].id,
-        this.txtFloor[5].active,
+      this.getRoomActiveById(
+        this.text.room.room220.id,
+        this.text.room.room220.active,
         "floor_2_220"
       );
-      this.getRoomStatusById(
-        this.txtFloor[6].id,
-        this.txtFloor[6].active,
+      this.getRoomActiveById(
+        this.text.room.room221.id,
+        this.text.room.room221.active,
         "floor_2_221"
       );
-      this.getRoomStatusById(
-        this.txtFloor[7].id,
-        this.txtFloor[7].active,
+      this.getRoomActiveById(
+        this.text.room.room222.id,
+        this.text.room.room222.active,
         "floor_2_222"
       );
-      this.getRoomStatusById(
-        this.txtFloor[8].id,
-        this.txtFloor[8].active,
+      this.getRoomActiveById(
+        this.text.room.room223.id,
+        this.text.room.room223.active,
         "floor_2_223"
       );
-      this.getRoomStatusById(
-        this.txtFloor[9].id,
-        this.txtFloor[9].active,
+      this.getRoomActiveById(
+        this.text.room.room224.id,
+        this.text.room.room224.active,
         "floor_2_224"
       );
-      this.getRoomStatusById(
-        this.txtFloor[10].id,
-        this.txtFloor[10].active,
+      this.getRoomActiveById(
+        this.text.room.room225.id,
+        this.text.room.room225.active,
         "floor_2_225"
       );
-      this.getRoomStatusById(
-        this.txtFloor[11].id,
-        this.txtFloor[11].active,
+      this.getRoomActiveById(
+        this.text.room.room226.id,
+        this.text.room.room226.active,
         "floor_2_226"
       );
     }

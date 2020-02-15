@@ -46,7 +46,7 @@
                 id="floor_1_m04"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[4].id, txtFloor[4].name, txtFloor[4].size, txtFloor[4].floor, txtFloor[4].pathImg, txtFloor[4].active)"
+                v-on:click="selectRoom(text.room.m04.id, text.room.m04.name, text.room.m04.size, text.room.m04.floor, text.room.m04.path, text.room.m04.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -59,7 +59,7 @@
                 id="floor_1_m03"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[3].id, txtFloor[3].name, txtFloor[3].size, txtFloor[3].floor, txtFloor[3].pathImg, txtFloor[3].active)"
+                v-on:click="selectRoom(text.room.m03.id, text.room.m03.name, text.room.m03.size, text.room.m03.floor, text.room.m03.path, text.room.m03.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -72,7 +72,7 @@
                 id="floor_1_m23"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[13].id, txtFloor[13].name, txtFloor[13].size, txtFloor[13].floor, txtFloor[13].pathImg, txtFloor[13].active)"
+                v-on:click="selectRoom(text.room.m23.id, text.room.m23.name, text.room.m23.size, text.room.m23.floor, text.room.m23.path, text.room.m23.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -85,7 +85,7 @@
                 id="floor_1_m22"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[12].id, txtFloor[12].name, txtFloor[12].size, txtFloor[12].floor, txtFloor[12].pathImg, txtFloor[12].active)"
+                v-on:click="selectRoom(text.room.m22.id, text.room.m22.name, text.room.m22.size, text.room.m22.floor, text.room.m22.path, text.room.m22.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -98,7 +98,7 @@
                 id="floor_1_m21"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-on:click="selectRoom(txtFloor[11].id, txtFloor[11].name, txtFloor[11].size, txtFloor[11].floor, txtFloor[11].pathImg, txtFloor[11].active)"
+                v-on:click="selectRoom(text.room.m21.id, text.room.m21.name, text.room.m21.size, text.room.m21.floor, text.room.m21.path, text.room.m21.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -111,7 +111,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m14"
-                v-on:click="selectRoom(txtFloor[7].id, txtFloor[7].name, txtFloor[7].size, txtFloor[7].floor, txtFloor[7].pathImg, txtFloor[7].active)"
+                v-on:click="selectRoom(text.room.m14.id, text.room.m14.name, text.room.m14.size, text.room.m14.floor, text.room.m14.path, text.room.m14.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -124,7 +124,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m18"
-                v-on:click="selectRoom(txtFloor[10].id, txtFloor[10].name, txtFloor[10].size, txtFloor[10].floor, txtFloor[10].pathImg, txtFloor[10].active)"
+                v-on:click="selectRoom(text.room.m18.id, text.room.m18.name, text.room.m18.size, text.room.m18.floor, text.room.m18.path, text.room.m18.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -137,7 +137,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m13"
-                v-on:click="selectRoom(txtFloor[6].id, txtFloor[6].name, txtFloor[6].size, txtFloor[6].floor, txtFloor[6].pathImg, txtFloor[6].active)"
+                v-on:click="selectRoom(text.room.m13.id, text.room.m13.name, text.room.m13.size, text.room.m13.floor, text.room.m13.path, text.room.m13.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -150,7 +150,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m17"
-                v-on:click="selectRoom(txtFloor[9].id, txtFloor[9].name, txtFloor[9].size, txtFloor[9].floor, txtFloor[9].pathImg, txtFloor[9].active)"
+                v-on:click="selectRoom(text.room.m17.id, text.room.m17.name, text.room.m17.size, text.room.m17.floor, text.room.m17.path, text.room.m17.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -163,7 +163,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m12"
-                v-on:click="selectRoom(txtFloor[5].id, txtFloor[5].name, txtFloor[5].size, txtFloor[5].floor, txtFloor[5].pathImg, txtFloor[5].active)"
+                v-on:click="selectRoom(text.room.m12.id, text.room.m12.name, text.room.m12.size, text.room.m12.floor, text.room.m12.path, text.room.m12.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -176,7 +176,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_m16"
-                v-on:click="selectRoom(txtFloor[8].id, txtFloor[8].name, txtFloor[8].size, txtFloor[8].floor, txtFloor[8].pathImg, txtFloor[8].active)"
+                v-on:click="selectRoom(text.room.m16.id, text.room.m16.name, text.room.m16.size, text.room.m16.floor, text.room.m16.path, text.room.m16.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -189,7 +189,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_111"
-                v-on:click="selectRoom(txtFloor[1].id, txtFloor[1].name, txtFloor[1].size, txtFloor[1].floor, txtFloor[1].pathImg, txtFloor[1].active)"
+                v-on:click="selectRoom(text.room.room111.id, text.room.room111.name, text.room.room111.size, text.room.room111.floor, text.room.room111.path, text.room.room111.active)"
               />
               <rect
                 fill="#bfbfbf"
@@ -202,7 +202,7 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="floor_1_auditorium"
-                v-on:click="selectRoom(txtFloor[0].id, txtFloor[0].name, txtFloor[0].size, txtFloor[0].floor, txtFloor[0].pathImg, txtFloor[0].active)"
+                v-on:click="selectRoom(text.room.auditorium.id, text.room.auditorium.name, text.room.auditorium.size, text.room.auditorium.floor, text.room.auditorium.path, text.room.auditorium.active)"
               />
               <text
                 fill="#000000"
@@ -218,8 +218,8 @@
                 xml:space="preserve"
                 fill-opacity="1"
                 stroke-opacity="1"
-                v-if="txtFloors"
-                v-text="txtFloor[2].name"
+                v-if="text.room.service.id"
+                v-text="text.room.service.name"
               />
               <text
                 fill="#000000"
@@ -235,8 +235,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m04"
-                v-if="txtFloors"
-                v-text="txtFloor[4].name"
+                v-if="text.room.m04.id"
+                v-text="text.room.m04.name"
               />
               <text
                 fill="#000000"
@@ -252,8 +252,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m03"
-                v-if="txtFloors"
-                v-text="txtFloor[3].name"
+                v-if="text.room.m03.id"
+                v-text="text.room.m03.name"
               />
               <text
                 fill="#000000"
@@ -269,8 +269,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m23"
-                v-if="txtFloors"
-                v-text="txtFloor[13].name"
+                v-if="text.room.m23.id"
+                v-text="text.room.m23.name"
               />
               <text
                 fill="#000000"
@@ -286,8 +286,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m22"
-                v-if="txtFloors"
-                v-text="txtFloor[12].name"
+                v-if="text.room.m22.id"
+                v-text="text.room.m22.name"
               />
               <text
                 fill="#000000"
@@ -303,8 +303,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m21"
-                v-if="txtFloors"
-                v-text="txtFloor[11].name"
+                v-if="text.room.m21.id"
+                v-text="text.room.m21.name"
               />
               <text
                 fill="#000000"
@@ -320,8 +320,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_111"
-                v-if="txtFloors"
-                v-text="txtFloor[1].name"
+                v-if="text.room.room111.id"
+                v-text="text.room.room111.name"
               />
               <text
                 fill="#000000"
@@ -337,8 +337,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_auditorium"
-                v-if="txtFloors"
-                v-text="txtFloor[0].name"
+                v-if="text.room.auditorium.id"
+                v-text="text.room.auditorium.name"
               />
               <text
                 fill="#000000"
@@ -354,8 +354,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m14"
-                v-if="txtFloors"
-                v-text="txtFloor[7].name"
+                v-if="text.room.m14.id"
+                v-text="text.room.m14.name"
               />
               <text
                 fill="#000000"
@@ -371,8 +371,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m12"
-                v-if="txtFloors"
-                v-text="txtFloor[5].name"
+                v-if="text.room.m12.id"
+                v-text="text.room.m12.name"
               />
               <text
                 fill="#000000"
@@ -388,8 +388,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m13"
-                v-if="txtFloors"
-                v-text="txtFloor[6].name"
+                v-if="text.room.m13.id"
+                v-text="text.room.m13.name"
               />
               <text
                 fill="#000000"
@@ -405,8 +405,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m18"
-                v-if="txtFloors"
-                v-text="txtFloor[10].name"
+                v-if="text.room.m18.id"
+                v-text="text.room.m18.name"
               />
               <text
                 fill="#000000"
@@ -422,8 +422,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m16"
-                v-if="txtFloors"
-                v-text="txtFloor[8].name"
+                v-if="text.room.m16.id"
+                v-text="text.room.m16.name"
               />
               <text
                 fill="#000000"
@@ -439,8 +439,8 @@
                 fill-opacity="1"
                 stroke-opacity="1"
                 id="txt_m17"
-                v-if="txtFloors"
-                v-text="txtFloor[9].name"
+                v-if="text.room.m17.id"
+                v-text="text.room.m17.name"
               />
             </g>
           </svg>
@@ -458,21 +458,186 @@ const axiosConfig = require("../../assets/config.json");
 export default {
   name: "Floor1",
   created() {
-    this.getRoomByFloor(1);
+    this.getRoomByName("Auditorium");
+    this.getRoomByName("111");
+    this.getRoomByName("Service");
+    this.getRoomByName("M03");
+    this.getRoomByName("M04");
+    this.getRoomByName("M12");
+    this.getRoomByName("M13");
+    this.getRoomByName("M14");
+    this.getRoomByName("M16");
+    this.getRoomByName("M17");
+    this.getRoomByName("M18");
+    this.getRoomByName("M21");
+    this.getRoomByName("M22");
+    this.getRoomByName("M23");
   },
   data() {
     return {
-      txtFloor: []
+      text: {
+        room: {
+          auditorium: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          room111: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          service: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m03: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m04: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m12: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m13: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m14: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m16: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m17: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m18: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m21: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m22: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          },
+          m23: {
+            id: "",
+            name: "",
+            size: "",
+            floor: "",
+            path: "",
+            student: "",
+            professor: "",
+            officer: "",
+            active: ""
+          }
+        }
+      }
     };
-  },
-  computed: {
-    txtFloors() {
-      return this.txtFloor.length;
-    }
   },
   mounted() {},
   updated() {
-    this.updateRoomStatusByFloor();
+    this.updateRoomActiveAllFloor();
   },
   methods: {
     selectRoom(id, name, size, floor, path, active) {
@@ -483,28 +648,28 @@ export default {
         floor != null &&
         path != null
       ) {
-        if (active == "Y") {
+        if (active) {
           this.$parent.selectRoom(id, name, size, floor, path);
         }
       }
     },
-    getRoomByFloor(floor) {
+    getRoomByName(name) {
       const path =
         "http://" +
         axiosConfig.APIGATEWAY.HOST +
         ":" +
         axiosConfig.APIGATEWAY.PORT +
-        "/api/" +
-        axiosConfig.PATH.getRoomByFloor +
+        "/api" +
+        axiosConfig.PATH.getRoomByName +
         "/" +
-        floor;
+        name;
 
       try {
         axios
           .get(path)
           .then(res => {
-            var roomArrary = res.data;
-            this.updateTxtFloor(roomArrary);
+            var room = res.data;
+            this.setRoomInMap(room[0].RoomName, room);
           })
           .catch(error => {
             console.log(error);
@@ -513,113 +678,219 @@ export default {
         console.log(err);
       }
     },
-    updateTxtFloor(room) {
-      for (var roomIndex in room) {
-        this.txtFloor.push({
-          id: room[roomIndex].room_id,
-          name: room[roomIndex].room_name,
-          size: room[roomIndex].room_size,
-          floor: room[roomIndex].room_floor,
-          pathImg: room[roomIndex].room_pathImage,
-          active: room[roomIndex].room_active
-        });
+    setRoomInMap(name, room) {
+      name = name.toLowerCase();
+      if (name == "auditorium") {
+        this.text.room.auditorium.id = room[0].RoomId;
+        this.text.room.auditorium.name = room[0].RoomName;
+        this.text.room.auditorium.size = room[0].RoomSize;
+        this.text.room.auditorium.floor = room[0].RoomFloor;
+        this.text.room.auditorium.path = room[0].RoomPathImage;
+        this.text.room.auditorium.student = room[0].RoomPermissionStudent;
+        this.text.room.auditorium.professor = room[0].RoomPermissionProfessor;
+        this.text.room.auditorium.officer = room[0].RoomPermissionOfficer;
+        this.text.room.auditorium.active = room[0].RoomActive;
+      } else if (name == "111") {
+        this.text.room.room111.id = room[0].RoomId;
+        this.text.room.room111.name = room[0].RoomName;
+        this.text.room.room111.size = room[0].RoomSize;
+        this.text.room.room111.floor = room[0].RoomFloor;
+        this.text.room.room111.path = room[0].RoomPathImage;
+        this.text.room.room111.student = room[0].RoomPermissionStudent;
+        this.text.room.room111.professor = room[0].RoomPermissionProfessor;
+        this.text.room.room111.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room111.active = room[0].RoomActive;
+      } else if (name == "service") {
+        this.text.room.service.id = room[0].RoomId;
+        this.text.room.service.name = room[0].RoomName;
+        this.text.room.service.size = room[0].RoomSize;
+        this.text.room.service.floor = room[0].RoomFloor;
+        this.text.room.service.path = room[0].RoomPathImage;
+        this.text.room.service.student = room[0].RoomPermissionStudent;
+        this.text.room.service.professor = room[0].RoomPermissionProfessor;
+        this.text.room.service.officer = room[0].RoomPermissionOfficer;
+        this.text.room.service.active = room[0].RoomActive;
+      } else if (name == "m03") {
+        this.text.room.m03.id = room[0].RoomId;
+        this.text.room.m03.name = room[0].RoomName;
+        this.text.room.m03.size = room[0].RoomSize;
+        this.text.room.m03.floor = room[0].RoomFloor;
+        this.text.room.m03.path = room[0].RoomPathImage;
+        this.text.room.m03.student = room[0].RoomPermissionStudent;
+        this.text.room.m03.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m03.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m03.active = room[0].RoomActive;
+      } else if (name == "m04") {
+        this.text.room.m04.id = room[0].RoomId;
+        this.text.room.m04.name = room[0].RoomName;
+        this.text.room.m04.size = room[0].RoomSize;
+        this.text.room.m04.floor = room[0].RoomFloor;
+        this.text.room.m04.path = room[0].RoomPathImage;
+        this.text.room.m04.student = room[0].RoomPermissionStudent;
+        this.text.room.m04.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m04.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m04.active = room[0].RoomActive;
+      } else if (name == "m12") {
+        this.text.room.m12.id = room[0].RoomId;
+        this.text.room.m12.name = room[0].RoomName;
+        this.text.room.m12.size = room[0].RoomSize;
+        this.text.room.m12.floor = room[0].RoomFloor;
+        this.text.room.m12.path = room[0].RoomPathImage;
+        this.text.room.m12.student = room[0].RoomPermissionStudent;
+        this.text.room.m12.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m12.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m12.active = room[0].RoomActive;
+      } else if (name == "m13") {
+        this.text.room.m13.id = room[0].RoomId;
+        this.text.room.m13.name = room[0].RoomName;
+        this.text.room.m13.size = room[0].RoomSize;
+        this.text.room.m13.floor = room[0].RoomFloor;
+        this.text.room.m13.path = room[0].RoomPathImage;
+        this.text.room.m13.student = room[0].RoomPermissionStudent;
+        this.text.room.m13.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m13.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m13.active = room[0].RoomActive;
+      } else if (name == "m14") {
+        this.text.room.m14.id = room[0].RoomId;
+        this.text.room.m14.name = room[0].RoomName;
+        this.text.room.m14.size = room[0].RoomSize;
+        this.text.room.m14.floor = room[0].RoomFloor;
+        this.text.room.m14.path = room[0].RoomPathImage;
+        this.text.room.m14.student = room[0].RoomPermissionStudent;
+        this.text.room.m14.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m14.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m14.active = room[0].RoomActive;
+      } else if (name == "m16") {
+        this.text.room.m16.id = room[0].RoomId;
+        this.text.room.m16.name = room[0].RoomName;
+        this.text.room.m16.size = room[0].RoomSize;
+        this.text.room.m16.floor = room[0].RoomFloor;
+        this.text.room.m16.path = room[0].RoomPathImage;
+        this.text.room.m16.student = room[0].RoomPermissionStudent;
+        this.text.room.m16.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m16.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m16.active = room[0].RoomActive;
+      } else if (name == "m17") {
+        this.text.room.m17.id = room[0].RoomId;
+        this.text.room.m17.name = room[0].RoomName;
+        this.text.room.m17.size = room[0].RoomSize;
+        this.text.room.m17.floor = room[0].RoomFloor;
+        this.text.room.m17.path = room[0].RoomPathImage;
+        this.text.room.m17.student = room[0].RoomPermissionStudent;
+        this.text.room.m17.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m17.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m17.active = room[0].RoomActive;
+      } else if (name == "m18") {
+        this.text.room.m18.id = room[0].RoomId;
+        this.text.room.m18.name = room[0].RoomName;
+        this.text.room.m18.size = room[0].RoomSize;
+        this.text.room.m18.floor = room[0].RoomFloor;
+        this.text.room.m18.path = room[0].RoomPathImage;
+        this.text.room.m18.student = room[0].RoomPermissionStudent;
+        this.text.room.m18.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m18.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m18.active = room[0].RoomActive;
+      } else if (name == "m21") {
+        this.text.room.m21.id = room[0].RoomId;
+        this.text.room.m21.name = room[0].RoomName;
+        this.text.room.m21.size = room[0].RoomSize;
+        this.text.room.m21.floor = room[0].RoomFloor;
+        this.text.room.m21.path = room[0].RoomPathImage;
+        this.text.room.m21.student = room[0].RoomPermissionStudent;
+        this.text.room.m21.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m21.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m21.active = room[0].RoomActive;
+      } else if (name == "m22") {
+        this.text.room.m22.id = room[0].RoomId;
+        this.text.room.m22.name = room[0].RoomName;
+        this.text.room.m22.size = room[0].RoomSize;
+        this.text.room.m22.floor = room[0].RoomFloor;
+        this.text.room.m22.path = room[0].RoomPathImage;
+        this.text.room.m22.student = room[0].RoomPermissionStudent;
+        this.text.room.m22.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m22.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m22.active = room[0].RoomActive;
+      } else if (name == "m23") {
+        this.text.room.m23.id = room[0].RoomId;
+        this.text.room.m23.name = room[0].RoomName;
+        this.text.room.m23.size = room[0].RoomSize;
+        this.text.room.m23.floor = room[0].RoomFloor;
+        this.text.room.m23.path = room[0].RoomPathImage;
+        this.text.room.m23.student = room[0].RoomPermissionStudent;
+        this.text.room.m23.professor = room[0].RoomPermissionProfessor;
+        this.text.room.m23.officer = room[0].RoomPermissionOfficer;
+        this.text.room.m23.active = room[0].RoomActive;
       }
     },
-    getRoomStatusById(roomId, roomActive, rectId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/" +
-        axiosConfig.PATH.getRoomStatusById +
-        "/" +
-        roomId;
-
-      try {
-        axios
-          .get(path)
-          .then(res => {
-            var roomStatusArrary = res.data;
-            if (roomActive != "N") {
-              if (roomStatusArrary) {
-                document
-                  .getElementById(rectId)
-                  .setAttribute("fill", "lightgreen");
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } catch (err) {
-        console.log(err);
+    getRoomActiveById(roomId, roomActive, rectId) {
+      if (roomActive) {
+        document.getElementById(rectId).setAttribute("fill", "lightgreen");
       }
     },
-    updateRoomStatusByFloor() {
-      this.getRoomStatusById(
-        this.txtFloor[0].id,
-        this.txtFloor[0].active,
+    updateRoomActiveAllFloor() {
+      this.getRoomActiveById(
+        this.text.room.auditorium.id,
+        this.text.room.auditorium.active,
         "floor_1_auditorium"
       );
-      this.getRoomStatusById(
-        this.txtFloor[1].id,
-        this.txtFloor[1].active,
+      this.getRoomActiveById(
+        this.text.room.room111.id,
+        this.text.room.room111.active,
         "floor_1_111"
       );
-      this.getRoomStatusById(
-        this.txtFloor[3].id,
-        this.txtFloor[3].active,
+      this.getRoomActiveById(
+        this.text.room.m03.id,
+        this.text.room.m03.active,
         "floor_1_m03"
       );
-      this.getRoomStatusById(
-        this.txtFloor[4].id,
-        this.txtFloor[4].active,
+      this.getRoomActiveById(
+        this.text.room.m04.id,
+        this.text.room.m04.active,
         "floor_1_m04"
       );
-      this.getRoomStatusById(
-        this.txtFloor[5].id,
-        this.txtFloor[5].active,
+      this.getRoomActiveById(
+        this.text.room.m12.id,
+        this.text.room.m12.active,
         "floor_1_m12"
       );
-      this.getRoomStatusById(
-        this.txtFloor[6].id,
-        this.txtFloor[6].active,
+      this.getRoomActiveById(
+        this.text.room.m13.id,
+        this.text.room.m13.active,
         "floor_1_m13"
       );
-      this.getRoomStatusById(
-        this.txtFloor[7].id,
-        this.txtFloor[7].active,
+      this.getRoomActiveById(
+        this.text.room.m14.id,
+        this.text.room.m14.active,
         "floor_1_m14"
       );
-      this.getRoomStatusById(
-        this.txtFloor[8].id,
-        this.txtFloor[8].active,
+      this.getRoomActiveById(
+        this.text.room.m16.id,
+        this.text.room.m16.active,
         "floor_1_m16"
       );
-      this.getRoomStatusById(
-        this.txtFloor[9].id,
-        this.txtFloor[9].active,
+      this.getRoomActiveById(
+        this.text.room.m17.id,
+        this.text.room.m17.active,
         "floor_1_m17"
       );
-      this.getRoomStatusById(
-        this.txtFloor[10].id,
-        this.txtFloor[10].active,
+      this.getRoomActiveById(
+        this.text.room.m18.id,
+        this.text.room.m18.active,
         "floor_1_m18"
       );
-      this.getRoomStatusById(
-        this.txtFloor[11].id,
-        this.txtFloor[11].active,
+      this.getRoomActiveById(
+        this.text.room.m21.id,
+        this.text.room.m21.active,
         "floor_1_m21"
       );
-      this.getRoomStatusById(
-        this.txtFloor[12].id,
-        this.txtFloor[12].active,
+      this.getRoomActiveById(
+        this.text.room.m22.id,
+        this.text.room.m22.active,
         "floor_1_m22"
       );
-      this.getRoomStatusById(
-        this.txtFloor[13].id,
-        this.txtFloor[13].active,
+      this.getRoomActiveById(
+        this.text.room.m23.id,
+        this.text.room.m23.active,
         "floor_1_m23"
       );
     }
