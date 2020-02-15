@@ -10,6 +10,7 @@ router.use(bodyParser.json());
 
 router.get("/all", roomService.getAllRoom);
 router.get("/:roomid", roomService.getRoomById);
+router.get("/name/:roomname", roomService.getRoomByName);
 router.get("/floor/:roomfloor", roomService.getRoomByFloor);
 router.get("/:roomid/booking", roomService.getRoomBookingStatusById);
 

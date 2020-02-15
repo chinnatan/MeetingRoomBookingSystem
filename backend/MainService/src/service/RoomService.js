@@ -71,6 +71,28 @@ exports.getRoomById = (req, res) => {
   });
 };
 
+// แสดงข้อมูลห้องด้วย ROOM NAME
+exports.getRoomByName = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM BY NAME"
+
+  var roomName = req.params.roomname;
+
+  mysqlCon.query("select * from Room where RoomName = ?", [roomName], function (err, results, fields) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
+    } else {
+      if (results.length) {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Name Found`);
+        return res.status(200).json(results);
+      } else {
+        console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By Name Not Found`);
+        return res.status(404).json({ "message": "ไม่พบข้อมูล" });
+      }
+    }
+  });
+};
+
 // แสดงข้อมูลของห้องทั้งหมดในชั้นที่ต้องการ
 exports.getRoomByFloor = (req, res) => {
   const FUNCTION_NAME = "GET ROOM BY FLOOR"
