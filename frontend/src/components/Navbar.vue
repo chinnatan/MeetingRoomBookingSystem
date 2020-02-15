@@ -67,7 +67,7 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link
                   :to="'#'"
-                  v-on:click.native="Logout"
+                  v-on:click.native="signOut"
                   class="dropdown-item"
                 >{{ navbar.account.logout }}</router-link>
               </div>
@@ -80,8 +80,13 @@
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "Navbar",
+  created() {
+    this.getUser()
+  },
   data() {
     return {
       navbar: {
@@ -95,11 +100,29 @@ export default {
         reportDamaged: "แจ้งอุปกรณ์เสียหาย",
         home: "หน้าหลัก",
         account: {
-          username: "ชินธันย์ ชาติทอง",
+          username: "",
           logout: "ออกจากระบบ"
         }
+      },
+      user: {
+        mail: "",
+        status: "",
+        role: ""
       }
     };
+  },
+  methods: {
+    getUser() {
+      let user = JSON.parse(localStorage.getItem("user"))
+      this.navbar.account.username = user.fullname
+      this.user.mail = user.mail
+      this.user.status = user.status
+      this.user.role = user.role
+    },
+    signOut() {
+      localStorage.clear()
+      router.push({ name: "SignIn" });
+    }
   }
 };
 </script>

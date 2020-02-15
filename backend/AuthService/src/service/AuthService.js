@@ -90,7 +90,7 @@ exports.login = async (req, res) => {
                                 if (err) {
                                     throw new Error(err)
                                 } else {
-                                    return res.status(200).json({ "accesstoken": token, "message": "เข้าสู่ระบบสำเร็จ" })
+                                    return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "status": results[0].Status, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
                                 }
                             })
                         } else { // ถ้าไม่เคยเข้าสู่ระบบเลยให้เพิ่มข้อมูลลงฐานข้อมูลและ sign token
@@ -115,7 +115,7 @@ exports.login = async (req, res) => {
                                         if (err) {
                                             throw new Error(err)
                                         } else {
-                                            return res.status(200).json({ "accesstoken": token, "message": "เข้าสู่ระบบสำเร็จ" })
+                                            return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "status": results[0].Status, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
                                         }
                                     })
                                 }
@@ -125,7 +125,7 @@ exports.login = async (req, res) => {
                 })
             } else {
                 console.log("- Authenticated unsuccessfully");
-                return res.status(401).json({ "message": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" })
+                return res.status(200).json({ "accesstoken": false, "message": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" })
             }
         }
     });

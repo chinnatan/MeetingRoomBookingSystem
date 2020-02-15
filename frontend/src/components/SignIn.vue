@@ -27,13 +27,23 @@
             </div>
             <div class="row">
               <div class="col-md-10 mx-auto">
-                <form>
-                  <div class="form-group mt-4">
+                <div
+                  class="alert alert-danger"
+                  role="alert"
+                  v-if="input.messageAlert"
+                >{{ input.messageAlert }}</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-10 mx-auto">
+                <form @submit="preSignIn">
+                  <div class="form-group">
                     <input
                       type="text"
                       class="form-control signin-text-en"
                       id="inputUsername"
-                      :placeholder=signin.txtUsername
+                      v-model="input.inputUsername"
+                      :placeholder="signin.txtUsername"
                     />
                   </div>
                   <div class="form-group mt-4">
@@ -41,10 +51,14 @@
                       type="password"
                       class="form-control signin-text-en"
                       id="inputPassword"
-                      :placeholder=signin.txtPassword
+                      v-model="input.inputPassword"
+                      :placeholder="signin.txtPassword"
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary col-md-12 mt-2 signin-text-en">{{signin.txtLogin}}</button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary col-md-12 mt-2 signin-text-en"
+                  >{{signin.txtLogin}}</button>
                 </form>
               </div>
             </div>
@@ -56,6 +70,12 @@
 </template>
 
 <script>
+import axios from "axios";
+import router from "../router";
+
+const HOST = "localhost";
+const PORT = "4000";
+
 export default {
   name: "SignIn",
   data() {
@@ -69,8 +89,61 @@ export default {
         txtUsername: "Username",
         txtPassword: "Password",
         txtLogin: "Login"
+      },
+      input: {
+        inputUsername: "",
+        inputPassword: "",
+        messageAlert: ""
       }
     };
+  },
+  methods: {
+    preSignIn(evt) {
+      evt.preventDefault();
+      var username = this.input.inputUsername;
+      var password = this.input.inputPassword;
+
+      if (username == "" || password == "") {
+        this.input.messageAlert =
+          "กรุณากรอกชื่อผู้ใช้งานหรือรหัสผ่านให้ครบถ้วน";
+      } else {
+        const payloads = {
+          username: username,
+          password: password
+        };
+
+        this.signIn(payloads);
+      }
+    },
+    signIn(payloads) {
+      const path = "http://" + HOST + ":" + PORT + "/api/auth/login";
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: "login"
+      };
+      axios
+        .post(path, payloads, { headers: headers })
+        .then(res => {
+          if (!res.data.accesstoken) {
+            this.input.messageAlert = res.data.message;
+          } else {
+            if (res.data.user.status != "OK") {
+              this.input.messageAlert =
+                "คุณไม่สามารถใช้งานได้ เนื่องจากคุณทำผิดกฏของระบบ";
+            } else {
+              localStorage.setItem(
+                "token",
+                JSON.stringify(res.data.accesstoken)
+              );
+              localStorage.setItem("user", JSON.stringify(res.data.user));
+              router.push({ name: "Home" });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>
