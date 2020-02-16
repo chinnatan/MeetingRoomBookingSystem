@@ -151,3 +151,40 @@ exports.getRoomBookingStatusById = (req, res) => {
     }
   })
 };
+
+// แสดงรายการการจองของห้องทั้งหมด ณ วันปัจจุบัน โดยใช้ ROOM ID
+exports.getRoomBookingStatusCurDateById = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM BOOKING STATUS CURRENT DATE BY ID"
+
+  var roomId = req.params.roomid;
+
+  var sqlQueryRoom = "select * from Room where RoomId = ?"
+  mysqlCon.query(sqlQueryRoom, [roomId], function (err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
+    }
+
+    if (results.length) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
+      var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate = CURDATE();"
+      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+        if (err) {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+          return res.status(500).json({ "sql_error_message": err.message });
+        }
+
+        if (results.length) {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Found`);
+          return res.status(200).json(results);
+        } else {
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status By ID Not Found`);
+          return res.status(404).json({ "message": "พร้อมใช้งาน" });
+        }
+      });
+    } else {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Not Found`);
+      return res.status(404).json({ "message": "ไม่พบห้องที่ต้องการ" });
+    }
+  })
+};

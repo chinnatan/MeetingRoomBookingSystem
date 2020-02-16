@@ -56,19 +56,19 @@ exports.addBooking = (req, res) => {
   var UserId = req.body.UserId
   var RoomId = req.body.RoomId
 
-  let [startTimeHour, startTimeMinute, startTimeSecond] = BookingStartTime.split(':')
-  let [endTimeHour, endTimeMinute, endTimeSecond] = BookingEndTime.split(':')
+  let [startTimeHour, startTimeMinute] = BookingStartTime.split(':')
+  let [endTimeHour, endTimeMinute] = BookingEndTime.split(':')
 
   var startDateTime = Date.parse(BookingStartDate)
   startDateTime = new Date(startDateTime)
   startDateTime.setHours(startTimeHour)
   startDateTime.setMinutes(startTimeMinute)
-  startDateTime.setSeconds(startTimeSecond)
+  startDateTime.setSeconds(0)
   var endDateTime = Date.parse(BookingEndDate)
   endDateTime = new Date(endDateTime)
   endDateTime.setHours(endTimeHour)
   endDateTime.setMinutes(endTimeMinute)
-  endDateTime.setSeconds(endTimeSecond)
+  endDateTime.setSeconds(0)
   var dateNow = new Date()
 
   try {
@@ -106,8 +106,8 @@ exports.addBooking = (req, res) => {
     }
 
     if (setting.Unit.AdvanceBooking.ShortName == 'D') {
-      var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000))
-      if (diffDay > setting.AdvanceBooking) {
+      var diffDay = parseInt((startDateTime - dateNow) / (24 * 3600 * 1000)) + 1
+      if (diffDay <= setting.AdvanceBooking) {
         error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
         throw error_message
       }
@@ -123,13 +123,16 @@ exports.addBooking = (req, res) => {
       }
       var diffMinute = Math.abs(dateNow.getMinutes() - startDateTime.getMinutes())
       var diffHoursMinute = diffHours - diffMinute
+      console.log(diffHoursMinute)
 
-      if (diffHoursMinute < 0) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
-        throw error_message
-      } else if (diffHoursMinute < setting.AdvanceBooking * 60) {
-        error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
-        throw error_message
+      if (startDateTime.getDate() == dateNow.getDate() && startDateTime.getMonth() == dateNow.getMonth() && startDateTime.getFullYear() == dateNow.getFullYear()) {
+        if (diffHoursMinute < 0) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากเวลาที่ต้องการจองผ่านมาเรียบร้อยแล้ว"
+          throw error_message
+        } else if (diffHoursMinute < setting.AdvanceBooking * 60) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากต้องทำการจองล่วงหน้าก่อน " + setting.AdvanceBooking + " " + setting.Unit.AdvanceBooking.LongName
+          throw error_message
+        }
       }
     } else if (setting.Unit.AdvanceBooking.ShortName == 'M') {
       if (dateNow.getHours() == 0 || (startDateTime.getHours() == 0)) {
@@ -345,7 +348,7 @@ exports.addBooking = (req, res) => {
       }
     })
   } catch (err) {
-    return res.status(500).json({ "error_message": err })
+    return res.status(200).json({ "error_message": err })
   }
 };
 
