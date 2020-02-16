@@ -167,7 +167,7 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
 
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
-      var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate = CURDATE();"
+      var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= CURDATE();"
       mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
@@ -187,4 +187,27 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
       return res.status(404).json({ "message": "ไม่พบห้องที่ต้องการ" });
     }
   })
+};
+
+// แสดงรายการการจองของห้องทั้งหมด ณ วัน และเวลาปัจจุบัน
+exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
+  const FUNCTION_NAME = "GET ROOM ALL BOOKING STATUS CURRENT DATE"
+
+  var roomId = req.params.roomid;
+
+  var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate = CURDATE() and (CURTIME() between BookingStartTime and BookingEndTime)"
+  mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
+    }
+
+    if (results.length) {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status Found`);
+      return res.status(200).json(results);
+    } else {
+      console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room Booking Status Not Found`);
+      return res.status(200).json({ "message": "พร้อมใช้งาน" });
+    }
+  });
 };
