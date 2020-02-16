@@ -166,7 +166,7 @@ exports.addBooking = (req, res) => {
       if (diffDay > 1) {
         for (var count = 0; count < diffDay; count++) {
           startDateTime.setDate(startDateTime.getDate() + count)
-          var bookingStartDateCount = startDateTime.getFullYear() + "-" + startDateTime.getMonth() + "-" + startDateTime.getDate()
+          var bookingStartDateCount = startDateTime.getFullYear() + "-" + (startDateTime.getMonth() + 1) + "-" + startDateTime.getDate()
           var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
           mysqlCon.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, bookingStartDateCount, bookingStartDateCount, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId], function (err, results) {
             if (err) {
