@@ -84,6 +84,11 @@ exports.addBooking = (req, res) => {
       throw error_message
     }
 
+    if((startDateTime.getDate() > endDateTime.getDate()) && (startDateTime.getMonth() >= endDateTime.getMonth()) && (startDateTime.getFullYear() >= endDateTime.getFullYear())) {
+      error_message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่เริ่มต้นมากกว่าวันที่สิ้นสุด"
+      throw error_message
+    }
+
     var bookingDateTotal = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000) + 1)
     if (bookingDateTotal > setting.HighestDatePerTime) {
       error_message = "ไม่สามารถทำรายการได้ เนื่องจากวันที่ที่ต้องการจองเกินกำหนด (" + setting.HighestDatePerTime + " " + setting.Unit.HighestDatePerTime + ")"
@@ -162,30 +167,13 @@ exports.addBooking = (req, res) => {
         return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
       }
 
-      var diffDay = parseInt((endDateTime - startDateTime) / (24 * 3600 * 1000)) + 1
-      if (diffDay > 1) {
-        for (var count = 0; count < diffDay; count++) {
-          startDateTime.setDate(startDateTime.getDate() + count)
-          var bookingStartDateCount = startDateTime.getFullYear() + "-" + (startDateTime.getMonth() + 1) + "-" + startDateTime.getDate()
-          var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-          mysqlCon.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, bookingStartDateCount, bookingStartDateCount, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId], function (err, results) {
-            if (err) {
-              mysqlCon.rollback(function () {
-                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL INSERT ERROR -> ${err}`);
-                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
-              })
-            }
 
-            mysqlCon.commit(function (err) {
-              if (err) {
-                mysqlCon.rollback(function () {
-                  console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
-                  return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
-                })
-              }
-
-              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Booking Successfully ${count + 1}`);
-            })
+      var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      mysqlCon.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId], function (err, results) {
+        if (err) {
+          mysqlCon.rollback(function () {
+            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL INSERT ERROR -> ${err}`);
+            return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
           })
         }
 
@@ -218,10 +206,6 @@ exports.addBooking = (req, res) => {
 
           if (results.length) {
             var roomName = results[0].RoomName
-            var convertBookingStartDate = Date.parse(BookingStartDate)
-            convertBookingStartDate = new Date(convertBookingStartDate)
-            var convertBookingEndDate = Date.parse(BookingEndDate)
-            convertBookingEndDate = new Date(convertBookingEndDate)
             if (startDateTime.getHours() == 0) {
               var bookingStartTime = "24:" + startDateTime.getMinutes()
             } else {
@@ -237,10 +221,10 @@ exports.addBooking = (req, res) => {
               to: '59070040@it.kmitl.ac.th',                // list of receivers
               subject: `[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง ${roomName}`,              // Mail subject
               html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
-            <b>หัวข้อการจอง : </b>${BookingTitle}<br>
-            <b>วันที่จอง : </b>${convertBookingStartDate.toDateString()} - ${convertBookingEndDate.toDateString()}<br>
-            <b>เวลาที่จอง : </b>${bookingStartTime} - ${bookingEndTime}<br>
-            <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
+              <b>หัวข้อการจอง : </b>${BookingTitle}<br>
+              <b>วันที่จอง : </b>${startDateTime.toDateString()} - ${endDateTime.toDateString()}<br>
+              <b>เวลาที่จอง : </b>${bookingStartTime} - ${bookingEndTime}<br>
+              <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
             };
 
             transporter.sendMail(addMailOptions, function (err, info) {
@@ -257,95 +241,19 @@ exports.addBooking = (req, res) => {
           }
         })
 
-        return res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
-      } else {
-        var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        mysqlCon.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, BookingStatus, BookingPartner, UserId, RoomId], function (err, results) {
+        mysqlCon.commit(function (err) {
           if (err) {
             mysqlCon.rollback(function () {
-              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL INSERT ERROR -> ${err}`);
+              console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
               return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
             })
           }
 
-          // ส่งรหัสผ่านสำหรับการเข้าใช้งานห้องไปที่ Email ของผู้ใช้งาน
-          const nodemailer = require('nodemailer');
-          const gmailConfig = require("../config");
+          console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Booking Successfully"`);
 
-          // config สำหรับของ gmail
-          const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            secure: false, // use SSL
-            port: 25, // port for secure SMTP
-            auth: {
-              user: gmailConfig.GMAIL.USER, // your email
-              pass: gmailConfig.GMAIL.PWD // your email password
-            },
-            tls: {
-              rejectUnauthorized: false
-            }
-          });
-
-          var sqlQueryRoom = "select RoomName from Room where RoomId = ?"
-          mysqlCon.query(sqlQueryRoom, [RoomId], function (err, results) {
-            if (err) {
-              mysqlCon.rollback(function () {
-                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
-                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
-              })
-            }
-
-            if (results.length) {
-              var roomName = results[0].RoomName
-              if (startDateTime.getHours() == 0) {
-                var bookingStartTime = "24:" + startDateTime.getMinutes()
-              } else {
-                var bookingStartTime = startDateTime.getHours() + ":" + startDateTime.getMinutes()
-              }
-              if (endDateTime.getHours() == 0) {
-                var bookingEndTime = "24:" + endDateTime.getMinutes()
-              } else {
-                var bookingEndTime = endDateTime.getHours() + ":" + endDateTime.getMinutes()
-              }
-              let addMailOptions = {
-                from: gmailConfig.GMAIL.USER,                // sender
-                to: '59070040@it.kmitl.ac.th',                // list of receivers
-                subject: `[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง ${roomName}`,              // Mail subject
-                html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
-              <b>หัวข้อการจอง : </b>${BookingTitle}<br>
-              <b>วันที่จอง : </b>${startDateTime.toDateString()} - ${endDateTime.toDateString()}<br>
-              <b>เวลาที่จอง : </b>${bookingStartTime} - ${bookingEndTime}<br>
-              <b>รหัสผ่านสำหรับการเข้าใช้งานห้อง : </b>${BookingPin}`   // HTML body
-              };
-
-              transporter.sendMail(addMailOptions, function (err, info) {
-                if (err) {
-                  mysqlCon.rollback(function () {
-                    console.log(`[TRANSPORTER][ADD MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
-                    return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
-                  })
-                } else {
-                  console.log(info);
-                  transporter.close(); // shut down the connection pool, no more messages
-                }
-              });
-            }
-          })
-
-          mysqlCon.commit(function (err) {
-            if (err) {
-              mysqlCon.rollback(function () {
-                console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL COMMIT ERROR -> ${err.message}`);
-                return res.status(500).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
-              })
-            }
-
-            console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> "Booking Successfully"`);
-
-            res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
-          })
+          res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
         })
-      }
+      })
     })
   } catch (err) {
     return res.status(200).json({ "error_message": err })
@@ -767,7 +675,7 @@ exports.startBookingUse = (req, res) => {
   var bookingId = req.body.BookingId
   var bookingPin = req.body.BookingPin
 
-  var sqlQueryBooking = "select BookingPin, BookingStartDate, BookingStartTime, UserId, RoomId from Booking where BookingId = ?"
+  var sqlQueryBooking = "select BookingPin, BookingStartDate, BookingEndDate, BookingStartTime, BookingEndTime, UserId, RoomId from Booking where BookingId = ?"
   mysqlCon.query(sqlQueryBooking, [bookingId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] SQL QUERY ERROR -> ${err.message}`);
@@ -778,23 +686,45 @@ exports.startBookingUse = (req, res) => {
       try {
         var error_message = String.empty
         var bookingStartDate = results[0].BookingStartDate
+        var bookingEndDate = results[0].BookingEndDate
         var bookingStartTime = results[0].BookingStartTime
+        var bookingEndTime = results[0].BookingEndTime
         var userId = results[0].UserId
         var roomId = results[0].RoomId
 
         let [startTimeHour, startTimeMinute, startTimeSecond] = bookingStartTime.split(':')
+        let [endTimeHour, endTimeMinute, endTimeSecond] = bookingEndTime.split(':')
 
         var startDateTime = Date.parse(bookingStartDate)
         startDateTime = new Date(startDateTime)
         startDateTime.setHours(startTimeHour)
         startDateTime.setMinutes(startTimeMinute)
         startDateTime.setSeconds(startTimeSecond)
+        var endDateTime = Date.parse(bookingEndDate)
+        endDateTime = new Date(endDateTime)
+        endDateTime.setHours(endTimeHour)
+        endDateTime.setMinutes(endTimeMinute)
+        endDateTime.setSeconds(endTimeSecond)
         var dateNow = new Date()
+        
+        // TESTING
+        // var dateNow = new Date("2020-02-20")
+        // console.log(dateNow.toLocaleString())
+        // dateNow.setHours(22)
+        // dateNow.setMinutes(00)
+        // dateNow.setSeconds(00)
+        // console.log(dateNow.toLocaleString())
 
-        if ((startDateTime.getHours() != dateNow.getHours()) && (startDateTime.getMinutes() != dateNow.getMinutes())) {
+        if(!((dateNow >= startDateTime) && (dateNow <= endDateTime))) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากไม่อยู่ในช่วงเวลาที่ทำการจอง"
+          throw error_message
+        } else if ((startDateTime.getHours() != dateNow.getHours()) && (startDateTime.getMinutes() != dateNow.getMinutes())) {
           error_message = "ไม่สามารถทำรายการได้ เนื่องจากยังไม่ถึงเวลาเข้าใช้งาน"
           throw error_message
         } else if ((startDateTime.getHours() < dateNow.getHours()) && (startDateTime.getMinutes() <= dateNow.getMinutes())) {
+          error_message = "ไม่สามารถทำรายการได้ เนื่องจากยังไม่ถึงเวลาเข้าใช้งาน"
+          throw error_message
+        } else if ((startDateTime.getHours() > dateNow.getHours()) && (startDateTime.getMinutes() >= dateNow.getMinutes())) {
           error_message = "ไม่สามารถทำรายการได้ เนื่องจากยังไม่ถึงเวลาเข้าใช้งาน"
           throw error_message
         }
