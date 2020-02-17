@@ -455,11 +455,17 @@ export default {
             active: ""
           }
         }
-      }
+      },
+      intervalUpdate: null
     };
   },
   computed: {
     
+  },
+  mounted() {
+    this.intervalUpdate = setInterval(function () {
+      this.updateRoomActiveAllFloor();
+    }.bind(this), 60000)
   },
   beforeUpdate() {
     this.updateRoomActiveAllFloor()
@@ -620,67 +626,152 @@ export default {
         this.text.room.room335.active = room[0].RoomActive;
       }
     },
-    getRoomActiveById(roomId, roomActive, rectId) {
+    getRoomActiveById(roomId, roomActive, student, professor, officer, rectId) {
       if (roomActive) {
-        document.getElementById(rectId).setAttribute("fill", "lightgreen");
+        if (
+          JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
+          "IT STUDENT"
+        ) {
+          if (student) {
+            this.getBookingScheduleCurDateAndCurTime(roomId, rectId)
+          } else {
+            document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
+          }
+        }
+
+        if (
+          JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
+          "PROFESSOR"
+        ) {
+          if (professor) {
+            document.getElementById(rectId).setAttribute("fill", "#00ff00");
+          } else {
+            document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
+          }
+        }
+
+        if (
+          JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
+          "OFFICER"
+        ) {
+          if (officer) {
+            document.getElementById(rectId).setAttribute("fill", "#00ff00");
+          } else {
+            document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
+          }
+        }
       }
     },
     updateRoomActiveAllFloor() {
       this.getRoomActiveById(
         this.text.room.room304.id,
         this.text.room.room304.active,
+        this.text.room.room304.student,
+        this.text.room.room304.professor,
+        this.text.room.room304.officer,
         "floor_3_304"
       );
       this.getRoomActiveById(
         this.text.room.room306.id,
         this.text.room.room306.active,
+        this.text.room.room306.student,
+        this.text.room.room306.professor,
+        this.text.room.room306.officer,
         "floor_3_306"
       );
       this.getRoomActiveById(
         this.text.room.room308.id,
         this.text.room.room308.active,
+        this.text.room.room308.student,
+        this.text.room.room308.professor,
+        this.text.room.room308.officer,
         "floor_3_308"
       );
       this.getRoomActiveById(
         this.text.room.room328.id,
         this.text.room.room328.active,
+        this.text.room.room328.student,
+        this.text.room.room328.professor,
+        this.text.room.room328.officer,
         "floor_3_328"
       );
       this.getRoomActiveById(
         this.text.room.room329.id,
         this.text.room.room329.active,
+        this.text.room.room329.student,
+        this.text.room.room329.professor,
+        this.text.room.room329.officer,
         "floor_3_329"
       );
       this.getRoomActiveById(
         this.text.room.room330.id,
         this.text.room.room330.active,
+        this.text.room.room330.student,
+        this.text.room.room330.professor,
+        this.text.room.room330.officer,
         "floor_3_330"
       );
       this.getRoomActiveById(
         this.text.room.room331.id,
         this.text.room.room331.active,
+        this.text.room.room331.student,
+        this.text.room.room331.professor,
+        this.text.room.room331.officer,
         "floor_3_331"
       );
       this.getRoomActiveById(
         this.text.room.room332.id,
         this.text.room.room332.active,
+        this.text.room.room332.student,
+        this.text.room.room332.professor,
+        this.text.room.room332.officer,
         "floor_3_332"
       );
       this.getRoomActiveById(
         this.text.room.room333.id,
         this.text.room.room333.active,
+        this.text.room.room333.student,
+        this.text.room.room333.professor,
+        this.text.room.room333.officer,
         "floor_3_333"
       );
       this.getRoomActiveById(
         this.text.room.room334.id,
         this.text.room.room334.active,
+        this.text.room.room334.student,
+        this.text.room.room334.professor,
+        this.text.room.room334.officer,
         "floor_3_334"
       );
       this.getRoomActiveById(
         this.text.room.room335.id,
         this.text.room.room335.active,
+        this.text.room.room335.student,
+        this.text.room.room335.professor,
+        this.text.room.room335.officer,
         "floor_3_335"
       );
+    },
+    getBookingScheduleCurDateAndCurTime(roomId, rectId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/room/" + roomId + "/booking/time/now";
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data[0] != null) {
+            document.getElementById(rectId).setAttribute("fill", "red");
+          } else if(res.data.message != null) {
+            document.getElementById(rectId).setAttribute("fill", "#00ff00");
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        });
     }
   }
 };
