@@ -1,0 +1,20 @@
+{
+    "HighestPeriodPerTime": 1,
+    "HighestDatePerTime": 1,
+    "SlowestActivation": 15,
+    "AdvanceBooking": 1,
+    "AdvanceCancel": 1,
+    "Unit": {
+        "HighestPeriodPerTime": "ชั่วโมง",
+        "HighestDatePerTime": "วัน",
+        "SlowestActivation": "นาที",
+        "AdvanceBooking": {
+            "ShortName": "D",
+            "LongName": "วัน"
+        },
+        "AdvanceCancel": {
+            "ShortName": "M",
+            "LongName": "นาที"
+        }
+    }
+}
