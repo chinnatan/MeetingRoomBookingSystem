@@ -17,8 +17,6 @@ const roomController = require("./src/controller/RoomController");
 app.use("/room", roomController);
 const toolController = require("./src/controller/ToolController");
 app.use("/tool", toolController);
-const settingController = require("./src/controller/SettingController");
-app.use("/setting", settingController);
 const bookingController = require("./src/controller/BookingController");
 app.use("/booking", bookingController);
 
