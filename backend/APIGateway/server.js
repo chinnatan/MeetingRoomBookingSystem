@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const authServiceProxy = httpProxy('http://0.0.0.0:3000')
 const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
+const settingServiceProxy = httpProxy('http://0.0.0.0:3003')
 
 // API Gateway Option
 const NAME = "API Gateway";
@@ -19,15 +20,15 @@ app.use((req, res, next) => {
     // TODO: my authentication logic
     const SECRET = config.MY_SECRET
 
-    if(!req.headers.authorization) {
+    if (!req.headers.authorization) {
         next()
     } else if (req.headers.authorization !== "undefined") {
-        if(req.headers.authorization === "login") {
+        if (req.headers.authorization === "login") {
             return next();
         } else {
             const token = req.headers.authorization
-            jwt.verify(token, SECRET, function(err, detoken) {
-                if(err) {
+            jwt.verify(token, SECRET, function (err, detoken) {
+                if (err) {
                     return res.status(401).json(err)
                 } else {
                     return next()
@@ -59,6 +60,10 @@ app.use((req, res, next) => {
 // Proxy request
 app.use('/api/auth/', (req, res, next) => {
     authServiceProxy(req, res, next)
+})
+
+app.use('/api/setting/', (req, res, next) => {
+    settingServiceProxy(req, res, next)
 })
 
 app.use('/api/', (req, res, next) => {
