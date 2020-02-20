@@ -357,3 +357,43 @@ exports.addBooking = async (req, res) => {
         }
     })
 }
+
+exports.getBookingByUserId = async (req, res) => {
+    const API_NAME = "GET BOOKING BY USER ID"
+
+    var userId = req.params.userId
+
+    var sqlQueryBookingByUserId = "select * from Booking join Room on (Booking.RoomId = Room.RoomId) where UserId = ? and BookingStatus = ?"
+    mysqlPool.query(sqlQueryBookingByUserId, [userId, "B"], function (err, results) {
+        if (err) {
+            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if(results.length > 0) {
+            return res.status(200).json(results)
+        } else {
+            return res.status(200).json({ "message": "ไม่พบรายการการจองห้องของคุณ หรือคุณอาจจะยังไม่เคยทำการจองห้อง" })
+        }
+    })
+}
+
+exports.getBookingByBookingId = async (req, res) => {
+    const API_NAME = "GET BOOKING BY BOOKING ID"
+
+    var bookingId = req.params.bookingId
+
+    var sqlQueryBookingByBookingId = "select * from Booking where BookingId = ?"
+    mysqlPool.query(sqlQueryBookingByBookingId, [bookingId], function (err, results) {
+        if (err) {
+            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if(results.length > 0) {
+            return res.status(200).json(results)
+        } else {
+            return res.status(200).json({ "message": "ไม่พบรายการการจองห้องของคุณ หรือคุณอาจจะยังไม่เคยทำการจองห้อง" })
+        }
+    })
+}

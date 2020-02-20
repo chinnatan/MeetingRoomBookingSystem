@@ -14,4 +14,7 @@ router.post("/send", BookingService.addBooking);
 // router.post("/use", BookingService.startBookingUse);
 // router.post("/crash/time", BookingService.checkBookingCrashTime);
 
+router.get("/user/:userId", BookingService.getBookingByUserId);
+router.get("/:bookingId", BookingService.getBookingByBookingId);
+
 module.exports = router;
