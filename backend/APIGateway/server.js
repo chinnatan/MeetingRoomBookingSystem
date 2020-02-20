@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const authServiceProxy = httpProxy('http://0.0.0.0:3000')
 const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
+const bookingServiceProxy = httpProxy('http://0.0.0.0:3002')
 const settingServiceProxy = httpProxy('http://0.0.0.0:3003')
 
 // API Gateway Option
@@ -60,6 +61,10 @@ app.use((req, res, next) => {
 // Proxy request
 app.use('/api/auth/', (req, res, next) => {
     authServiceProxy(req, res, next)
+})
+
+app.use('/api/booking/', (req, res, next) => {
+    bookingServiceProxy(req, res, next)
 })
 
 app.use('/api/setting/', (req, res, next) => {
