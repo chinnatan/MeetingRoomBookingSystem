@@ -412,7 +412,6 @@
                   <tr>
                     <th scope="col">{{ modal.text.table.BookingTitle }}</th>
                     <th scope="col">{{ modal.text.table.BookingStartDate }}</th>
-                    <th scope="col">{{ modal.text.table.BookingEndDate }}</th>
                     <th scope="col">{{ modal.text.table.BookingStartTime }}</th>
                     <th scope="col">{{ modal.text.table.BookingEndTime }}</th>
                     <th scope="col">{{ modal.text.table.Fullname }}</th>
@@ -422,7 +421,6 @@
                   <tr v-for="(line, index) in modal.schedule" v-bind:key="index">
                     <td>{{ line.BookingTitle }}</td>
                     <td>{{ line.BookingStartDate }}</td>
-                    <td>{{ line.BookingEndDate }}</td>
                     <td>{{ line.BookingStartTime }}</td>
                     <td>{{ line.BookingEndTime }}</td>
                     <td>{{ line.Fullname }}</td>
@@ -512,10 +510,9 @@ export default {
           title: "ตารางเวลาของห้อง",
           table: {
             BookingTitle: "หัวข้อการจอง",
-            BookingStartDate: "วันที่เริ่มต้นการจอง",
-            BookingEndDate: "วันที่สิ้นสุดการจอง",
-            BookingStartTime: "เวลาที่เริ่มต้นการจอง",
-            BookingEndTime: "เวลาที่สิ้นสุดการจอง",
+            BookingStartDate: "วันที่จอง",
+            BookingStartTime: "เวลาเริ่มต้น",
+            BookingEndTime: "เวลาสิ้นสุด",
             Fullname: "ผู้ทำการจอง"
           }
         },
