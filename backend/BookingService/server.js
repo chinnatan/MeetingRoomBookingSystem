@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Controller Configuration
 const bookingController = require("./src/controller/BookingController");
-app.use("/booking", bookingController);
+app.use("/", bookingController);
 
 http.listen(PORT, HOST);
 console.log(`[${NAME}] Running on http://${HOST}:${PORT}`);

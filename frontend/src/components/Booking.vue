@@ -140,7 +140,12 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <div class="alert alert-danger" role="alert" v-if="alert">{{ alertMessage }}</div>
+                  <div
+                    id="alert-message"
+                    class="alert alert-danger"
+                    role="alert"
+                    v-if="alert"
+                  >{{ alertMessage }}</div>
                 </div>
               </div>
               <div class="row mt-4">
@@ -192,7 +197,7 @@
                           >{{ txtBooking.lblBookingSchedule }}</button>
                         </div>
                       </div>
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="col-md-12">
                           <div class="card">
                             <div class="card-body">
@@ -218,8 +223,8 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="row mt-2">
+                      </div>-->
+                      <!-- <div class="row mt-2">
                         <div class="col-md-12">
                           <div class="card">
                             <div class="card-body">
@@ -245,7 +250,7 @@
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-md-8 text-left">
                       <div class="row">
@@ -285,19 +290,19 @@
                               <div class="col-md-12">
                                 <div class="form-group">
                                   <label
-                                    for="lblBookingPartner"
+                                    for="lblBookingAttendees"
                                     class="booking-font"
-                                  >{{ txtBooking.lblBookingPartner }}</label>
+                                  >{{ txtBooking.lblBookingAttendees }}</label>
                                   <input
                                     type="number"
                                     class="form-control"
-                                    v-model="form.inputBookingPartner"
+                                    v-model="form.inputBookingAttendees"
                                   />
                                 </div>
                               </div>
                             </div>
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-12">
                                 <div class="form-group">
                                   <label
                                     for="lblBookingStartDate"
@@ -308,20 +313,6 @@
                                     :min="form.currentDate"
                                     class="form-control"
                                     v-model="form.inputBookingStartDate"
-                                  />
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <label
-                                    for="lblBookingEndDate"
-                                    class="booking-font"
-                                  >{{ txtBooking.lblBookingEndDate }}</label>
-                                  <input
-                                    type="date"
-                                    :min="form.currentDate"
-                                    class="form-control"
-                                    v-model="form.inputBookingEndDate"
                                   />
                                 </div>
                               </div>
@@ -336,7 +327,7 @@
                                   <input
                                     type="time"
                                     min="09:00:00"
-                                    max="17:00:00"
+                                    max="23:00:00"
                                     class="form-control"
                                     v-model="form.inputBookingStartTime"
                                   />
@@ -351,7 +342,7 @@
                                   <input
                                     type="time"
                                     min="09:00:00"
-                                    max="17:00:00"
+                                    max="23:00:00"
                                     class="form-control"
                                     v-model="form.inputBookingEndTime"
                                   />
@@ -478,13 +469,12 @@ export default {
         lblRoom: "ห้อง :",
         lblSize: "รองรับ : ",
         lblBookingTitle: "หัวข้อการจอง",
-        lblBookingStartDate: "วันที่เริ่มต้นการจอง",
-        lblBookingEndDate: "วันที่สิ้นสุดการจอง",
+        lblBookingStartDate: "วันที่ต้องการจอง",
         lblBookingStartTime: "เวลาเริ่มต้น",
         lblBookingEndTime: "เวลาสิ้นสุด",
         lblBookingDetail: "รายละเอียดการจอง",
         lblBookingSchedule: "ดูตารางเวลา",
-        lblBookingPartner: "จำนวนผู้เข้าร่วม",
+        lblBookingAttendees: "จำนวนผู้เข้าร่วม",
         lblRoomId: "",
         lblNameRoom: "",
         lblSizeRoom: "",
@@ -511,10 +501,9 @@ export default {
         inputBookingTitle: null,
         inputBookingDetail: null,
         inputBookingStartDate: null,
-        inputBookingEndDate: null,
         inputBookingStartTime: null,
         inputBookingEndTime: null,
-        inputBookingPartner: null,
+        inputBookingAttendees: null,
         currentDate: null,
         currentTime: null
       },
@@ -556,6 +545,9 @@ export default {
 
       this.form.inputBookingStartDate = this.form.currentDate;
       this.form.inputBookingStartTime = this.form.currentTime;
+
+      this.alert = false;
+      this.alertMessage = null;
     },
     changeFloor(floor) {
       this.floor = floor;
@@ -564,28 +556,34 @@ export default {
     preSendBooking() {
       // Validate
       if (
-        this.form.inputBookingTitle == null &&
-        this.form.inputBookingDetail == null &&
-        this.form.inputBookingStartDate == null &&
-        this.form.inputBookingEndDate == null &&
-        this.form.inputBookingStartTime == null &&
-        this.form.inputBookingEndTime == null &&
-        this.form.inputBookingPartner == null
+        this.form.inputBookingTitle == null ||
+        this.form.inputBookingDetail == null ||
+        this.form.inputBookingStartDate == null ||
+        this.form.inputBookingStartTime == null ||
+        this.form.inputBookingEndTime == null ||
+        this.form.inputBookingAttendees == null
       ) {
         this.alertDanger("กรุณากรอกข้อมูลให้ครบถ้วน");
+        document
+          .getElementById("form-booking")
+          .scrollIntoView({ behavior: "smooth" });
       } else if (
         this.form.inputBookingStartDate > this.form.inputBookingEndDate
       ) {
-        this.alertDanger("กรุณากรอกวันที่ต้องการให้ถูกต้อง");
+        this.alertDanger(
+          "ไม่สามารถทำรายการได้ เนื่องจากวันที่เริ่มต้นมากกว่าวันที่สิ้นสุด"
+        );
+        document
+          .getElementById("form-booking")
+          .scrollIntoView({ behavior: "smooth" });
       } else {
         const results = {
           BookingTitle: this.form.inputBookingTitle,
           BookingDetail: this.form.inputBookingDetail,
           BookingStartDate: this.form.inputBookingStartDate,
-          BookingEndDate: this.form.inputBookingEndDate,
           BookingStartTime: this.form.inputBookingStartTime,
           BookingEndTime: this.form.inputBookingEndTime,
-          BookingPartner: this.form.inputBookingPartner,
+          BookingAttendees: this.form.inputBookingAttendees,
           UserId: JSON.parse(localStorage.getItem("user")).id,
           RoomId: this.txtBooking.lblRoomId
         };
@@ -599,8 +597,7 @@ export default {
         axiosConfig.APIGATEWAY.HOST +
         ":" +
         axiosConfig.APIGATEWAY.PORT +
-        "/api" +
-        axiosConfig.PATH.addBooking;
+        "/api/booking/send";
 
       try {
         axios
@@ -610,6 +607,9 @@ export default {
             if (response.error_message) {
               this.alertDanger(response.error_message);
               this.alert = true;
+              document
+                .getElementById("form-booking")
+                .scrollIntoView({ behavior: "smooth" });
             } else {
               this.alertSuccess(response.message, response.pin);
               this.alert = false;
@@ -630,7 +630,7 @@ export default {
       this.form.inputBookingEndDate = null;
       this.form.inputBookingStartTime = null;
       this.form.inputBookingEndTime = null;
-      this.form.inputBookingPartner = null;
+      this.form.inputBookingAttendees = null;
       this.form.currentDate = null;
       this.form.currentTime = null;
 
@@ -663,7 +663,7 @@ export default {
         axiosConfig.PATH.getRoomBookingStatusCurDateById;
 
       var dateFormat = require("dateformat");
-      this.modal.schedule = []
+      this.modal.schedule = [];
 
       axios
         .get(path)
@@ -672,10 +672,22 @@ export default {
             for (var scheduleIndex in res.data) {
               this.modal.schedule.push({
                 BookingTitle: res.data[scheduleIndex].BookingTitle,
-                BookingStartDate: dateFormat(res.data[scheduleIndex].BookingStartDate, "dd/mm/yyyy"),
-                BookingEndDate: dateFormat(res.data[scheduleIndex].BookingEndDate, "dd/mm/yyyy"),
-                BookingStartTime: res.data[scheduleIndex].BookingStartTime,
-                BookingEndTime: res.data[scheduleIndex].BookingEndTime,
+                BookingStartDate: dateFormat(
+                  res.data[scheduleIndex].BookingStartDate,
+                  "dd/mm/yyyy"
+                ),
+                BookingEndDate: dateFormat(
+                  res.data[scheduleIndex].BookingEndDate,
+                  "dd/mm/yyyy"
+                ),
+                BookingStartTime: dateFormat(
+                  res.data[scheduleIndex].BookingStartDate,
+                  "HH:MM"
+                ),
+                BookingEndTime: dateFormat(
+                  res.data[scheduleIndex].BookingEndDate,
+                  "HH:MM"
+                ),
                 Fullname: res.data[scheduleIndex].Fullname
               });
             }

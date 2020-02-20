@@ -49,19 +49,19 @@ exports.addBooking = async (req, res) => {
     var UserId = req.body.UserId
     var RoomId = req.body.RoomId
 
-    let [startTimeHour, startTimeMinute, startTimeSecond] = BookingStartTime.split(':')
-    let [endTimeHour, endTimeMinute, endTimeSecond] = BookingEndTime.split(':')
+    let [startTimeHour, startTimeMinute] = BookingStartTime.split(':')
+    let [endTimeHour, endTimeMinute] = BookingEndTime.split(':')
 
     var startDateTime = Date.parse(BookingStartDate)
     startDateTime = new Date(startDateTime)
     startDateTime.setHours(startTimeHour)
     startDateTime.setMinutes(startTimeMinute)
-    startDateTime.setSeconds(startTimeSecond)
+    startDateTime.setSeconds(0)
     var endDateTime = Date.parse(BookingEndDate)
     endDateTime = new Date(endDateTime)
     endDateTime.setHours(endTimeHour)
     endDateTime.setMinutes(endTimeMinute)
-    endDateTime.setSeconds(endTimeSecond)
+    endDateTime.setSeconds(0)
     var currentDate = new Date()
 
     // --GET SETTING SYSTEM-- //
