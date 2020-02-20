@@ -358,7 +358,7 @@ exports.addBooking = async (req, res) => {
     })
 }
 
-exports.getBookingByUserId = async (req, res) => {
+exports.getBookingByUserId = (req, res) => {
     const API_NAME = "GET BOOKING BY USER ID"
 
     var userId = req.params.userId
@@ -378,7 +378,7 @@ exports.getBookingByUserId = async (req, res) => {
     })
 }
 
-exports.getBookingByBookingId = async (req, res) => {
+exports.getBookingByBookingId = (req, res) => {
     const API_NAME = "GET BOOKING BY BOOKING ID"
 
     var bookingId = req.params.bookingId
