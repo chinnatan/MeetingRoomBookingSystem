@@ -9,7 +9,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.post("/send", BookingService.addBooking);
-// router.put("/update", BookingService.editBooking);
+
+router.put("/update", BookingService.editBooking);
 // router.put("/cancel", BookingService.cancelBooking);
 // router.post("/use", BookingService.startBookingUse);
 // router.post("/crash/time", BookingService.checkBookingCrashTime);
