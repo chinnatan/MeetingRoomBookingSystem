@@ -127,7 +127,7 @@ export default {
           if (!res.data.accesstoken) {
             this.input.messageAlert = res.data.message;
           } else {
-            if (res.data.user.status != "OK") {
+            if (res.data.user.banned) {
               this.input.messageAlert =
                 "คุณไม่สามารถใช้งานได้ เนื่องจากคุณทำผิดกฏของระบบ";
             } else {
