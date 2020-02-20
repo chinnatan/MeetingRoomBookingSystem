@@ -167,8 +167,8 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
 
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
-      var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= CURDATE();"
-      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+      var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= ?;"
+      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleDateString()], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
           return res.status(500).json({ "sql_error_message": err.message });
@@ -195,8 +195,8 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
 
   var roomId = req.params.roomid;
 
-  var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.BookingStartTime, Booking.BookingEndTime, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate = CURDATE() and (CURTIME() between BookingStartTime and BookingEndTime)"
-  mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+  var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and ? between BookingStartDate and BookingEndDate"
+  mysqlCon.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
