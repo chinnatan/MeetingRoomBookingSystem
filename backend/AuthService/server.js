@@ -15,4 +15,4 @@ const authController = require('./src/controller/AuthController')
 app.use("/", authController);
 
 app.listen(PORT, HOST);
-console.log(`Auth Service Running on http://${HOST}:${PORT}`);
+console.log(`[AUTH SERVICE] Running on http://${HOST}:${PORT}`);

@@ -80,7 +80,7 @@ exports.login = async (req, res) => {
                                 _id: results[0].UserId,
                                 fullname: results[0].Fullname,
                                 mail: results[0].Email,
-                                status: results[0].Status,
+                                banned: results[0].BannedStatus,
                                 role: results[0].Role,
                                 iat: new Date().getTime(), //มาจากคำว่า issued at time (สร้างเมื่อ)
                                 exp: Math.floor(Date.now() / 1000) + (60 * 60)
@@ -90,12 +90,12 @@ exports.login = async (req, res) => {
                                 if (err) {
                                     throw new Error(err)
                                 } else {
-                                    return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "status": results[0].Status, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
+                                    return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "banned": results[0].BannedStatus, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
                                 }
                             })
                         } else { // ถ้าไม่เคยเข้าสู่ระบบเลยให้เพิ่มข้อมูลลงฐานข้อมูลและ sign token
-                            var sqlInsertUser = "insert into User (UserId, Fullname, Email, Status, Role) values (?, ?, ?, ?, ?)"
-                            mysqlCon.query(sqlInsertUser, [req.body.username, userData.name, userData.mail, 'OK', userData.description], function (err, results) {
+                            var sqlInsertUser = "insert into User (UserId, Fullname, Email, BannedStatus, BannedDate, Role) values (?, ?, ?, ?, ?)"
+                            mysqlCon.query(sqlInsertUser, [req.body.username, userData.name, userData.mail, false, null, userData.description], function (err, results) {
                                 if (err) {
                                     console.log(`[${NAME}] sqlInsertUser Error -> ${err}`)
                                 } else {
@@ -105,7 +105,7 @@ exports.login = async (req, res) => {
                                         _id: req.body.username,
                                         fullname: userData.name,
                                         mail: userData.mail,
-                                        status: 'OK',
+                                        banned: false,
                                         role: userData.description,
                                         iat: new Date().getTime(), //มาจากคำว่า issued at time (สร้างเมื่อ)
                                         exp: Math.floor(Date.now() / 1000) + (60 * 60)
@@ -115,7 +115,7 @@ exports.login = async (req, res) => {
                                         if (err) {
                                             throw new Error(err)
                                         } else {
-                                            return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "status": results[0].Status, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
+                                            return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "banned": results[0].BannedStatus, "role": results[0].Role }, "message": "เข้าสู่ระบบสำเร็จ" })
                                         }
                                     })
                                 }
