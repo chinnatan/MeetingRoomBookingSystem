@@ -108,7 +108,11 @@
                                 >
                                   <i class="fa fa-edit"></i>
                                 </button>
-                                <button type="button" class="btn btn-sm btn-danger">
+                                <button
+                                  type="button"
+                                  class="btn btn-sm btn-danger"
+                                  @click="preSendCancelBooking(content.booking.table[index].BookingId)"
+                                >
                                   <i class="fa fa-window-close"></i>
                                 </button>
                               </td>
@@ -401,7 +405,7 @@ export default {
       axios
         .get(path)
         .then(res => {
-          if (res.data) {
+          if (res.data.length > 0) {
             for (var bookingIndex in res.data) {
               this.content.booking.table.push({
                 BookingId: res.data[bookingIndex].BookingId,
@@ -422,7 +426,8 @@ export default {
               });
             }
           } else {
-            this.content.message = res.data.message;
+            this.content.booking.table = [];
+            this.content.text.message = res.data.message;
           }
         })
         .catch(error => {
@@ -549,6 +554,61 @@ export default {
         .catch(error => {
           console.log(error);
           this.alert = true;
+        });
+    },
+    preSendCancelBooking(bookingId) {
+      this.$swal({
+        title: "คุณแน่ใจหรือไม่ที่ต้องการจะยกเลิกการจอง ?",
+        text: "คุณจะไม่สามารถยกเลิกการกระทำของคุณได้",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "red",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then(result => {
+        if (result.value) {
+          const payload = {
+            BookingId: bookingId
+          };
+          this.SenCancelBooking(payload);
+        } else {
+          this.$swal("ยกเลิก", "รายการจองของคุณยังเหมือนเดิม", "info");
+        }
+      });
+    },
+    SenCancelBooking(payload) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/booking/cancel";
+
+      axios
+        .put(path, JSON.stringify(payload))
+        .then(res => {
+          if(res.data.isCancel) {
+            this.$swal("ยกเลิกการจอง", res.data.message, "success");
+            this.content.booking.table = [
+              {
+                BookingId: undefined,
+                BookingTitle: undefined,
+                RoomName: undefined,
+                BookingStartDate: undefined,
+                BookingStartTime: undefined,
+                BookingEndTime: undefined
+              }
+            ];
+            this.getBookingByUserId(
+              JSON.parse(localStorage.getItem("user")).id
+            );
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$swal("เกิดข้อผิดพลาด", "ไม่สามารถทำรายการได้ เนื่องจากเกิดความผิดพลาดของระบบ", "warning");
         });
     }
   }
