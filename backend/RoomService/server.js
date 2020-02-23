@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const roomController = require("./src/controller/RoomController");
-app.use("/room", roomController);
+app.use("/", roomController);
 
 http.listen(PORT, HOST);
 console.log(`[${NAME}] Running on http://${HOST}:${PORT}`);

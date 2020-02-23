@@ -7,7 +7,7 @@ const config = require('./config.json')
 const jwt = require("jsonwebtoken");
 
 const authServiceProxy = httpProxy('http://0.0.0.0:3000')
-const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
+const roomServiceProxy = httpProxy('http://0.0.0.0:3001')
 const bookingServiceProxy = httpProxy('http://0.0.0.0:3002')
 const settingServiceProxy = httpProxy('http://0.0.0.0:3003')
 const toolServiceProxy = httpProxy('http://0.0.0.0:3004')
@@ -77,8 +77,8 @@ app.use('/api/tool/', (req, res, next) => {
     toolServiceProxy(req, res, next)
 })
 
-app.use('/api/', (req, res, next) => {
-    mainServiceProxy(req, res, next)
+app.use('/api/room/', (req, res, next) => {
+    roomServiceProxy(req, res, next)
 })
 
 http.listen(PORT, HOST);
