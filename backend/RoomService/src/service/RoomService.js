@@ -159,7 +159,7 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
       var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= ?;"
-      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleDateString()], function (err, results, fields) {
+      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
           return res.status(500).json({ "sql_error_message": err.message });

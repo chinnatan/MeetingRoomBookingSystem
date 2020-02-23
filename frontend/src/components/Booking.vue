@@ -172,13 +172,21 @@
                                   </div>
                                   <div class="row">
                                     <div
-                                      class="col-md-12"
+                                      class="col-md-6"
                                     >{{ txtFloor }} {{ txtBooking.lblFloorRoom }}</div>
-                                  </div>
-                                  <div class="row">
                                     <div
-                                      class="col-md-12"
+                                      class="col-md-6"
                                     >{{ txtBooking.lblSize }} {{ txtBooking.lblSizeRoom }} คน</div>
+                                  </div>
+                                  <hr>
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="row" v-for="(line, index) in room.tool" v-bind:key="index">
+                                        <div class="col-md-6">{{ line.ToolName }}</div>
+                                        <div class="col-md-6" v-if="line.ToolStatus"><font color="#00ff00">สามารถใช้งานได้</font></div>
+                                        <div class="col-md-6" v-else><font color="red">ไม่สามารถใช้งานได้</font></div>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -197,60 +205,6 @@
                           >{{ txtBooking.lblBookingSchedule }}</button>
                         </div>
                       </div>
-                      <!-- <div class="row">
-                        <div class="col-md-12">
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <div class="row">
-                                    <div class="col-md-6">
-                                      <div class="row">
-                                        <div class="col-md-12">ติวหนังสือ</div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-12">21/11/2562</div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="row">
-                                        <div class="col-md-12 align-self-center">09.00 - 10.00</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>-->
-                      <!-- <div class="row mt-2">
-                        <div class="col-md-12">
-                          <div class="card">
-                            <div class="card-body">
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <div class="row">
-                                    <div class="col-md-6">
-                                      <div class="row">
-                                        <div class="col-md-12">ประชุมกิจกรรม</div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col-md-12">21/11/2562</div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="row">
-                                        <div class="col-md-12 align-self-center">11.00 - 12.00</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>-->
                     </div>
                     <div class="col-md-8 text-left">
                       <div class="row">
@@ -517,6 +471,9 @@ export default {
           }
         },
         schedule: []
+      },
+      room: {
+        tool: []
       }
     };
   },
@@ -542,6 +499,8 @@ export default {
 
       this.form.inputBookingStartDate = this.form.currentDate;
       this.form.inputBookingStartTime = this.form.currentTime;
+
+      this.getToolByRoomId(id)
 
       this.alert = false;
       this.alertMessage = null;
@@ -686,6 +645,35 @@ export default {
                   "HH:MM"
                 ),
                 Fullname: res.data[scheduleIndex].Fullname
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getToolByRoomId(roomId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/" +
+        roomId;
+
+      this.room.tool = [];
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            for (var toolIndex in res.data) {
+              this.room.tool.push({
+                ToolId: res.data[toolIndex].ToolId,
+                ToolName: res.data[toolIndex].ToolName,
+                ToolStatus: res.data[toolIndex].ToolStatus,
+                RoomId: res.data[toolIndex].RoomId
               });
             }
           }
