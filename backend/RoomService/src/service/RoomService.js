@@ -1,39 +1,30 @@
 const MySQL = require("mysql");
-const mysqlConfig = require("../config");
+const Config = require("../../config.json");
 
-const SERVICE_NAME = "ROOM SERVICE";
-const MYSQL_NAME = "MYSQL"
+const SERVICE_NAME = Config.SERVER.NAME;
 
-// MySQL Option
-const HOST_MYSQL = mysqlConfig.HOST;
-const PORT_MYSQL = mysqlConfig.PORT;
-const USER_MYSQL = mysqlConfig.USERNAME;
-const PASS_MYSQL = mysqlConfig.PASSWORD;
-const DATA_MYSQL = mysqlConfig.DATABASE;
+// MySQL Configuration
+const HOST_MYSQL = Config.MYSQL.HOST;
+const PORT_MYSQL = Config.MYSQL.PORT;
+const USER_MYSQL = Config.MYSQL.USERNAME;
+const PASS_MYSQL = Config.MYSQL.PASSWORD;
+const DATA_MYSQL = Config.MYSQL.DATABASE;
+const CONNECTION_LIMIT_MYSQL = Config.MYSQL.CONNECTION_LIMIT;
 
-// MySQL Connected
-var mysqlCon = MySQL.createConnection({
+// MySQL Pool Connection
+var mysqlPool = MySQL.createPool({
+  connectionLimit: CONNECTION_LIMIT_MYSQL,
   host: HOST_MYSQL,
   port: PORT_MYSQL,
   user: USER_MYSQL,
   password: PASS_MYSQL,
-  database: DATA_MYSQL,
-  insecureAuth: true
-});
-
-mysqlCon.connect(function (err) {
-  if (err) {
-    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Error -> ${err.message}`);
-    throw new Error(err);
-  } else {
-    console.log(`[${SERVICE_NAME}][${MYSQL_NAME}] Connected -> ${HOST_MYSQL}:${PORT_MYSQL}`);
-  }
+  database: DATA_MYSQL
 });
 
 // แสดงข้อมูลห้องทั้งหมดที่มีในฐานข้อมูล
 exports.getAllRoom = (req, res) => {
   const FUNCTION_NAME = "GET ALL ROOM"
-  mysqlCon.query("select * from Room", function (err, results, fields) {
+  mysqlPool.query("select * from Room", function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -55,7 +46,7 @@ exports.getRoomById = (req, res) => {
 
   var roomId = req.params.roomid;
 
-  mysqlCon.query("select * from Room where RoomId = ?", [roomId], function (err, results, fields) {
+  mysqlPool.query("select * from Room where RoomId = ?", [roomId], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -77,7 +68,7 @@ exports.getRoomByName = (req, res) => {
 
   var roomName = req.params.roomname;
 
-  mysqlCon.query("select * from Room where RoomName = ?", [roomName], function (err, results, fields) {
+  mysqlPool.query("select * from Room where RoomName = ?", [roomName], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -99,7 +90,7 @@ exports.getRoomByFloor = (req, res) => {
 
   var roomFloor = req.params.roomfloor;
 
-  mysqlCon.query("select * from Room where RoomFloor = ?", [roomFloor], function (err, results, fields) {
+  mysqlPool.query("select * from Room where RoomFloor = ?", [roomFloor], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -122,7 +113,7 @@ exports.getRoomBookingStatusById = (req, res) => {
   var roomId = req.params.roomid;
 
   var sqlQueryRoom = "select * from Room where RoomId = ?"
-  mysqlCon.query(sqlQueryRoom, [roomId], function (err, results) {
+  mysqlPool.query(sqlQueryRoom, [roomId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -131,7 +122,7 @@ exports.getRoomBookingStatusById = (req, res) => {
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
       var sqlQueryRoomBooking = "select * from Room join Booking on (Room.RoomId = Booking.RoomId) where Room.RoomId = ? and Booking.BookingStatus = ?"
-      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
+      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B"], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
           return res.status(500).json({ "sql_error_message": err.message });
@@ -159,7 +150,7 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
   var roomId = req.params.roomid;
 
   var sqlQueryRoom = "select * from Room where RoomId = ?"
-  mysqlCon.query(sqlQueryRoom, [roomId], function (err, results) {
+  mysqlPool.query(sqlQueryRoom, [roomId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -168,7 +159,7 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] -> Get Room By ID Found`);
       var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= ?;"
-      mysqlCon.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleDateString()], function (err, results, fields) {
+      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleDateString()], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
           return res.status(500).json({ "sql_error_message": err.message });
@@ -196,7 +187,7 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
   var roomId = req.params.roomid;
 
   var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and ? between BookingStartDate and BookingEndDate"
-  mysqlCon.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
+  mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${FUNCTION_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
