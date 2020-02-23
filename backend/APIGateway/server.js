@@ -10,6 +10,7 @@ const authServiceProxy = httpProxy('http://0.0.0.0:3000')
 const mainServiceProxy = httpProxy('http://0.0.0.0:3001')
 const bookingServiceProxy = httpProxy('http://0.0.0.0:3002')
 const settingServiceProxy = httpProxy('http://0.0.0.0:3003')
+const toolServiceProxy = httpProxy('http://0.0.0.0:3004')
 
 // API Gateway Option
 const NAME = "API Gateway";
@@ -70,6 +71,10 @@ app.use('/api/booking/', (req, res, next) => {
 
 app.use('/api/setting/', (req, res, next) => {
     settingServiceProxy(req, res, next)
+})
+
+app.use('/api/tool/', (req, res, next) => {
+    toolServiceProxy(req, res, next)
 })
 
 app.use('/api/', (req, res, next) => {

@@ -1,0 +1,29 @@
+{
+  "name": "toolservice",
+  "version": "1.0.0",
+  "description": "tool service for manage tool in system",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chinnatan/MeetingRoomBookingSystem.git"
+  },
+  "keywords": [
+    "tool",
+    "service"
+  ],
+  "author": "Chinnatan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chinnatan/MeetingRoomBookingSystem/issues"
+  },
+  "homepage": "https://github.com/chinnatan/MeetingRoomBookingSystem#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4",
+    "mysql": "^2.18.1"
+  }
+}
