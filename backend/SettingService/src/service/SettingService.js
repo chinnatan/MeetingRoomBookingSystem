@@ -24,22 +24,22 @@ exports.getSetting = (req, res) => {
     } else { // ไม่พบไฟล์
         console.log(`[${SERVICE_NAME}][${API_NAME}] -> File Setting Not Found`);
         var setting = {
-            "HighestPeriodPerTime": 0, // ระยะเวลาที่สามารถจองได้สูงสุดต่อครั้ง (ชั่วโมง)
-            "HighestDatePerTime": 0, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
-            "SlowestActivation": 0, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
-            "AdvanceBooking": 0, // เวลาในการทำการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
-            "AdvanceCancel": 0, // เวลาในการยกเลิกการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
+            "HighestPeriodPerTime": 1, // ระยะเวลาที่สามารถจองได้สูงสุดต่อครั้ง (ชั่วโมง)
+            "HighestDatePerTime": 1, // วันที่สามารถจองได้สูงสุดต่อครั้ง (วัน)
+            "SlowestActivation": 10, // เวลาที่สามารถเข้าใช้งานห้องได้อย่างช้าที่สุด (นาที)
+            "AdvanceBooking": 1, // เวลาในการทำการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
+            "AdvanceCancel": 1, // เวลาในการยกเลิกการจองล่วงหน้า (นาที / ชั่วโมง / วัน)
             "Unit": {
                 "HighestPeriodPerTime": "ชั่วโมง",
                 "HighestDatePerTime": "วัน",
                 "SlowestActivation": "นาที",
                 "AdvanceBooking": {
-                    "ShortName": "H",
-                    "LongName": "ชั่วโมง"
+                    "ShortName": "D",
+                    "LongName": "วัน"
                 },
                 "AdvanceCancel": {
-                    "ShortName": "H",
-                    "LongName": "ชั่วโมง"
+                    "ShortName": "D",
+                    "LongName": "วัน"
                 }
             }
         }
@@ -85,10 +85,10 @@ exports.updateSetting = (req, res) => {
     fs.writeFile('./src/setting.json', JSON.stringify(setting), function (err) {
         if (err) {
             console.log(`[${SERVICE_NAME}][${API_NAME}] -> ${err}`);
-            throw err;
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้ เนื่องจากเกิดความผิดพลาดของระบบ" });
         } else {
             console.log(`[${SERVICE_NAME}][${API_NAME}] -> Write File Setting`);
-            return res.status(200).json({ "message": "บันทึกเรียบร้อย" });
+            return res.status(200).json({ "isError": false, "message": "บันทึกเรียบร้อย" });
         }
     })
 }
