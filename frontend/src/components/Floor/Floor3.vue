@@ -341,7 +341,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room306: {
@@ -352,7 +352,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room308: {
@@ -363,7 +363,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room328: {
@@ -374,7 +374,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room329: {
@@ -385,7 +385,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room330: {
@@ -396,7 +396,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room331: {
@@ -407,7 +407,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room332: {
@@ -418,7 +418,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room333: {
@@ -429,7 +429,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room334: {
@@ -440,7 +440,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           },
           room335: {
@@ -451,7 +451,7 @@ export default {
             path: "",
             student: "",
             professor: "",
-            officer: "",
+            staff: "",
             active: ""
           }
         }
@@ -522,7 +522,7 @@ export default {
         this.text.room.room304.path = room[0].RoomPathImage;
         this.text.room.room304.student = room[0].RoomPermissionStudent;
         this.text.room.room304.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room304.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room304.staff = room[0].RoomPermissionStaff;
         this.text.room.room304.active = room[0].RoomActive;
       } else if (name == "306") {
         this.text.room.room306.id = room[0].RoomId;
@@ -532,7 +532,7 @@ export default {
         this.text.room.room306.path = room[0].RoomPathImage;
         this.text.room.room306.student = room[0].RoomPermissionStudent;
         this.text.room.room306.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room306.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room306.staff = room[0].RoomPermissionStaff;
         this.text.room.room306.active = room[0].RoomActive;
       } else if (name == "308") {
         this.text.room.room308.id = room[0].RoomId;
@@ -542,7 +542,7 @@ export default {
         this.text.room.room308.path = room[0].RoomPathImage;
         this.text.room.room308.student = room[0].RoomPermissionStudent;
         this.text.room.room308.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room308.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room308.staff = room[0].RoomPermissionStaff;
         this.text.room.room308.active = room[0].RoomActive;
       } else if (name == "328") {
         this.text.room.room328.id = room[0].RoomId;
@@ -552,7 +552,7 @@ export default {
         this.text.room.room328.path = room[0].RoomPathImage;
         this.text.room.room328.student = room[0].RoomPermissionStudent;
         this.text.room.room328.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room328.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room328.staff = room[0].RoomPermissionStaff;
         this.text.room.room328.active = room[0].RoomActive;
       } else if (name == "329") {
         this.text.room.room329.id = room[0].RoomId;
@@ -562,7 +562,7 @@ export default {
         this.text.room.room329.path = room[0].RoomPathImage;
         this.text.room.room329.student = room[0].RoomPermissionStudent;
         this.text.room.room329.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room329.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room329.staff = room[0].RoomPermissionStaff;
         this.text.room.room329.active = room[0].RoomActive;
       } else if (name == "330") {
         this.text.room.room330.id = room[0].RoomId;
@@ -572,7 +572,7 @@ export default {
         this.text.room.room330.path = room[0].RoomPathImage;
         this.text.room.room330.student = room[0].RoomPermissionStudent;
         this.text.room.room330.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room330.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room330.staff = room[0].RoomPermissionStaff;
         this.text.room.room330.active = room[0].RoomActive;
       } else if (name == "331") {
         this.text.room.room331.id = room[0].RoomId;
@@ -582,7 +582,7 @@ export default {
         this.text.room.room331.path = room[0].RoomPathImage;
         this.text.room.room331.student = room[0].RoomPermissionStudent;
         this.text.room.room331.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room331.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room331.staff = room[0].RoomPermissionStaff;
         this.text.room.room331.active = room[0].RoomActive;
       } else if (name == "332") {
         this.text.room.room332.id = room[0].RoomId;
@@ -592,7 +592,7 @@ export default {
         this.text.room.room332.path = room[0].RoomPathImage;
         this.text.room.room332.student = room[0].RoomPermissionStudent;
         this.text.room.room332.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room332.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room332.staff = room[0].RoomPermissionStaff;
         this.text.room.room332.active = room[0].RoomActive;
       } else if (name == "333") {
         this.text.room.room333.id = room[0].RoomId;
@@ -602,7 +602,7 @@ export default {
         this.text.room.room333.path = room[0].RoomPathImage;
         this.text.room.room333.student = room[0].RoomPermissionStudent;
         this.text.room.room333.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room333.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room333.staff = room[0].RoomPermissionStaff;
         this.text.room.room333.active = room[0].RoomActive;
       } else if (name == "334") {
         this.text.room.room334.id = room[0].RoomId;
@@ -612,7 +612,7 @@ export default {
         this.text.room.room334.path = room[0].RoomPathImage;
         this.text.room.room334.student = room[0].RoomPermissionStudent;
         this.text.room.room334.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room334.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room334.staff = room[0].RoomPermissionStaff;
         this.text.room.room334.active = room[0].RoomActive;
       } else if (name == "335") {
         this.text.room.room335.id = room[0].RoomId;
@@ -622,11 +622,11 @@ export default {
         this.text.room.room335.path = room[0].RoomPathImage;
         this.text.room.room335.student = room[0].RoomPermissionStudent;
         this.text.room.room335.professor = room[0].RoomPermissionProfessor;
-        this.text.room.room335.officer = room[0].RoomPermissionOfficer;
+        this.text.room.room335.staff = room[0].RoomPermissionStaff;
         this.text.room.room335.active = room[0].RoomActive;
       }
     },
-    getRoomActiveById(roomId, roomActive, student, professor, officer, rectId) {
+    getRoomActiveById(roomId, roomActive, student, professor, staff, rectId) {
       if (roomActive) {
         if (
           JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
@@ -644,7 +644,7 @@ export default {
           "PROFESSOR"
         ) {
           if (professor) {
-            document.getElementById(rectId).setAttribute("fill", "#00ff00");
+            this.getBookingScheduleCurDateAndCurTime(roomId, rectId)
           } else {
             document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
           }
@@ -652,10 +652,21 @@ export default {
 
         if (
           JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
-          "OFFICER"
+          "STAFF"
         ) {
-          if (officer) {
-            document.getElementById(rectId).setAttribute("fill", "#00ff00");
+          if (staff) {
+            this.getBookingScheduleCurDateAndCurTime(roomId, rectId)
+          } else {
+            document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
+          }
+        }
+
+        if (
+          JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
+          "ADMIN"
+        ) {
+          if (student || professor || staff) {
+            this.getBookingScheduleCurDateAndCurTime(roomId, rectId)
           } else {
             document.getElementById(rectId).setAttribute("fill", "#bfbfbf");
           }
@@ -668,7 +679,7 @@ export default {
         this.text.room.room304.active,
         this.text.room.room304.student,
         this.text.room.room304.professor,
-        this.text.room.room304.officer,
+        this.text.room.room304.staff,
         "floor_3_304"
       );
       this.getRoomActiveById(
@@ -676,7 +687,7 @@ export default {
         this.text.room.room306.active,
         this.text.room.room306.student,
         this.text.room.room306.professor,
-        this.text.room.room306.officer,
+        this.text.room.room306.staff,
         "floor_3_306"
       );
       this.getRoomActiveById(
@@ -684,7 +695,7 @@ export default {
         this.text.room.room308.active,
         this.text.room.room308.student,
         this.text.room.room308.professor,
-        this.text.room.room308.officer,
+        this.text.room.room308.staff,
         "floor_3_308"
       );
       this.getRoomActiveById(
@@ -692,7 +703,7 @@ export default {
         this.text.room.room328.active,
         this.text.room.room328.student,
         this.text.room.room328.professor,
-        this.text.room.room328.officer,
+        this.text.room.room328.staff,
         "floor_3_328"
       );
       this.getRoomActiveById(
@@ -700,7 +711,7 @@ export default {
         this.text.room.room329.active,
         this.text.room.room329.student,
         this.text.room.room329.professor,
-        this.text.room.room329.officer,
+        this.text.room.room329.staff,
         "floor_3_329"
       );
       this.getRoomActiveById(
@@ -708,7 +719,7 @@ export default {
         this.text.room.room330.active,
         this.text.room.room330.student,
         this.text.room.room330.professor,
-        this.text.room.room330.officer,
+        this.text.room.room330.staff,
         "floor_3_330"
       );
       this.getRoomActiveById(
@@ -716,7 +727,7 @@ export default {
         this.text.room.room331.active,
         this.text.room.room331.student,
         this.text.room.room331.professor,
-        this.text.room.room331.officer,
+        this.text.room.room331.staff,
         "floor_3_331"
       );
       this.getRoomActiveById(
@@ -724,7 +735,7 @@ export default {
         this.text.room.room332.active,
         this.text.room.room332.student,
         this.text.room.room332.professor,
-        this.text.room.room332.officer,
+        this.text.room.room332.staff,
         "floor_3_332"
       );
       this.getRoomActiveById(
@@ -732,7 +743,7 @@ export default {
         this.text.room.room333.active,
         this.text.room.room333.student,
         this.text.room.room333.professor,
-        this.text.room.room333.officer,
+        this.text.room.room333.staff,
         "floor_3_333"
       );
       this.getRoomActiveById(
@@ -740,7 +751,7 @@ export default {
         this.text.room.room334.active,
         this.text.room.room334.student,
         this.text.room.room334.professor,
-        this.text.room.room334.officer,
+        this.text.room.room334.staff,
         "floor_3_334"
       );
       this.getRoomActiveById(
@@ -748,7 +759,7 @@ export default {
         this.text.room.room335.active,
         this.text.room.room335.student,
         this.text.room.room335.professor,
-        this.text.room.room335.officer,
+        this.text.room.room335.staff,
         "floor_3_335"
       );
     },
