@@ -57,12 +57,9 @@ exports.login = async (req, res) => {
         } else {
             console.log(`[${SERVICE_NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
 
-            // เมื่อเชื่อมต่อฐานข้อมูลสำเร็จ ยืนยัน username และ password ผ่าน ldap
-            const client = new Client(url, baseDn);
-            const isAuthenticated = await client.authenticate(upn, password);
-            const SECRET = Config.ldap.MY_SECRET
-
             // --CASE 1 ไม่ทราบ Role ของบาง Actor-- //
+            const SECRET = Config.ldap.MY_SECRET
+            
             if (req.body.username == "admin" && password == "admin") {
                 var sqlSelectUser = "select * from User where UserId = ?"
                 connection.query(sqlSelectUser, [req.body.username], function (err, results) {
@@ -165,7 +162,14 @@ exports.login = async (req, res) => {
                     }
 
                 })
+            } else if(req.body.username != null && password != null) {
+                return res.status(200).json({ "accesstoken": false, "message": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" })
             } else {
+                // เมื่อเชื่อมต่อฐานข้อมูลสำเร็จ ยืนยัน username และ password ผ่าน ldap
+                const client = new Client(url, baseDn);
+                const isAuthenticated = await client.authenticate(upn, password);
+                const SECRET = Config.ldap.MY_SECRET
+
                 if (isAuthenticated) {
                     console.log("+ Authenticated successfully");
                     const userData = await client.getUser(upn, password);
@@ -235,6 +239,12 @@ exports.login = async (req, res) => {
             // --CASE 1 ไม่ทราบ Role ของบาง Actor-- //
 
             // --CASE 2 ทราบ Role ของทุก Actor เรียบร้อยแล้ว-- //
+
+            // เมื่อเชื่อมต่อฐานข้อมูลสำเร็จ ยืนยัน username และ password ผ่าน ldap
+            // const client = new Client(url, baseDn);
+            // const isAuthenticated = await client.authenticate(upn, password);
+            // const SECRET = Config.ldap.MY_SECRET
+
             // if (isAuthenticated) {
             //     console.log("+ Authenticated successfully");
             //     const userData = await client.getUser(upn, password);
