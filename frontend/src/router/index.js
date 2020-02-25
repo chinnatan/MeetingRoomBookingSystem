@@ -9,6 +9,7 @@ import Setting from '@/components/Admin/Setting'
 import ManageUser from '@/components/Admin/ManageUser'
 import ManageReportToolBroken from '@/components/Admin/ManageReport/ManageReportToolBroken'
 import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
+import Forbidden403 from '@/components/403'
 import NotFound404 from '@/components/404'
 
 Vue.use(Router)
@@ -19,8 +20,9 @@ let router = new Router({
       path: '/',
       name: 'SignIn',
       component: SignIn,
-      meta: { 
-        guest: true
+      meta: {
+        guest: true,
+        requiresAuth: false
       }
     },
     {
@@ -60,7 +62,8 @@ let router = new Router({
       name: 'Setting',
       component: Setting,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        isAdmin: true
       }
     },
     {
@@ -68,7 +71,8 @@ let router = new Router({
       name: 'ManageUser',
       component: ManageUser,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        isAdmin: true
       }
     },
     {
@@ -76,13 +80,23 @@ let router = new Router({
       name: 'ManageReportToolBroken',
       component: ManageReportToolBroken,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        isAdmin: true
       }
     },
     {
       path: '/admin/manage/report/room',
       name: 'ManageReportRoom',
       component: ManageReportRoom,
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      }
+    },
+    {
+      path: '/403',
+      name: 'Forbidden',
+      component: Forbidden403,
       meta: {
         requiresAuth: true
       }
@@ -101,34 +115,39 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)) {
-      if (localStorage.getItem('token') == null) {
-          next({
-              path: '/',
-              params: { nextUrl: to.fullPath }
-          })
-      } else {
-          let user = JSON.parse(localStorage.getItem('user'))
-          if(to.matched.some(record => record.meta.is_admin)) {
-              if(user.is_admin == 1){
-                  next()
-              }
-              else{
-                  next()
-              }
-          } else {
-              next()
-          }
-      }
-  } else if(to.matched.some(record => record.meta.guest)) {
-      if(localStorage.getItem('token') == null){
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (localStorage.getItem('token') == null) {
+      next({
+        path: '/',
+        params: { nextUrl: to.fullPath }
+      })
+    } else {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if (to.matched.some(record => record.meta.isAdmin)) {
+        if (user.isAdmin) {
           next()
+        }
+        else {
+          next({
+            path: '/403',
+            params: { nextUrl: to.fullPath }
+          })
+        }
+      } else {
+        next()
       }
-      else{
-          next({ name: 'userboard'})
-      }
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (localStorage.getItem('token') == null) {
+      next()
+    } else {
+      next({
+        path: '/home',
+        params: { nextUrl: to.fullPath }
+      })
+    }
   } else {
-      next() 
+    next()
   }
 })
 
