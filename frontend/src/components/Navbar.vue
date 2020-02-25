@@ -48,6 +48,52 @@
             <li class="nav-item">
               <router-link :to="{path: '/report/tool' }" class="nav-link" replace>{{ navbar.reportDamaged }}</router-link>
             </li>
+            <li class="nav-item dropdown" v-if="user.isAdmin">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarBookingDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >{{ navbar.manageReport }}</a>
+              <div class="dropdown-menu" aria-labelledby="navbarBookingDropdown">
+                <router-link
+                  :to="{path: '/admin/manage/report/room' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageReportDropdown.room }}</router-link>
+                <router-link
+                  :to="{path: '/admin/manage/report/tool' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageReportDropdown.tool }}</router-link>
+              </div>
+            </li>
+            <li class="nav-item dropdown" v-if="user.isAdmin">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarBookingDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >{{ navbar.manageSystem }}</a>
+              <div class="dropdown-menu" aria-labelledby="navbarBookingDropdown">
+                <router-link
+                  :to="{path: '/admin/setting' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageSystemDropdown.setting }}</router-link>
+                <router-link
+                  :to="{path: '/admin/manage/user' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageSystemDropdown.user }}</router-link>
+              </div>
+            </li>
           </ul>
           <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
             <li class="nav-item dropdown">
@@ -98,6 +144,16 @@ export default {
           bookingInformation: "ข้อมูลการจอง"
         },
         reportDamaged: "แจ้งอุปกรณ์เสียหาย",
+        manageReport: "จัดการรายงาน",
+        manageReportDropdown: {
+          room: "รายงานการใช้งานห้อง",
+          tool: "รายงานการแจ้งอุปกรณ์เสียหาย"
+        },
+        manageSystem: "จัดการระบบ",
+        manageSystemDropdown: {
+          setting: "ตั้งค่าทั่วไป",
+          user: "จัดการผู้ใช้งาน"
+        },
         home: "หน้าหลัก",
         account: {
           username: "",
@@ -107,7 +163,8 @@ export default {
       user: {
         mail: "",
         status: "",
-        role: ""
+        role: "",
+        isAdmin: null,
       }
     };
   },
@@ -118,6 +175,7 @@ export default {
       this.user.mail = user.mail
       this.user.status = user.status
       this.user.role = user.role
+      this.user.isAdmin = user.isAdmin
     },
     signOut() {
       localStorage.clear()
