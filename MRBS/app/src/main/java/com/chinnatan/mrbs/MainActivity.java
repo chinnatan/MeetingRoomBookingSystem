@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onFragmentChanged: (Change to page)" + fragmentName);
         if (fragmentName.equalsIgnoreCase("HOME") || fragmentName.equalsIgnoreCase("MY") || fragmentName.equalsIgnoreCase("REQUEST") || fragmentName.equalsIgnoreCase("VETERINARY")) {
             if (fragmentName.equals("HOME")) {
-                Log.d(TAG, "check nav 0");
+                Log.d(TAG, "CHECK THIS IS HOME");
             } else if (fragmentName.equals("VETERINARY")) {
                 Log.d(TAG, "check nav 1");
             } else if (fragmentName.equals("REQUEST")) {
