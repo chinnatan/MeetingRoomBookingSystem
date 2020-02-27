@@ -373,11 +373,26 @@
                 </thead>
                 <tbody>
                   <tr v-for="(line, index) in modal.schedule" v-bind:key="index">
-                    <td>{{ line.BookingTitle }}</td>
-                    <td>{{ line.BookingStartDate }}</td>
-                    <td>{{ line.BookingStartTime }}</td>
-                    <td>{{ line.BookingEndTime }}</td>
-                    <td>{{ line.Fullname }}</td>
+                    <td>
+                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingTitle }}</font>
+                      <font color="black" v-else>{{ line.BookingTitle }}</font>
+                    </td>
+                    <td>
+                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingStartDate }}</font>
+                      <font color="black" v-else>{{ line.BookingStartDate }}</font>
+                    </td>
+                    <td>
+                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingStartTime }}</font>
+                      <font color="black" v-else>{{ line.BookingStartTime }}</font>
+                    </td>
+                    <td>
+                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingEndTime }}</font>
+                      <font color="black" v-else>{{ line.BookingEndTime }}</font>
+                    </td>
+                    <td>
+                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.Fullname }}</font>
+                      <font color="black" v-else>{{ line.Fullname }}</font>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -470,7 +485,8 @@ export default {
             Fullname: "ผู้ทำการจอง"
           }
         },
-        schedule: []
+        schedule: [],
+        notavaliable: false
       },
       room: {
         tool: []
@@ -617,9 +633,49 @@ export default {
         "/api/room/" +
         roomId +
         axiosConfig.PATH.getRoomBookingStatusCurDateById;
+      
+      const pathTimeNow =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/room/" + roomId + "/booking/time/now";
 
       var dateFormat = require("dateformat");
       this.modal.schedule = [];
+
+      axios
+        .get(pathTimeNow)
+        .then(res => {
+          if (res.data[0] != null) {
+            this.modal.notavaliable = true
+            this.modal.schedule.push({
+                BookingTitle: res.data[0].BookingTitle,
+                BookingStartDate: dateFormat(
+                  res.data[0].BookingStartDate,
+                  "dd/mm/yyyy"
+                ),
+                BookingEndDate: dateFormat(
+                  res.data[0].BookingEndDate,
+                  "dd/mm/yyyy"
+                ),
+                BookingStartTime: dateFormat(
+                  res.data[0].BookingStartDate,
+                  "HH:MM"
+                ),
+                BookingEndTime: dateFormat(
+                  res.data[0].BookingEndDate,
+                  "HH:MM"
+                ),
+                Fullname: res.data[0].Fullname
+              });
+          } else {
+            this.modal.notavaliable = false
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        });
 
       axios
         .get(path)
