@@ -19,7 +19,11 @@ import com.chinnatan.mrbs.MainActivity;
 import com.chinnatan.mrbs.Model.Booking;
 import com.chinnatan.mrbs.Model.BookingDao;
 import com.chinnatan.mrbs.R;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
+    private Socket socketService;
 
     private Handler displayTime = new Handler(getMainLooper());
 
@@ -77,6 +82,23 @@ public class HomeFragment extends Fragment {
         currentDate = getView().findViewById(R.id.home_currentdate);
         message = getView().findViewById(R.id.home_message);
         bookingList = getView().findViewById(R.id.home_booking_list);
+
+        try {
+            socketService = IO.socket("http://192.168.1.2:4001");
+            socketService.on("triggerAddBooking", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Boolean triggerAddBooking = (Boolean) args[0];
+                    if(triggerAddBooking) {
+                        getBooking();
+                    }
+                }
+            });
+            socketService.connect();
+
+        } catch (URISyntaxException e) {
+            Log.e("SOCKET-SERVICE", e.getMessage());
+        }
     }
 
     private void displayTime() {
@@ -102,6 +124,7 @@ public class HomeFragment extends Fragment {
 
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                 List<BookingDao> bookingDaos = response.body();
+                bookingArrayList.clear();
 
                 for (BookingDao bookingDao : bookingDaos) {
                     Log.d("BOOKING", "bookingDaos");
@@ -141,5 +164,6 @@ public class HomeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         displayTime = null;
+        socketService.disconnect();
     }
 }

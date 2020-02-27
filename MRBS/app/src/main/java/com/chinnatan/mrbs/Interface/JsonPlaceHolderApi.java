@@ -10,6 +10,6 @@ import retrofit2.http.Path;
 
 public interface JsonPlaceHolderApi {
 
-    @GET("api/room/{roomid}/booking/now")
+    @GET("api/room/{roomid}/booking/now/display")
     Call<List<BookingDao>> getBooking(@Path("roomid") int roomId);
 }
