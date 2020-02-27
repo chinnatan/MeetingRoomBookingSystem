@@ -260,7 +260,9 @@ exports.addBooking = async (req, res) => {
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Booking Successfully"`);
 
-                            res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
+                            axios.get('http://localhost:4001/api/trigger/booking');
+
+                            return res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
                         })
                     })
                 })
@@ -349,7 +351,7 @@ exports.addBooking = async (req, res) => {
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Booking Successfully"`);
 
-                            res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
+                            return res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
                         })
                     })
                 })
