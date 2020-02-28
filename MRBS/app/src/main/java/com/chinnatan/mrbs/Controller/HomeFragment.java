@@ -1,5 +1,8 @@
 package com.chinnatan.mrbs.Controller;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -49,10 +52,12 @@ public class HomeFragment extends Fragment {
     private TextView currentDate;
     private TextView message;
     private ListView bookingList;
+    private int roomid;
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
     private Socket socketService;
+    private SQLiteDatabase myDB;
 
     private Handler displayTime = new Handler(getMainLooper());
 
@@ -78,6 +83,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void init() {
+        myDB = getActivity().openOrCreateDatabase("my.db", Context.MODE_PRIVATE, null);
+        Cursor cursor = myDB.rawQuery("select * from setting", null);
+        if(cursor != null) {
+            cursor.moveToFirst();
+            roomid = cursor.getInt(0);
+        }
         currentTime = getView().findViewById(R.id.home_currenttime);
         currentDate = getView().findViewById(R.id.home_currentdate);
         message = getView().findViewById(R.id.home_message);

@@ -1,6 +1,7 @@
 package com.chinnatan.mrbs.Interface;
 
 import com.chinnatan.mrbs.Model.BookingDao;
+import com.chinnatan.mrbs.Model.RoomDao;
 
 import java.util.List;
 
@@ -12,4 +13,7 @@ public interface JsonPlaceHolderApi {
 
     @GET("api/room/{roomid}/booking/now/display")
     Call<List<BookingDao>> getBooking(@Path("roomid") int roomId);
+
+    @GET("api/room/all")
+    Call<List<RoomDao>> getRoomName();
 }

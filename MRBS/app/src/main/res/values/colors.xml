@@ -7,4 +7,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBackground">#353F48</color>
     <color name="colorAvaliable">#06CB7C</color>
+    <color name="colorButtonSave">#00c853</color>
 </resources>
