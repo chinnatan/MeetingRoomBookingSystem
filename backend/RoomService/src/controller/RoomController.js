@@ -15,6 +15,5 @@ router.get("/floor/:roomfloor", roomService.getRoomByFloor);
 router.get("/:roomid/booking", roomService.getRoomBookingStatusById);
 router.get("/:roomid/booking/now", roomService.getRoomBookingStatusCurDateById);
 router.get("/:roomid/booking/time/now", roomService.getRoomBookingStatusCurDateAndCurTime);
-router.get("/:roomid/booking/now/display", roomService.getRoomBookingStatusCurDateForDisplayByRoomId);
 
 module.exports = router;
