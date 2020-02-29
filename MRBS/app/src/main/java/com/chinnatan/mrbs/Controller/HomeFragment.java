@@ -1,19 +1,26 @@
 package com.chinnatan.mrbs.Controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.chinnatan.mrbs.Controller.Adapter.BookingAdapter;
@@ -34,7 +41,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,12 +58,16 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HOME";
     private static final int ROOMID = 5;
 
+    private ConstraintLayout homeHeader;
     private TextView currentTime;
     private TextView currentDate;
     private TextView message;
+    private TextView homeRoomName;
     private ListView bookingList;
+
     private int roomid;
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
+
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
     private Socket socketService;
@@ -73,26 +87,24 @@ public class HomeFragment extends Fragment {
         MainActivity.onFragmentChanged((TAG));
 
         init();
-        displayTime();
-        bookingAdapter = new BookingAdapter(getActivity(), R.layout.fragment_home_booking_item, bookingArrayList);
-        bookingList.setAdapter(bookingAdapter);
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
-        JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        getBooking();
+        getBooking(roomid);
+        getBookingCurrentTime(roomid);
     }
 
     private void init() {
+        initElement();
+        initDisplayTime();
+        initApiService();
+        initAdapter();
+        initElementListener();
+
         myDB = getActivity().openOrCreateDatabase("my.db", Context.MODE_PRIVATE, null);
         Cursor cursor = myDB.rawQuery("select * from setting", null);
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.moveToFirst();
-            roomid = cursor.getInt(0);
+            roomid = cursor.getInt(1);
+            homeRoomName.setText(cursor.getString(2));
         }
-        currentTime = getView().findViewById(R.id.home_currenttime);
-        currentDate = getView().findViewById(R.id.home_currentdate);
-        message = getView().findViewById(R.id.home_message);
-        bookingList = getView().findViewById(R.id.home_booking_list);
 
         try {
             socketService = IO.socket("http://192.168.1.2:4001");
@@ -100,8 +112,8 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void call(Object... args) {
                     Boolean triggerAddBooking = (Boolean) args[0];
-                    if(triggerAddBooking) {
-                        getBooking();
+                    if (triggerAddBooking) {
+                        getBooking(roomid);
                     }
                 }
             });
@@ -112,7 +124,16 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void displayTime() {
+    private void initElement() {
+        currentTime = getView().findViewById(R.id.home_currenttime);
+        currentDate = getView().findViewById(R.id.home_currentdate);
+        message = getView().findViewById(R.id.home_message);
+        bookingList = getView().findViewById(R.id.home_booking_list);
+        homeRoomName = getView().findViewById(R.id.home_roomname);
+        homeHeader = getView().findViewById(R.id.home_header);
+    }
+
+    private void initDisplayTime() {
         currentDate.setText(new SimpleDateFormat("dd/MM/YYYY", Locale.US).format(new Date()));
         displayTime.postDelayed(new Runnable() {
             @Override
@@ -123,8 +144,29 @@ public class HomeFragment extends Fragment {
         }, 10);
     }
 
-    private void getBooking() {
-        Call<List<BookingDao>> call = JsonPlaceHolderApi.getBooking(5);
+    private void initApiService() {
+        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(8, TimeUnit.SECONDS).writeTimeout(8, TimeUnit.SECONDS).connectTimeout(5, TimeUnit.SECONDS).build();
+        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
+        JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+    }
+
+    private void initAdapter() {
+        bookingAdapter = new BookingAdapter(getActivity(), R.layout.fragment_home_booking_item, bookingArrayList);
+        bookingList.setAdapter(bookingAdapter);
+    }
+
+    private void initElementListener() {
+        bookingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Booking booking = (Booking) parent.getAdapter().getItem(position);
+                displayInputPasswordDialog(booking.getBookingId());
+            }
+        });
+    }
+
+    private void getBooking(int roomid) {
+        Call<List<BookingDao>> call = JsonPlaceHolderApi.getBooking(roomid);
         call.enqueue(new Callback<List<BookingDao>>() {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
@@ -133,42 +175,97 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                 List<BookingDao> bookingDaos = response.body();
                 bookingArrayList.clear();
 
                 for (BookingDao bookingDao : bookingDaos) {
-                    Log.d("BOOKING", "bookingDaos");
-                    Booking booking = new Booking();
-                    booking.setBookingTitle(bookingDao.getBookingTitle());
+                    SimpleDateFormat isoDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    isoDate.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
-                        SimpleDateFormat isoDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                        isoDate.setTimeZone(TimeZone.getTimeZone("UTC"));
-                        Date startTime = isoDate.parse(bookingDao.getBookingStartDate());
-                        Date endTime = isoDate.parse(bookingDao.getBookingEndDate());
-                        booking.setBookingTime(formatter.format(startTime) + " - " + formatter.format(endTime));
+                        Booking booking = new Booking();
+                        Date dateCompare = isoDate.parse(bookingDao.getBookingStartDate());
+                        Date currentDate = new Date();
+                        if (dateFormat.format(dateCompare).equals(dateFormat.format(currentDate))) {
+                            booking.setBookingTitle(bookingDao.getBookingTitle());
+                            Date startTime = isoDate.parse(bookingDao.getBookingStartDate());
+                            Date endTime = isoDate.parse(bookingDao.getBookingEndDate());
+                            booking.setBookingTime(formatter.format(startTime) + " - " + formatter.format(endTime));
+                            bookingArrayList.add(booking);
+                        }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-
-                    bookingArrayList.add(booking);
                 }
-                bookingAdapter.notifyDataSetChanged();
-                bookingList.setAdapter(bookingAdapter);
+
+                if(bookingArrayList.size() > 0) {
+                    bookingAdapter.notifyDataSetChanged();
+                    bookingList.setAdapter(bookingAdapter);
+                } else {
+                    message.setText("ไม่พบรายการการจองห้อง");
+                }
             }
 
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
-                Log.e("E", t.getMessage());
+                Log.e(TAG, t.getLocalizedMessage());
                 message.setText("ไม่สามารถแสดงข้อมูลได้");
             }
         });
     }
 
+    private void getBookingCurrentTime(int roomid) {
+        Call<List<BookingDao>> call = JsonPlaceHolderApi.getBookingCurrentTime(roomid);
+        call.enqueue(new Callback<List<BookingDao>>() {
+            @Override
+            public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
+                if (!response.isSuccessful()) {
+                    return;
+                }
+
+                List<BookingDao> bookingDaos = response.body();
+                if (bookingDaos.size() > 0) {
+                    homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<BookingDao>> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void displayInputPasswordDialog(int bookingId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("กรอกรหัสผ่านสำหรับการเข้าใช้งาน");
+
+        final EditText input = new EditText(getContext());
+
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+        builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        displayTime();
+        initDisplayTime();
     }
 
     @Override
