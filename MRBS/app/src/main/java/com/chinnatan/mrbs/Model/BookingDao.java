@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class BookingDao {
 
+    @SerializedName("BookingId")
+    private int bookingId;
     @SerializedName("BookingTitle")
     private String bookingTitle;
     @SerializedName("BookingStartDate")
@@ -14,6 +16,10 @@ public class BookingDao {
     private String fullname;
     @SerializedName("message")
     private String message;
+
+    public int getBookingId() {
+        return bookingId;
+    }
 
     public String getBookingTitle() {
         return bookingTitle;
