@@ -6,12 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,7 +58,6 @@ import static android.os.Looper.getMainLooper;
 public class HomeFragment extends Fragment {
 
     private static final String TAG = "HOME";
-    private static final int ROOMID = 5;
 
     private ConstraintLayout homeHeader;
     private TextView currentTime;
@@ -64,8 +65,10 @@ public class HomeFragment extends Fragment {
     private TextView message;
     private TextView homeRoomName;
     private ListView bookingList;
+    private Button homeActiveBtn;
 
     private int roomid;
+    private int bookingid;
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
 
     private BookingAdapter bookingAdapter;
@@ -117,6 +120,24 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
+            socketService.on("getBookingSender", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Boolean triggerGetBooking = (Boolean) args[0];
+                    if (triggerGetBooking) {
+                        getBooking(roomid);
+                    }
+                }
+            });
+            socketService.on("getBookingCurrentTimeSender", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Boolean triggerGetBookingCurrentTime = (Boolean) args[0];
+                    if (triggerGetBookingCurrentTime) {
+                        getBookingCurrentTime(roomid);
+                    }
+                }
+            });
             socketService.connect();
 
         } catch (URISyntaxException e) {
@@ -131,6 +152,7 @@ public class HomeFragment extends Fragment {
         bookingList = getView().findViewById(R.id.home_booking_list);
         homeRoomName = getView().findViewById(R.id.home_roomname);
         homeHeader = getView().findViewById(R.id.home_header);
+        homeActiveBtn = getView().findViewById(R.id.home_active_btn);
     }
 
     private void initDisplayTime() {
@@ -156,11 +178,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void initElementListener() {
-        bookingList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        homeActiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Booking booking = (Booking) parent.getAdapter().getItem(position);
-                displayInputPasswordDialog(booking.getBookingId());
+            public void onClick(View v) {
+                displayInputPasswordDialog(bookingid);
             }
         });
     }
@@ -175,6 +196,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                message.setVisibility(View.INVISIBLE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
                 List<BookingDao> bookingDaos = response.body();
@@ -205,6 +227,8 @@ public class HomeFragment extends Fragment {
                 } else {
                     message.setText("ไม่พบรายการการจองห้อง");
                 }
+
+                socketService.emit("getBookingReceive", true);
             }
 
             @Override
@@ -227,7 +251,15 @@ public class HomeFragment extends Fragment {
                 List<BookingDao> bookingDaos = response.body();
                 if (bookingDaos.size() > 0) {
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
+                    homeActiveBtn.setVisibility(View.VISIBLE);
+                    bookingid = bookingDaos.get(0).getBookingId();
+                } else {
+                    homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
+                    homeActiveBtn.setVisibility(View.INVISIBLE);
+                    bookingid = 0;
                 }
+
+                socketService.emit("getBookingCurrentTimeReceive", true);
             }
 
             @Override
@@ -239,11 +271,12 @@ public class HomeFragment extends Fragment {
 
     private void displayInputPasswordDialog(int bookingId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("กรอกรหัสผ่านสำหรับการเข้าใช้งาน");
+        builder.setTitle("กรอกรหัสผ่าน");
 
         final EditText input = new EditText(getContext());
 
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(6)});
+        input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         builder.setView(input);
 
         builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_header"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/colorAvaliable">
+        android:background="@color/colorAvaliable"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,9 +96,10 @@
     <ScrollView
         android:id="@+id/home_scrollview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@color/colorBackground"
         android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/home_footer"
         app:layout_constraintTop_toBottomOf="@id/home_header">
 
         <RelativeLayout
@@ -108,8 +110,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_vertical|center_horizontal">
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/home_message"
@@ -141,4 +143,44 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:ignore="MissingConstraints">
+
+            <Button
+                android:id="@+id/home_active_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="เข้าใช้งาน"
+                android:textSize="24dp"
+                android:theme="@style/AppTheme.ButtonActiveRoom">
+
+            </Button>
+
+            <Button
+                android:id="@+id/home_booking_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="จองห้อง"
+                android:textSize="24dp"
+                android:theme="@style/AppTheme.Button">
+
+            </Button>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

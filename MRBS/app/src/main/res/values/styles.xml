@@ -9,7 +9,12 @@
     </style>
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorButtonSave</item>
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.ButtonActiveRoom" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorNoAvaliable</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 

@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,7 +66,8 @@ public class SettingFragment extends Fragment {
         MainActivity.onFragmentChanged(TAG);
 
         init();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
+        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(8, TimeUnit.SECONDS).writeTimeout(8, TimeUnit.SECONDS).connectTimeout(5, TimeUnit.SECONDS).build();
+        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
         JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         getRoomName();
     }
