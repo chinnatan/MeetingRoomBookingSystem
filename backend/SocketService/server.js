@@ -30,6 +30,18 @@ io.on('connection', function(socket) {
     socket.on('disconnect', function() {
         console.log('user disconnected : ' + socket.id)
     })
+
+    socket.on('getBookingReceive', function(message) {
+        if(message) {
+            io.emit('getBookingSender', true)
+        }
+    })
+
+    socket.on('getBookingCurrentTimeReceive', function(message) {
+        if(message) {
+            io.emit('getBookingCurrentTimeSender', true)
+        }
+    })
 })
 
 http.listen(PORT, HOST);
