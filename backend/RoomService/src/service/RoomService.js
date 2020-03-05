@@ -198,7 +198,7 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
       return res.status(200).json(results);
     } else {
       console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Room Booking Status Not Found`);
-      return res.status(200).json({ "message": "พร้อมใช้งาน" });
+      return res.status(200).json([{ "BookingId": null, "BookingTitle": null, "BookingStartDate": null, "BookingEndDate": null, "RoomId": null, "Fullname": null, "message": "พร้อมใช้งาน" }]);
     }
   });
 };
@@ -206,9 +206,9 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
 exports.activeRoom = async (req, res) => {
   const API_NAME = "ACTIVE ROOM"
 
-  var bookingId = req.body.BookingId;
-  var roomId = req.body.RoomId;
-  var bookingPin = req.body.BookingPin;
+  var bookingId = req.body.bookingId;
+  var bookingPin = req.body.bookingPin;
+  var roomId = req.body.roomId;
 
   // --GET SETTING SYSTEM-- //
   const axios = require('axios')
@@ -238,8 +238,11 @@ exports.activeRoom = async (req, res) => {
     }
 
     if (results.length > 0) {
-
+      // --กรณีเข้าใช้งานห้องครั้งถัดไป-- //
+      // --สั่งเปิดประตู-- //
+      // axios.get('http://localhost:4001/api/trigger/door/on');
     } else {
+      // --กรณีเข้าใช้งานห้องครั้งแรก-- //
       var sqlQueryBooking = "select * from Booking where BookingId = ?"
       mysqlPool.query(sqlQueryBooking, [bookingId], function (err, results) {
         if (err) {
@@ -253,14 +256,14 @@ exports.activeRoom = async (req, res) => {
 
           var start = moment(bookingStartDateTime)
           var current = moment(currentDate)
-          var diffMinute = start.diff(current, 'minutes', true);
+          var diffMinute = current.diff(start, 'minutes', true);
           if (diffMinute > setting.SlowestActivation) {
             var message = "ไม่สามารถยืนยันการเข้าใช้งานได้ เนื่องจากคุณมาเข้าใช้งานช้ากว่าที่ระบบกำหนด (ระบบกำหนดไว้ " + setting.SlowestActivation + " " + setting.Unit.SlowestActivation + ")"
-            return res.status(200).json({ "message": message })
+            return res.status(200).json({ "diffMinute": diffMinute, "message": message })
           } else {
             if (start > current) {
               var message = "ไม่สามารถยืนยันการเข้าใช้งานได้ เนื่องจากยังไม่ถึงเวลาใช้งาน"
-              return res.status(200).json({ "message": message })
+              return res.status(200).json({ "diffMinute": diffMinute, "message": message })
             } else {
               var sqlQueryBookingAndBookingPin = "select * from Booking where BookingId = ? and BookingPin = ?"
               mysqlPool.query(sqlQueryBookingAndBookingPin, [bookingId, bookingPin], function (err, results) {
@@ -270,7 +273,53 @@ exports.activeRoom = async (req, res) => {
                 }
 
                 if (results.length > 0) {
-                  
+                  mysqlPool.getConnection(function (err, connection) {
+                    if (err) {
+                      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL CONNECTION ERROR -> ${err}`);
+                      return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                    }
+
+                    connection.beginTransaction(function (err) {
+                      if (err) {
+                        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
+                        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                      }
+
+                      var sqlUpdateBookingStatus = "update Booking set BookingStatus = ? where BookingId = ?"
+                      connection.query(sqlUpdateBookingStatus, ["U", bookingId], function (err) {
+                        if (err) {
+                          connection.rollback(function () {
+                            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL UPDATE[sqlUpdateBookingStatus] ERROR -> ${err}`);
+                            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                          })
+                        }
+
+                        var sqlInsertRoomAccess = "insert into RoomAccess (StartDate, EndDate, BookingId) values (?, ?, ?)"
+                        connection.query(sqlInsertRoomAccess, [new Date(), null, bookingId], function (err) {
+                          if (err) {
+                            connection.rollback(function () {
+                              console.log(`[${SERVICE_NAME}][${API_NAME}] SQL INSERT[sqlInsertRoomAccess] ERROR -> ${err}`);
+                              return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                            })
+                          }
+                        })
+
+                        connection.commit(function (err) {
+                          if (err) {
+                            connection.rollback(function () {
+                              console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                              return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                            })
+                          }
+
+                          // --สั่งเปิดประตู-- //
+                          // axios.get('http://localhost:4001/api/trigger/door/on');
+
+                          return res.status(200).json({ "message": "ยืนยันสำเร็จ" })
+                        })
+                      })
+                    })
+                  })
                 } else {
                   var message = "ไม่สามารถยืนยันการเข้าใช้งานได้ เนื่องจากรหัสผ่านไม่ถูกต้องกรุณาลองใหม่อีกครั้ง"
                   return res.status(200).json({ "message": message })
@@ -280,18 +329,9 @@ exports.activeRoom = async (req, res) => {
           }
         } else {
           var message = "ไม่สามารถยืนยันการเข้าใช้งานได้ เนื่องจากไม่พบการจองที่ต้องการ"
-                  return res.status(200).json({ "message": message })
+          return res.status(200).json({ "message": message })
         }
       })
     }
   })
-
-
-
-  try {
-    var error_message
-    var currentDate = new Date();
-  } catch (error) {
-    return res.status(200).json({ "error_message": error_message })
-  }
 }
