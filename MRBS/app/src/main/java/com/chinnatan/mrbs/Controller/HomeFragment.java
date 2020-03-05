@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ import com.chinnatan.mrbs.Interface.JsonPlaceHolderApi;
 import com.chinnatan.mrbs.MainActivity;
 import com.chinnatan.mrbs.Model.Booking;
 import com.chinnatan.mrbs.Model.BookingDao;
+import com.chinnatan.mrbs.Model.RoomAccessRq;
+import com.chinnatan.mrbs.Model.RoomAccessRs;
 import com.chinnatan.mrbs.R;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -64,6 +67,7 @@ public class HomeFragment extends Fragment {
     private TextView currentDate;
     private TextView message;
     private TextView homeRoomName;
+    private TextView homeStatus;
     private ListView bookingList;
     private Button homeActiveBtn;
 
@@ -151,6 +155,7 @@ public class HomeFragment extends Fragment {
         message = getView().findViewById(R.id.home_message);
         bookingList = getView().findViewById(R.id.home_booking_list);
         homeRoomName = getView().findViewById(R.id.home_roomname);
+        homeStatus = getView().findViewById(R.id.home_status);
         homeHeader = getView().findViewById(R.id.home_header);
         homeActiveBtn = getView().findViewById(R.id.home_active_btn);
     }
@@ -249,13 +254,17 @@ public class HomeFragment extends Fragment {
                 }
 
                 List<BookingDao> bookingDaos = response.body();
-                if (bookingDaos.size() > 0) {
+                if (bookingDaos.size() > 0 && bookingDaos.get(0).getMessage() == null) {
+                    Log.d(TAG, "NO AVALIABLE");
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
                     homeActiveBtn.setVisibility(View.VISIBLE);
+                    homeStatus.setText("ไม่พร้อม");
                     bookingid = bookingDaos.get(0).getBookingId();
                 } else {
+                    Log.d(TAG, "AVALIABLE");
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
                     homeActiveBtn.setVisibility(View.INVISIBLE);
+                    homeStatus.setText("พร้อม");
                     bookingid = 0;
                 }
 
@@ -265,6 +274,32 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void activeRoom(int bookingPin) {
+        Log.d(TAG, "BOOKING ID : " + String.valueOf(bookingid) + "ROOM ID : " + String.valueOf(roomid));
+        Call<RoomAccessRs> call = JsonPlaceHolderApi.activeRoom(new RoomAccessRq(bookingid, bookingPin, roomid));
+        call.enqueue(new Callback<RoomAccessRs>() {
+            @Override
+            public void onResponse(Call<RoomAccessRs> call, Response<RoomAccessRs> response) {
+                if(!response.isSuccessful()) {
+                    return;
+                }
+
+                RoomAccessRs roomAccessRs = response.body();
+                if(roomAccessRs.getErrorMesage() != null) {
+                    Toast.makeText(getContext(), roomAccessRs.getErrorMesage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getContext(), roomAccessRs.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RoomAccessRs> call, Throwable t) {
+                Log.e("E", t.getMessage());
+                Toast.makeText(getContext(), "ระบบเกิดข้อผิดพลาด", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -282,7 +317,7 @@ public class HomeFragment extends Fragment {
         builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                input.getText().toString();
+                activeRoom(Integer.parseInt(input.getText().toString()));
             }
         });
         builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {

@@ -15,7 +15,7 @@ public class BookingDao {
     @SerializedName("Fullname")
     private String fullname;
     @SerializedName("message")
-    private String message;
+    private String message = null;
 
     public int getBookingId() {
         return bookingId;
