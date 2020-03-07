@@ -186,8 +186,30 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
 
   var roomId = req.params.roomid;
 
-  var sqlQueryRoomBooking = "select Booking.BookingId, Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and ? between BookingStartDate and BookingEndDate"
-  mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
+  var sqlQueryRoomBooking = "select Booking.BookingId, Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus != ? and ? between BookingStartDate and BookingEndDate"
+  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date().toLocaleString()], function (err, results, fields) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] ERROR -> ${err.message}`);
+      return res.status(500).json({ "sql_error_message": err.message });
+    }
+
+    if (results.length) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Room Booking Status Found`);
+      return res.status(200).json(results);
+    } else {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Room Booking Status Not Found`);
+      return res.status(200).json({ "message": "พร้อมใช้งาน" });
+    }
+  });
+};
+
+exports.displaySchedule = (req, res) => {
+  const API_NAME = "DISPLAY SCHEDULE"
+
+  var roomId = req.params.roomid;
+
+  var sqlQueryRoomBooking = "select Booking.BookingId, Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus != ? and ? between BookingStartDate and BookingEndDate"
+  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date().toLocaleString()], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -231,16 +253,15 @@ exports.activeRoom = async (req, res) => {
   const moment = require('moment')
 
   var sqlQueryRoomAccess = "select * from RoomAccess where BookingId = ?"
-  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function (err, results) {
+  mysqlPool.query(sqlQueryRoomAccess, [bookingId], async function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryRoomAccess] ERROR -> ${err}`);
       return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
     }
 
     if (results.length > 0) {
-      // --กรณีเข้าใช้งานห้องครั้งถัดไป-- //
       // --สั่งเปิดประตู-- //
-      // axios.get('http://localhost:4001/api/trigger/door/on');
+      return res.status(200).json({ "message": "ยืนยันสำเร็จ" })
     } else {
       // --กรณีเข้าใช้งานห้องครั้งแรก-- //
       var sqlQueryBooking = "select * from Booking where BookingId = ?"
@@ -311,9 +332,6 @@ exports.activeRoom = async (req, res) => {
                               return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                             })
                           }
-
-                          // --สั่งเปิดประตู-- //
-                          // axios.get('http://localhost:4001/api/trigger/door/on');
 
                           return res.status(200).json({ "message": "ยืนยันสำเร็จ" })
                         })

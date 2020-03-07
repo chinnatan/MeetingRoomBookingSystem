@@ -16,6 +16,8 @@ router.get("/:roomid/booking", roomService.getRoomBookingStatusById);
 router.get("/:roomid/booking/now", roomService.getRoomBookingStatusCurDateById);
 router.get("/:roomid/booking/time/now", roomService.getRoomBookingStatusCurDateAndCurTime);
 
+// for Android Application
+router.get("/:roomid/schedule/display", roomService.displaySchedule);
 router.post("/active", roomService.activeRoom);
 
 module.exports = router;
