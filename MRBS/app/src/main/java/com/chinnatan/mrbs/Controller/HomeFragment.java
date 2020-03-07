@@ -1,7 +1,9 @@
 package com.chinnatan.mrbs.Controller;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Entity;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -37,6 +39,7 @@ import com.chinnatan.mrbs.R;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -78,6 +81,7 @@ public class HomeFragment extends Fragment {
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
     private Socket socketService;
+    private Socket socketNodeMCUService;
     private SQLiteDatabase myDB;
 
     private Handler displayTime = new Handler(getMainLooper());
@@ -143,9 +147,15 @@ public class HomeFragment extends Fragment {
                 }
             });
             socketService.connect();
-
         } catch (URISyntaxException e) {
             Log.e("SOCKET-SERVICE", e.getMessage());
+        }
+
+        try {
+            socketNodeMCUService = IO.socket("http://192.168.1.2:4002");
+            socketNodeMCUService.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
@@ -197,7 +207,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
-                    message.setText("ไม่พบรายการการจองห้อง");
+                    message.setText("ไม่พบข้อมูลการจอง");
+                    socketService.emit("getBookingReceive", true);
                     return;
                 }
 
@@ -230,7 +241,7 @@ public class HomeFragment extends Fragment {
                     bookingAdapter.notifyDataSetChanged();
                     bookingList.setAdapter(bookingAdapter);
                 } else {
-                    message.setText("ไม่พบรายการการจองห้อง");
+                    message.setText("ไม่พบข้อมูลการจอง");
                 }
 
                 socketService.emit("getBookingReceive", true);
@@ -279,7 +290,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void activeRoom(int bookingPin) {
-        Log.d(TAG, "BOOKING ID : " + String.valueOf(bookingid) + "ROOM ID : " + String.valueOf(roomid));
+        Log.d(TAG, "BOOKING ID : " + String.valueOf(bookingid) + " ROOM ID : " + String.valueOf(roomid));
         Call<RoomAccessRs> call = JsonPlaceHolderApi.activeRoom(new RoomAccessRq(bookingid, bookingPin, roomid));
         call.enqueue(new Callback<RoomAccessRs>() {
             @Override
@@ -292,13 +303,18 @@ public class HomeFragment extends Fragment {
                 if(roomAccessRs.getErrorMesage() != null) {
                     Toast.makeText(getContext(), roomAccessRs.getErrorMesage(), Toast.LENGTH_LONG).show();
                 } else {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("RoomId", roomid);
+                    contentValues.put("isOpen", true);
+                    Gson gson = new Gson();
+                    socketNodeMCUService.emit("triggerOpenDoor", gson.toJson(contentValues));
                     Toast.makeText(getContext(), roomAccessRs.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<RoomAccessRs> call, Throwable t) {
-                Log.e("E", t.getMessage());
+                Log.e(TAG, t.getMessage());
                 Toast.makeText(getContext(), "ระบบเกิดข้อผิดพลาด", Toast.LENGTH_LONG).show();
             }
         });
@@ -317,7 +333,11 @@ public class HomeFragment extends Fragment {
         builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                activeRoom(Integer.parseInt(input.getText().toString()));
+                if(input.getText().toString().equals("") || input.getText().toString().equals(null)) {
+                    Toast.makeText(getContext(), "กรุณากรอกรหัสผ่าน", Toast.LENGTH_LONG).show();
+                } else {
+                    activeRoom(Integer.parseInt(input.getText().toString()));
+                }
             }
         });
         builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
@@ -341,5 +361,6 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
         displayTime = null;
         socketService.disconnect();
+        socketNodeMCUService.disconnect();
     }
 }

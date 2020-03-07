@@ -19,7 +19,7 @@ public interface JsonPlaceHolderApi {
     @GET("api/room/{roomid}/booking/now/")
     Call<List<BookingDao>> getBooking(@Path("roomid") int roomId);
 
-    @GET("api/room/{roomid}/booking/time/now")
+    @GET("api/room/{roomid}/schedule/display")
     Call<List<BookingDao>> getBookingCurrentTime(@Path("roomid") int roomId);
 
     @GET("api/room/all")
