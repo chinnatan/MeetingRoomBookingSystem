@@ -353,3 +353,23 @@ exports.activeRoom = async (req, res) => {
     }
   })
 }
+
+exports.checkActiveRoom = (req, res) => {
+  const API_NAME = "CHECK ACTIVE ROOM"
+
+  var bookingId = req.body.bookingId;
+
+  var sqlQueryRoomAccess = "select * from RoomAccess where BookingId = ?"
+  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function(err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryRoomAccess] ERROR -> ${err}`);
+      return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if(results.length > 0) {
+      return res.status(200).json({"isOpen": true});
+    } else {
+      return res.status(200).json({"isOpen": false});
+    }
+  })
+}

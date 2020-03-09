@@ -1,6 +1,8 @@
 package com.chinnatan.mrbs.Interface;
 
 import com.chinnatan.mrbs.Model.BookingDao;
+import com.chinnatan.mrbs.Model.DoorOpenRq;
+import com.chinnatan.mrbs.Model.DoorOpenRs;
 import com.chinnatan.mrbs.Model.RoomAccessRq;
 import com.chinnatan.mrbs.Model.RoomAccessRs;
 import com.chinnatan.mrbs.Model.RoomDao;
@@ -27,4 +29,7 @@ public interface JsonPlaceHolderApi {
 
     @POST("api/room/active")
     Call<RoomAccessRs> activeRoom(@Body RoomAccessRq body);
+
+    @POST("api/room/check/active")
+    Call<DoorOpenRs> checkActiveRoom(@Body DoorOpenRq body);
 }

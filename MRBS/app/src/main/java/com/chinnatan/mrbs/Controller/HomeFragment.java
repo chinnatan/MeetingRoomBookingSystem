@@ -33,6 +33,8 @@ import com.chinnatan.mrbs.Interface.JsonPlaceHolderApi;
 import com.chinnatan.mrbs.MainActivity;
 import com.chinnatan.mrbs.Model.Booking;
 import com.chinnatan.mrbs.Model.BookingDao;
+import com.chinnatan.mrbs.Model.DoorOpenRq;
+import com.chinnatan.mrbs.Model.DoorOpenRs;
 import com.chinnatan.mrbs.Model.RoomAccessRq;
 import com.chinnatan.mrbs.Model.RoomAccessRs;
 import com.chinnatan.mrbs.R;
@@ -128,24 +130,24 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-            socketService.on("getBookingSender", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Boolean triggerGetBooking = (Boolean) args[0];
-                    if (triggerGetBooking) {
-                        getBooking(roomid);
-                    }
-                }
-            });
-            socketService.on("getBookingCurrentTimeSender", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Boolean triggerGetBookingCurrentTime = (Boolean) args[0];
-                    if (triggerGetBookingCurrentTime) {
-                        getBookingCurrentTime(roomid);
-                    }
-                }
-            });
+//            socketService.on("getBookingSender", new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    int triggerGetBooking = (int) args[0];
+//                    if (triggerGetBooking == roomid) {
+//                        getBooking(roomid);
+//                    }
+//                }
+//            });
+//            socketService.on("getBookingCurrentTimeSender", new Emitter.Listener() {
+//                @Override
+//                public void call(Object... args) {
+//                    int triggerGetBookingCurrentTime = (int) args[0];
+//                    if (triggerGetBookingCurrentTime == roomid) {
+//                        getBookingCurrentTime(roomid);
+//                    }
+//                }
+//            });
             socketService.connect();
         } catch (URISyntaxException e) {
             Log.e("SOCKET-SERVICE", e.getMessage());
@@ -196,7 +198,7 @@ public class HomeFragment extends Fragment {
         homeActiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayInputPasswordDialog(bookingid);
+                checkRoomAccess(bookingid);
             }
         });
     }
@@ -208,7 +210,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
                     message.setText("ไม่พบข้อมูลการจอง");
-                    socketService.emit("getBookingReceive", true);
+                    call.clone().enqueue(this);
                     return;
                 }
 
@@ -237,25 +239,25 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                if(bookingArrayList.size() > 0) {
+                if (bookingArrayList.size() > 0) {
                     bookingAdapter.notifyDataSetChanged();
                     bookingList.setAdapter(bookingAdapter);
                 } else {
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
-                socketService.emit("getBookingReceive", true);
+                call.clone().enqueue(this);
             }
 
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
-                Log.e(TAG, t.getLocalizedMessage());
-                message.setText("ไม่สามารถแสดงข้อมูลได้");
+                Log.e(TAG, "getBooking : " + t.getLocalizedMessage());
+                call.clone().enqueue(this);
             }
         });
     }
 
-    private void getBookingCurrentTime(int roomid) {
+    private void getBookingCurrentTime(final int roomid) {
         Call<List<BookingDao>> call = JsonPlaceHolderApi.getBookingCurrentTime(roomid);
         call.enqueue(new Callback<List<BookingDao>>() {
             @Override
@@ -279,12 +281,13 @@ public class HomeFragment extends Fragment {
                     bookingid = 0;
                 }
 
-                socketService.emit("getBookingCurrentTimeReceive", true);
+                call.clone().enqueue(this);
             }
 
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
-                Log.e(TAG, t.getMessage());
+                Log.e(TAG, "getBookingCurrentTime : " + t.getMessage());
+                call.clone().enqueue(this);
             }
         });
     }
@@ -295,12 +298,12 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<RoomAccessRs>() {
             @Override
             public void onResponse(Call<RoomAccessRs> call, Response<RoomAccessRs> response) {
-                if(!response.isSuccessful()) {
+                if (!response.isSuccessful()) {
                     return;
                 }
 
                 RoomAccessRs roomAccessRs = response.body();
-                if(roomAccessRs.getErrorMesage() != null) {
+                if (roomAccessRs.getErrorMesage() != null) {
                     Toast.makeText(getContext(), roomAccessRs.getErrorMesage(), Toast.LENGTH_LONG).show();
                 } else {
                     ContentValues contentValues = new ContentValues();
@@ -315,7 +318,35 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<RoomAccessRs> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
-                Toast.makeText(getContext(), "ระบบเกิดข้อผิดพลาด", Toast.LENGTH_LONG).show();
+                call.clone().enqueue(this);
+            }
+        });
+    }
+
+    private void checkRoomAccess(int bookingId) {
+        Call<DoorOpenRs> call = JsonPlaceHolderApi.checkActiveRoom(new DoorOpenRq(bookingId));
+        call.enqueue(new Callback<DoorOpenRs>() {
+            @Override
+            public void onResponse(Call<DoorOpenRs> call, Response<DoorOpenRs> response) {
+                if(!response.isSuccessful()) {
+                    return;
+                }
+
+                DoorOpenRs doorOpenRs = response.body();
+                if(doorOpenRs.isOpen()) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("RoomId", roomid);
+                    contentValues.put("isOpen", true);
+                    Gson gson = new Gson();
+                    socketNodeMCUService.emit("triggerOpenDoor", gson.toJson(contentValues));
+                } else {
+                    displayInputPasswordDialog(bookingid);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DoorOpenRs> call, Throwable t) {
+                call.clone().enqueue(this);
             }
         });
     }
@@ -326,18 +357,19 @@ public class HomeFragment extends Fragment {
 
         final EditText input = new EditText(getContext());
 
-        input.setFilters(new InputFilter[] { new InputFilter.LengthFilter(6)});
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         builder.setView(input);
 
         builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(input.getText().toString().equals("") || input.getText().toString().equals(null)) {
+                if (input.getText().toString().equals("") || input.getText().toString().equals(null)) {
                     Toast.makeText(getContext(), "กรุณากรอกรหัสผ่าน", Toast.LENGTH_LONG).show();
                 } else {
                     activeRoom(Integer.parseInt(input.getText().toString()));
                 }
+                getBooking(roomid);
             }
         });
         builder.setNegativeButton("ยกเลิก", new DialogInterface.OnClickListener() {
