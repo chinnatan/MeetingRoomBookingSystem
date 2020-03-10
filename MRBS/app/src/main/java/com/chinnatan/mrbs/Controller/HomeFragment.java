@@ -35,6 +35,7 @@ import com.chinnatan.mrbs.Model.Booking;
 import com.chinnatan.mrbs.Model.BookingDao;
 import com.chinnatan.mrbs.Model.DoorOpenRq;
 import com.chinnatan.mrbs.Model.DoorOpenRs;
+import com.chinnatan.mrbs.Model.MessageRs;
 import com.chinnatan.mrbs.Model.RoomAccessRq;
 import com.chinnatan.mrbs.Model.RoomAccessRs;
 import com.chinnatan.mrbs.R;
@@ -130,24 +131,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
             });
-//            socketService.on("getBookingSender", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    int triggerGetBooking = (int) args[0];
-//                    if (triggerGetBooking == roomid) {
-//                        getBooking(roomid);
-//                    }
-//                }
-//            });
-//            socketService.on("getBookingCurrentTimeSender", new Emitter.Listener() {
-//                @Override
-//                public void call(Object... args) {
-//                    int triggerGetBookingCurrentTime = (int) args[0];
-//                    if (triggerGetBookingCurrentTime == roomid) {
-//                        getBookingCurrentTime(roomid);
-//                    }
-//                }
-//            });
+
             socketService.connect();
         } catch (URISyntaxException e) {
             Log.e("SOCKET-SERVICE", e.getMessage());
@@ -155,6 +139,16 @@ public class HomeFragment extends Fragment {
 
         try {
             socketNodeMCUService = IO.socket("http://192.168.1.2:4002");
+            socketNodeMCUService.on("sendRoomIdToApplication", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    int socketRoomId = (int) args[0];
+                    if(roomid == socketRoomId) {
+                        saveEndDate(bookingid);
+                    }
+                }
+            });
+
             socketNodeMCUService.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -210,6 +204,9 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
                     message.setText("ไม่พบข้อมูลการจอง");
+                    bookingArrayList.clear();
+                    bookingAdapter.notifyDataSetChanged();
+                    bookingList.setAdapter(bookingAdapter);
                     call.clone().enqueue(this);
                     return;
                 }
@@ -346,6 +343,30 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<DoorOpenRs> call, Throwable t) {
+                call.clone().enqueue(this);
+            }
+        });
+    }
+
+    private void saveEndDate(int bookingId) {
+        Call<MessageRs> call = JsonPlaceHolderApi.saveEndDate(new DoorOpenRq(bookingId));
+        call.enqueue(new Callback<MessageRs>() {
+            @Override
+            public void onResponse(Call<MessageRs> call, Response<MessageRs> response) {
+                if(!response.isSuccessful()) {
+                    return;
+                }
+
+                MessageRs messageRs = response.body();
+                if(messageRs.isMessage()) {
+                    Log.d(TAG, "SAVE END DATE : SUCCESS");
+                } else {
+                    Log.d(TAG, "SAVE END DATE : NOT SUCCESS");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageRs> call, Throwable t) {
                 call.clone().enqueue(this);
             }
         });

@@ -373,3 +373,31 @@ exports.checkActiveRoom = (req, res) => {
     }
   })
 }
+
+exports.saveEndDateWhenDoorOpen = (req, res) => {
+  const API_NAME = "SAVE END DATE WHEN DOOR OPEN"
+
+  var bookingId = req.body.bookingId;
+
+  var sqlQueryRoomAccess = "select * from RoomAccess where BookingId = ?"
+  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function(err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryRoomAccess] ERROR -> ${err}`);
+      return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if(results.length > 0) {
+      var sqlUpdateEndDate = "update RoomAccess set EndDate = ? where BookingId = ?"
+      mysqlPool.query(sqlUpdateEndDate, [new Date(), bookingId], function(err, results) {
+        if (err) {
+          console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlUpdateEndDate] ERROR -> ${err}`);
+          return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        return res.status(200).json({"message": true});
+      })
+    } else {
+      return res.status(200).json({"message": false});
+    }
+  })
+}

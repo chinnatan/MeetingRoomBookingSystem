@@ -39,6 +39,16 @@ io.on('connection', function(socket) {
             io.emit('sendIsOpenToNodeMCU', String(res.isOpen))
         }
     })
+
+    socket.on('triggerSaveEndDate', function(message) {
+        let toApplication
+        if(message == 1) {
+            toApplication = 5
+        } else if(message == 3) {
+            toApplication = 4
+        }
+        io.emit('sendRoomIdToApplication', toApplication);
+    })
 })
 
 http.listen(PORT, HOST);

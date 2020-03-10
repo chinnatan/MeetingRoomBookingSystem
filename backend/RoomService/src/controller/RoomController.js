@@ -20,5 +20,6 @@ router.get("/:roomid/booking/time/now", roomService.getRoomBookingStatusCurDateA
 router.get("/:roomid/schedule/display", roomService.displaySchedule);
 router.post("/active", roomService.activeRoom);
 router.post("/check/active", roomService.checkActiveRoom);
+router.post("/active/save", roomService.saveEndDateWhenDoorOpen);
 
 module.exports = router;
