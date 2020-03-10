@@ -300,15 +300,19 @@ public class HomeFragment extends Fragment {
                 }
 
                 RoomAccessRs roomAccessRs = response.body();
-                if (roomAccessRs.getErrorMesage() != null) {
+                if (roomAccessRs.getErrorMesage() != null && roomAccessRs.getMessage() == null) {
                     Toast.makeText(getContext(), roomAccessRs.getErrorMesage(), Toast.LENGTH_LONG).show();
                 } else {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("RoomId", roomid);
-                    contentValues.put("isOpen", true);
-                    Gson gson = new Gson();
-                    socketNodeMCUService.emit("triggerOpenDoor", gson.toJson(contentValues));
-                    Toast.makeText(getContext(), roomAccessRs.getMessage(), Toast.LENGTH_LONG).show();
+                    if(roomAccessRs.getMessage().equals("ยืนยันสำเร็จ")) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("RoomId", roomid);
+                        contentValues.put("isOpen", true);
+                        Gson gson = new Gson();
+                        socketNodeMCUService.emit("triggerOpenDoor", gson.toJson(contentValues));
+                        Toast.makeText(getContext(), roomAccessRs.getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), roomAccessRs.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
