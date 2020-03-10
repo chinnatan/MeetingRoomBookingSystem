@@ -9,5 +9,6 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.get("/booking", SocketService.triggerAddBooking);
+router.get("/room/{roomid}/door/on", SocketService.triggerOpenDoor)
 
 module.exports = router;

@@ -32,14 +32,28 @@ io.on('connection', function(socket) {
     })
 
     socket.on('getBookingReceive', function(message) {
-        if(message) {
-            io.emit('getBookingSender', true)
+        console.log("getBookingReceive " + message);
+        let res = JSON.parse(message).mValues
+        if(res.isSuccess) {
+            io.emit('getBookingSender', res.RoomId)
         }
     })
 
     socket.on('getBookingCurrentTimeReceive', function(message) {
-        if(message) {
-            io.emit('getBookingCurrentTimeSender', true)
+        console.log(message)
+        let res = JSON.parse(message).mValues
+        if(res.isSuccess) {
+            io.emit('getBookingCurrentTimeSender', res.RoomId)
+        }
+    })
+
+    socket.on('triggerOpenDoor', function(message) {
+        console.log(JSON.parse(message).mValues)
+        let res = JSON.parse(message).mValues
+
+        if(message != null) {
+            io.emit('sendRoomIdToNodeMCU', String(res.RoomId))
+            io.emit('sendIsOpenToNodeMCU', String(res.isOpen))
         }
     })
 })
