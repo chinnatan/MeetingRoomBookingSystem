@@ -71,13 +71,19 @@
               <div class="card shadow-sm">
                 <div class="card-body">
                   <div class="row">
+                    <div
+                      class="col-md-12"
+                      v-if="content.report.table.length === 0"
+                    >{{ content.text.report.message }}</div>
+                  </div>
+                  <div class="row" v-if="content.report.table.length !== 0">
                     <div class="col-md-12">
                       <h5 class="card-title">{{ content.text.report.title }}</h5>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="table-responsive">
+                      <div class="table-responsive" v-if="content.report.table.length !== 0">
                         <table class="table">
                           <thead>
                             <tr>
@@ -87,64 +93,47 @@
                               <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
                               <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
                               <th scope="col">{{ content.text.report.table.thead_no5 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no6 }}</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            <tr>
-                              <th scope="row">1</th>
-                              <td>ติวสอบวิชา OOP</td>
-                              <td>M21</td>
-                              <td>27/01/2563</td>
-                              <td>ชินธันย์ ชาติทอง</td>
-                              <td>จอง</td>
-                              <td>ยังไม่ได้เข้าใช้งาน</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">2</th>
-                              <td>วางแผนงาน ITOPENHOUSE 2020</td>
-                              <td>M22</td>
-                              <td>26/01/2563</td>
-                              <td>ชินธันย์ ชาติทอง</td>
-                              <td>จอง</td>
-                              <td>ยังไม่ได้เข้าใช้งาน</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">3</th>
-                              <td>ติวสอบวิชา ISAD</td>
-                              <td>M23</td>
-                              <td>25/01/2563</td>
-                              <td>ชินธันย์ ชาติทอง</td>
-                              <td>จอง</td>
-                              <td>เข้าใช้งาน</td>
+                          <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
+                            <tr
+                              v-if="index + content.report.startRow < content.report.table.length"
+                            >
+                              <th scope="row">{{ index + content.report.startRow }}</th>
+                              <td>{{ content.report.table[index + content.report.startRow].BookingTitle }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].RoomName }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].BookingDate }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].Fullname }}</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'B'"
+                              >ยังไม่ได้ใช้งาน</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'C'"
+                              >ยกเลิก</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'U'"
+                              >ใช้งาน</td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="content.report.table.length !== 0">
                     <div class="col-md-12">
-                      <nav aria-label="...">
+                      <nav>
                         <ul class="pagination justify-content-center">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">ก่อนหน้า</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">1</a>
-                          </li>
-                          <li class="page-item active">
-                            <a class="page-link" href="#">
-                              2
-                              <span class="sr-only">(current)</span>
-                            </a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">ต่อไป</a>
-                          </li>
+                          <div
+                            v-for="page in Math.ceil(content.report.table.length / content.report.rowPerPages)"
+                            v-bind:key="page"
+                          >
+                            <li class="page-item active" v-if="page === content.report.currentPage">
+                              <button class="page-link" @click="onPageChange(page)">{{ page }}</button>
+                            </li>
+                            <li class="page-item" v-else>
+                              <button class="page-link" @click="onPageChange(page)">{{ page }}</button>
+                            </li>
+                          </div>
                         </ul>
                       </nav>
                     </div>
@@ -170,10 +159,17 @@
 <script>
 import Navbar from "@/components/Navbar";
 
+import axios from "axios";
+const axiosConfig = require("../../../assets/config.json");
+
 export default {
   name: "ManageReportRoom",
   components: {
     Navbar: Navbar
+  },
+  created() {
+    this.getSummaryBooking();
+    this.onPageChange(1);
   },
   data() {
     return {
@@ -187,7 +183,7 @@ export default {
             select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
             select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
             option: {
-              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--",
+              default_select_room: "--กรุณาเลือกห้องที่ต้องการ--"
             }
           },
           report: {
@@ -198,16 +194,66 @@ export default {
               thead_no2: "ชื่อห้อง",
               thead_no3: "จองเมื่อวันที่",
               thead_no4: "ชื่อผู้จอง",
-              thead_no5: "สถานะของการจอง",
-              thead_no6: "สถานะของการเข้าใช้งาน"
-            }
+              thead_no5: "สถานะ"
+            },
+            message: "ไม่พบข้อมูลการใช้งาน"
           }
+        },
+        report: {
+          table: [],
+          startRow: 0,
+          rowPerPages: 10,
+          currentPage: 0,
         }
       },
       button: {
         print_report: "พิมพ์รายงาน"
       }
     };
+  },
+  methods: {
+    getSummaryBooking() {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/booking/admin/summary";
+
+      var dateFormat = require("dateformat");
+      this.content.report.table = [];
+
+      let payload = {
+        isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
+      };
+
+      axios
+        .post(path, payload)
+        .then(res => {
+          if (res.data) {
+            for (var summaryIndex in res.data) {
+              this.content.report.table.push({
+                BookingTitle: res.data[summaryIndex].BookingTitle,
+                RoomName: res.data[summaryIndex].RoomName,
+                BookingDate: dateFormat(
+                  res.data[summaryIndex].BookingDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: res.data[summaryIndex].Fullname,
+                BookingStatus: res.data[summaryIndex].BookingStatus
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    onPageChange(page) {
+      this.content.report.currentPage = page;
+      this.content.report.startRow =
+        this.content.report.rowPerPages * (page - 1);
+    }
   }
 };
 </script>

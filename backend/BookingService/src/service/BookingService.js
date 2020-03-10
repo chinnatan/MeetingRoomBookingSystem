@@ -897,3 +897,29 @@ exports.getBookingByBookingId = (req, res) => {
         }
     })
 }
+
+// --สำหรับผู้ดูแลระบบ-- //
+exports.summaryBooking = (req, res) => {
+    const API_NAME = "SUMMARY BOOKING"
+
+    let isAdmin = req.body.isAdmin
+
+    if (isAdmin) {
+        var sqlQueryBooking = "select b.BookingTitle, r.RoomName, b.BookingDate, u.Fullname, b.BookingStatus from Booking b join User u on (b.UserId = u.UserId) join Room r on (r.RoomId = b.RoomId) order by BookingDate asc"
+        mysqlPool.query(sqlQueryBooking, function (err, results) {
+            if (err) {
+                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            }
+
+            if (results.length > 0) {
+                return res.status(200).json(results)
+            } else {
+                return res.status(200).json({ "message": "ไม่พบข้อมูลการใช้งาน" })
+            }
+        })
+    } else {
+        return res.status(403).send()
+    }
+}
+// --สำหรับผู้ดูแลระบบ-- //
