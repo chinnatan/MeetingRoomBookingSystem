@@ -52,7 +52,7 @@ void setup() {
 
   // Socket Configuration
   webSocket.on("sendRoomIdToNodeMCU", socketRoomIdEvent);
-  webSocket.begin("192.168.1.2", 4002);
+  webSocket.begin("171.4.7.253", 4002);
 
   // Software Serial Configuration
   pinMode(D2, INPUT);
