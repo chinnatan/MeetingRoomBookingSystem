@@ -29,6 +29,7 @@
                 class="btn btn-outline-variasi-warna col-md-12"
                 data-toggle="modal"
                 data-target="#report-problem-modal"
+                @click="getRoomNameForReportTool()"
               >{{ button.report_problem }}</button>
             </div>
           </div>
@@ -90,8 +91,14 @@
               <div class="card shadow-sm">
                 <div class="card-body">
                   <div class="row">
+                    <div
+                      class="col-md-12"
+                      v-if="content.report.table.length === 0"
+                    >{{ content.text.no_data }}</div>
+                  </div>
+                  <div class="row">
                     <div class="col-md-12">
-                      <div class="table-responsive">
+                      <div class="table-responsive" v-if="content.report.table.length !== 0">
                         <table class="table">
                           <thead>
                             <tr>
@@ -102,55 +109,44 @@
                               <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
                             </tr>
                           </thead>
-                          <tbody>
-                            <tr>
-                              <th scope="row">1</th>
-                              <td>ไมโครโฟน</td>
-                              <td>M21</td>
-                              <td>ใช้งานได้</td>
-                              <td>แก้ไขเรียบร้อย</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">2</th>
-                              <td>ไมโครโฟน</td>
-                              <td>M22</td>
-                              <td>ใช้งานไม่ได้</td>
-                              <td>กำลังดำเนินการแก้ไข</td>
-                            </tr>
-                            <tr>
-                              <th scope="row">3</th>
-                              <td>ไมโครโฟน</td>
-                              <td>M23</td>
-                              <td>ใช้งานไม่ได้</td>
-                              <td>กำลังดำเนินการแก้ไข</td>
+                          <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
+                            <tr
+                              v-if="index + content.report.startRow < content.report.table.length"
+                            >
+                              <th scope="row">{{ index + content.report.startRow }}</th>
+                              <td>{{ content.report.table[index + content.report.startRow].ReportToolName }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].ReportRoomName }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].ReportDate }}</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].ReportStatus === 'A'"
+                              >{{ content.text.acknowledge }}</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].ReportStatus === 'IN'"
+                              >{{ content.text.inprocess }}</td>
+                              <td
+                                v-if="content.report.table[index + content.report.startRow].ReportStatus === 'C'"
+                              >{{ content.text.completed }}</td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="content.report.table.length !== 0">
                     <div class="col-md-12">
-                      <nav aria-label="...">
+                      <nav>
                         <ul class="pagination justify-content-center">
-                          <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">ก่อนหน้า</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">1</a>
-                          </li>
-                          <li class="page-item active">
-                            <a class="page-link" href="#">
-                              2
-                              <span class="sr-only">(current)</span>
-                            </a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                          </li>
-                          <li class="page-item">
-                            <a class="page-link" href="#">ต่อไป</a>
-                          </li>
+                          <div
+                            v-for="page in Math.ceil(content.report.table.length / content.report.rowPerPages)"
+                            v-bind:key="page"
+                          >
+                            <li class="page-item active" v-if="page === content.report.currentPage">
+                              <button class="page-link" @click="onPageChange(page)">{{ page }}</button>
+                            </li>
+                            <li class="page-item" v-else>
+                              <button class="page-link" @click="onPageChange(page)">{{ page }}</button>
+                            </li>
+                          </div>
                         </ul>
                       </nav>
                     </div>
@@ -171,7 +167,7 @@
       role="dialog"
       aria-hidden="true"
     >
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <form>
             <div class="modal-header">
@@ -183,37 +179,85 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="room-name-select">{{ modal.text.room_name }}</label>
-                <select class="form-control" id="room-name-select" required>
-                  <option value="none" selected disabled hidden>{{ modal.text.option.room_name }}</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
+                <select
+                  class="form-control"
+                  v-model="modal.form.roomNameSelect"
+                  @change="getToolNameForReportTool(modal.form.roomNameSelect)"
+                  required
+                >
+                  <option
+                    :value="modal.text.option.room_name"
+                    selected
+                    disabled
+                    hidden
+                  >{{ modal.text.option.room_name }}</option>
+                  <option
+                    v-for="(line, index) in modal.form.room_name"
+                    v-bind:key="index"
+                    :value="line.RoomId"
+                  >{{ line.RoomName}} - {{ line.BookingTitle }}</option>
                 </select>
                 <small
                   id="room-name-select-help"
                   class="form-text text-muted"
                 >{{ modal.text.description.room_name }}</small>
               </div>
-              <div class="form-group">
-                <label for="tool-name-select">{{ modal.text.tool_name }}</label>
-                <select class="form-control" id="tool-name-select" required>
-                  <option value="none" selected disabled hidden>{{ modal.text.option.tool_name }}</option>
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-                <small
-                  id="tool-name-select-help"
-                  class="form-text text-muted"
-                >{{ modal.text.description.tool_name }}</small>
+              <div class="row">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-sm btn-success" @click="addToolReport()">
+                    <i class="fa fa-plus"></i>
+                    {{ button.add }}
+                  </button>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="detail-for-problem">{{ modal.text.detail_problem }}</label>
-                <textarea class="form-control" id="detail-for-problem" rows="3"></textarea>
+              <div class="row">
+                <div class="col-md-12">
+                  <hr />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div
+                    class="row"
+                    v-for="(tool, index) in modal.form.toolReport"
+                    v-bind:key="index"
+                  >
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label
+                          for="tool-name-select"
+                          class="col-sm-4 col-form-label"
+                        >{{ modal.text.tool_name }}</label>
+                        <div class="col-sm-8">
+                          <select class="form-control" v-model="tool.toolName" required>
+                            <option
+                              value="none"
+                              selected
+                              disabled
+                              hidden
+                            >{{ modal.text.option.tool_name }}</option>
+                            <option
+                              v-for="(toolOption, index) in modal.form.tool_name"
+                              v-bind:key="index"
+                              :value="toolOption.ToolId"
+                            >{{ toolOption.ToolName}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label
+                          for="tool-name-select"
+                          class="col-sm-4 col-form-label"
+                        >{{ modal.text.detail_problem }}</label>
+                        <div class="col-sm-8">
+                          <textarea class="form-control" v-model="tool.detail" rows="1"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="modal-footer">
@@ -222,7 +266,11 @@
                 class="btn btn-secondary"
                 data-dismiss="modal"
               >{{ button.close }}</button>
-              <button type="reset" class="btn btn-danger">{{ button.reset }}</button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                @click="onResetToolReport()"
+              >{{ button.reset }}</button>
               <button type="submit" class="btn btn-success">{{ button.accept }}</button>
             </div>
           </form>
@@ -235,10 +283,16 @@
 <script>
 import Navbar from "@/components/Navbar";
 
+import axios from "axios";
+const axiosConfig = require("../assets/config.json");
+
 export default {
   name: "ReportToolBroken",
   components: {
     Navbar: Navbar
+  },
+  created() {
+    this.getToolReportByUserId(JSON.parse(localStorage.getItem("user")).id);
   },
   data() {
     return {
@@ -248,7 +302,7 @@ export default {
           acknowledge: "แจ้งปัญหาเรียบร้อย",
           inprocess: "กำลังดำเนินการแก้ไขปัญหา",
           completed: "แก้ไขปัญหาเรียบร้อย",
-          no_data: "ไม่พบข้อมูล",
+          no_data: "ไม่พบข้อมูลการแจ้งปัญหา",
           filter: {
             title: "กรองข้อมูลตาม",
             select_room_label: "เลือกห้องที่ต้องการ",
@@ -263,10 +317,16 @@ export default {
               thead_no0: "#",
               thead_no1: "ชื่ออุปกรณ์",
               thead_no2: "ชื่อห้อง",
-              thead_no3: "สถานะของอุปกรณ์",
+              thead_no3: "แจ้งปัญหาวันที่",
               thead_no4: "สถานะของรายงาน"
             }
           }
+        },
+        report: {
+          table: [],
+          startRow: 0,
+          rowPerPages: 10,
+          currentPage: 0
         }
       },
       button: {
@@ -274,25 +334,162 @@ export default {
         report_problem_now: "แจ้งปัญหาแบบทันที",
         close: "ปิด",
         reset: "คืนค่าเริ่มต้น",
-        accept: "ยืนยัน"
+        accept: "ยืนยัน",
+        add: "เพิ่มอุปกรณ์"
       },
       modal: {
         text: {
           title: "แจ้งอุปกรณ์เสียหาย",
-          room_name: "ชื่อห้อง",
+          room_name: "ชื่อห้อง - หัวข้อการจอง",
           tool_name: "ชื่ออุปกรณ์",
-          detail_problem: "รายละเอียดของปัญหาที่ต้องการแจ้ง",
+          detail_problem: "รายละเอียด",
           description: {
             room_name: "แสดงเฉพาะที่ได้ทำการเข้าใช้งานเท่านั้น",
             tool_name: "แสดงเฉพาะอุปกรณ์ที่มีภายในห้องที่เลือกเท่านั้น"
           },
           option: {
             room_name: "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--",
-            tool_name: "--กรุณาเลือกอุปกรณ์ที่ต้องการแจ้งปัญหา--"
+            tool_name: "เลือกอุปกรณ์"
           }
+        },
+        form: {
+          room_name: [],
+          tool_name: [],
+          roomNameSelect: "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--",
+          toolReport: [
+            {
+              toolName: "",
+              detail: ""
+            }
+          ]
         }
       }
     };
+  },
+  methods: {
+    getToolReportByUserId(userId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/report/" +
+        userId;
+
+      var dateFormat = require("dateformat");
+      this.content.report.table = [];
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            for (var index in res.data) {
+              this.content.report.table.push({
+                ReportId: res.data[index].ReportId,
+                ReportToolName: res.data[index].ReportToolName,
+                ReportDate: dateFormat(
+                  res.data[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                ReportRoomName: res.data[index].ReportRoomName,
+                ReportStatus: res.data[index].ReportStatus
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    onPageChange(page) {
+      this.content.report.currentPage = page;
+      this.content.report.startRow =
+        this.content.report.rowPerPages * (page - 1);
+    },
+    getRoomNameForReportTool() {
+      let userId = JSON.parse(localStorage.getItem("user")).id;
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/report/room/name/" +
+        userId;
+
+      this.modal.form.toolReport = [
+        {
+          toolName: "",
+          detail: ""
+        }
+      ];
+      this.modal.form.room_name = [];
+      this.modal.form.roomNameSelect = "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--";
+      this.modal.form.tool_name = [];
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            for (var index in res.data) {
+              this.modal.form.room_name.push({
+                RoomId: res.data[index].RoomId,
+                RoomName: res.data[index].RoomName,
+                BookingTitle: res.data[index].BookingTitle
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    addToolReport() {
+      if (
+        this.modal.form.toolReport.length < this.modal.form.tool_name.length
+      ) {
+        this.modal.form.toolReport.push({
+          toolName: "",
+          detail: ""
+        });
+      }
+    },
+    onResetToolReport() {
+      this.modal.form.toolReport = [
+        {
+          toolName: "",
+          detail: ""
+        }
+      ];
+      this.modal.form.roomNameSelect = "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--";
+      this.modal.form.tool_name = [];
+    },
+    getToolNameForReportTool(roomId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/" +
+        roomId;
+
+      this.modal.form.tool_name = [];
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            for (var index in res.data) {
+              this.modal.form.tool_name.push({
+                ToolId: res.data[index].ToolId,
+                ToolName: res.data[index].ToolName
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>

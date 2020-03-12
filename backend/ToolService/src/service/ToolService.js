@@ -52,12 +52,66 @@ exports.getToolByRoomId = (req, res) => {
       return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
     }
 
-    if(results.length) {
+    if (results.length) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Tool By Room Id`);
       return res.status(200).json(results);
     } else {
       console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Tool By Room Id`);
-      return res.status(200).json({"message": "ไม่พบข้อมูล"});
+      return res.status(200).json({ "message": "ไม่พบข้อมูล" });
     }
   })
+}
+
+// -- Report Tool Problem -- //
+exports.getToolReportByUserId = (req, res) => {
+  const API_NAME = "GET TOOL REPORT By UserId"
+
+  var userId = req.params.userid
+
+  var sqlQueryReport = "select r.ReportId, r.ReportToolName, r.ReportRoomName, r.ReportStatus, r.ReportDate from Report r join RoomAccess ra on (r.RoomAccessId = ra.RoomAccessId) join Booking b on (ra.BookingId = b.BookingId) join Room rm on (rm.RoomId = b.RoomId) join User u on (u.UserId = b.UserId) where u.UserId = ?"
+  mysqlPool.query(sqlQueryReport, [userId], function (err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
+      return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if (results.length > 0) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] -> Found`);
+      return res.status(200).json(results);
+    } else {
+      return res.status(404).send();
+    }
+  })
+}
+
+exports.getRoomNameForReportToolByUserId = (req, res) => {
+  const API_NAME = "GET ROOM NAME FOR REPORT TOOL BY USER ID"
+
+  var userId = req.params.userid
+
+  var sqlQueryRoomName = "select distinct r.RoomId, r.RoomName, b.BookingTitle from Booking b " +
+    "join RoomAccess ra on (ra.BookingId = b.BookingId) " +
+    "join Room r on (r.RoomId = b.RoomId) " +
+    "where r.RoomName not in (select ReportRoomName from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
+    "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
+    "join Room on (Room.RoomId = Booking.RoomId) " +
+    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) " +
+    "and b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
+    "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
+    "join Room on (Room.RoomId = Booking.RoomId) " +
+    "join User on (User.UserId = Booking.UserId) where User.UserId = ?)"
+
+    mysqlPool.query(sqlQueryRoomName, [userId, userId], function(err, results) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
+        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+  
+      if (results.length > 0) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] -> Found`);
+        return res.status(200).json(results);
+      } else {
+        return res.status(404).send();
+      }
+    })
 }

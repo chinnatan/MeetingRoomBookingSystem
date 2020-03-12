@@ -10,5 +10,7 @@ router.use(bodyParser.json());
 
 router.get("/all", toolService.getAllTool);
 router.get("/:roomid", toolService.getToolByRoomId);
+router.get("/report/:userid", toolService.getToolReportByUserId);
+router.get("/report/room/name/:userid", toolService.getRoomNameForReportToolByUserId);
 
 module.exports = router;

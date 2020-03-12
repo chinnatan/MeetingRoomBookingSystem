@@ -10,7 +10,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'font-awesome/css/font-awesome.css'
 import 'animate.css'
 import 'sweetalert2/dist/sweetalert2.min.css';
-
+import Print from 'vue-print-nb'
+ 
+Vue.use(Print);
 Vue.config.productionTip = false
 Vue.use(VueSweetalert2);
 
