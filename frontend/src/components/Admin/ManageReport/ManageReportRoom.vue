@@ -76,46 +76,48 @@
                       v-if="content.report.table.length === 0"
                     >{{ content.text.report.message }}</div>
                   </div>
-                  <div class="row" v-if="content.report.table.length !== 0">
-                    <div class="col-md-12">
-                      <h5 class="card-title">{{ content.text.report.title }}</h5>
+                  <div id="reportRoomPrint">
+                    <div class="row" v-if="content.report.table.length !== 0">
+                      <div class="col-md-12">
+                        <h5 class="card-title">{{ content.text.report.title }}</h5>
+                      </div>
                     </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="table-responsive" v-if="content.report.table.length !== 0">
-                        <table class="table">
-                          <thead>
-                            <tr>
-                              <th scope="col">{{ content.text.report.table.thead_no0 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no1 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no2 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
-                              <th scope="col">{{ content.text.report.table.thead_no5 }}</th>
-                            </tr>
-                          </thead>
-                          <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
-                            <tr
-                              v-if="index + content.report.startRow < content.report.table.length"
-                            >
-                              <th scope="row">{{ index + content.report.startRow }}</th>
-                              <td>{{ content.report.table[index + content.report.startRow].BookingTitle }}</td>
-                              <td>{{ content.report.table[index + content.report.startRow].RoomName }}</td>
-                              <td>{{ content.report.table[index + content.report.startRow].BookingDate }}</td>
-                              <td>{{ content.report.table[index + content.report.startRow].Fullname }}</td>
-                              <td
-                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'B'"
-                              >ยังไม่ได้ใช้งาน</td>
-                              <td
-                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'C'"
-                              >ยกเลิก</td>
-                              <td
-                                v-if="content.report.table[index + content.report.startRow].BookingStatus === 'U'"
-                              >ใช้งาน</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="table-responsive" v-if="content.report.table.length !== 0">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">{{ content.text.report.table.thead_no0 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no1 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no2 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no5 }}</th>
+                              </tr>
+                            </thead>
+                            <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
+                              <tr
+                                v-if="index + content.report.startRow < content.report.table.length"
+                              >
+                                <th scope="row">{{ index + content.report.startRow }}</th>
+                                <td>{{ content.report.table[index + content.report.startRow].BookingTitle }}</td>
+                                <td>{{ content.report.table[index + content.report.startRow].RoomName }}</td>
+                                <td>{{ content.report.table[index + content.report.startRow].BookingDate }}</td>
+                                <td>{{ content.report.table[index + content.report.startRow].Fullname }}</td>
+                                <td
+                                  v-if="content.report.table[index + content.report.startRow].BookingStatus === 'B'"
+                                >ยังไม่ได้ใช้งาน</td>
+                                <td
+                                  v-if="content.report.table[index + content.report.startRow].BookingStatus === 'C'"
+                                >ยกเลิก</td>
+                                <td
+                                  v-if="content.report.table[index + content.report.startRow].BookingStatus === 'U'"
+                                >ใช้งาน</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -144,7 +146,11 @@
           </div>
           <div class="row mt-2 mb-5">
             <div class="col-md-12">
-              <button type="button" class="btn btn-outline-variasi-warna col-md-12">
+              <button
+                type="button"
+                class="btn btn-outline-variasi-warna col-md-12"
+                v-print="'#reportRoomPrint'"
+              >
                 {{ button.print_report }}
                 <i class="fa fa-print"></i>
               </button>
@@ -203,7 +209,7 @@ export default {
           table: [],
           startRow: 0,
           rowPerPages: 10,
-          currentPage: 0,
+          currentPage: 0
         }
       },
       button: {
