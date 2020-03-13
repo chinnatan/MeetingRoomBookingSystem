@@ -68,7 +68,13 @@ exports.getToolReportByUserId = (req, res) => {
 
   var userId = req.params.userid
 
-  var sqlQueryReport = "select r.ReportId, r.ReportToolName, r.ReportRoomName, r.ReportStatus, r.ReportDate from Report r join RoomAccess ra on (r.RoomAccessId = ra.RoomAccessId) join Booking b on (ra.BookingId = b.BookingId) join Room rm on (rm.RoomId = b.RoomId) join User u on (u.UserId = b.UserId) where u.UserId = ?"
+  var sqlQueryReport = "select r.ReportId, b.BookingTitle, t.ToolName, rm.RoomName, r.ReportDate, r.ReportStatus from Report r " +
+    "join RoomAccess ra on (r.RoomAccessId = ra.RoomAccessId) " +
+    "join Booking b on (ra.BookingId = b.BookingId) " +
+    "join Room rm on (rm.RoomId = b.RoomId) " +
+    "join User u on (u.UserId = b.UserId) " +
+    "join Tool t on (t.ToolId = r.ToolId) " +
+    "where u.UserId = ?"
   mysqlPool.query(sqlQueryReport, [userId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
@@ -80,6 +86,30 @@ exports.getToolReportByUserId = (req, res) => {
       return res.status(200).json(results);
     } else {
       return res.status(404).send();
+    }
+  })
+}
+
+exports.getToolReportByReportId = (req, res) => {
+  const API_NAME = "GET TOOL REPORT BY REPORT ID"
+
+  var reportId = req.params.reportId
+
+  var sqlQueryReportById = "select r.ReportId, b.BookingTitle, rm.RoomName, t.ToolName, r.ReportDetail, r.ReportDate, r.ReportStatus from Report r " +
+  "join Tool t on (t.ToolId = r.ToolId) " +
+  "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
+  "join Booking b on (b.BookingId = ra.BookingId) " +
+  "join Room rm on (rm.RoomId = b.RoomId) where r.ReportId = ?"
+  mysqlPool.query(sqlQueryReportById, [reportId], function(err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
+      return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if (results.length > 0) {
+      return res.status(200).json(results)
+    } else {
+      return res.status(200).json({ "isError": true, "message": "ไม่พบข้อมูลรายละเอียด" })
     }
   })
 }
@@ -116,12 +146,7 @@ exports.getRoomNameForReportToolByUserId = (req, res) => {
   var sqlQueryRoomName = "select distinct ra.RoomAccessId, r.RoomName, b.BookingTitle from Booking b " +
     "join RoomAccess ra on (ra.BookingId = b.BookingId) " +
     "join Room r on (r.RoomId = b.RoomId) " +
-    "where r.RoomName not in (select RoomName from Booking  " +
-    "join RoomAccess on (Booking.BookingId = RoomAccess.BookingId) " +
-    "join Room on (Room.RoomId = Booking.RoomId) " +
-    "join Report on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
-    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) " +
-    "and b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
+    "where b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
     "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
     "join Room on (Room.RoomId = Booking.RoomId) " +
     "join User on (User.UserId = Booking.UserId) where User.UserId = ?)"

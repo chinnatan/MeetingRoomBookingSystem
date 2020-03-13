@@ -93,12 +93,12 @@
                   <div class="row">
                     <div
                       class="col-md-12"
-                      v-if="content.report.table.length === 0"
+                      v-if="content.report.table.length === 0 || content.report.table.length === 1"
                     >{{ content.text.no_data }}</div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="table-responsive" v-if="content.report.table.length !== 0">
+                      <div class="table-responsive" v-if="content.report.table.length > 1">
                         <table class="table">
                           <thead>
                             <tr>
@@ -107,6 +107,8 @@
                               <th scope="col">{{ content.text.report.table.thead_no2 }}</th>
                               <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
                               <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
+                              <th scope="col">{{ content.text.report.table.thead_no5 }}</th>
+                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
@@ -114,8 +116,9 @@
                               v-if="index + content.report.startRow < content.report.table.length"
                             >
                               <th scope="row">{{ index + content.report.startRow }}</th>
-                              <td>{{ content.report.table[index + content.report.startRow].ReportToolName }}</td>
-                              <td>{{ content.report.table[index + content.report.startRow].ReportRoomName }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].BookingTitle }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].ToolName }}</td>
+                              <td>{{ content.report.table[index + content.report.startRow].RoomName }}</td>
                               <td>{{ content.report.table[index + content.report.startRow].ReportDate }}</td>
                               <td
                                 v-if="content.report.table[index + content.report.startRow].ReportStatus === 'A'"
@@ -126,13 +129,24 @@
                               <td
                                 v-if="content.report.table[index + content.report.startRow].ReportStatus === 'C'"
                               >{{ content.text.completed }}</td>
+                              <td>
+                                <button
+                                  type="button"
+                                  class="btn btn-sm btn-info"
+                                  data-toggle="modal"
+                                  data-target="#report-detail-modal"
+                                  @click="getToolReportByReportId(content.report.table[index + content.report.startRow].ReportId)"
+                                >
+                                  <i class="fa fa-info"></i>
+                                </button>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
                   </div>
-                  <div class="row" v-if="content.report.table.length !== 0">
+                  <div class="row" v-if="content.report.table.length > 1">
                     <div class="col-md-12">
                       <nav>
                         <ul class="pagination justify-content-center">
@@ -298,6 +312,70 @@
         </div>
       </div>
     </div>
+
+    <div
+      class="modal fade text-left"
+      id="report-detail-modal"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5
+              class="modal-title font-color-primary"
+              id="report-title"
+            >{{ modal.text.title_report_detail }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5>{{ modal.text.report_detail.general_title }}</h5><hr>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-3">{{ modal.text.report_detail.detail.booking_title }}</div>
+                      <div class="col-md-9"><font color="darkgray">{{ modal.text.report_detail.main.booking_title }}</font></div>
+                      <div class="col-md-3">{{ modal.text.report_detail.detail.room_name }}</div>
+                      <div class="col-md-9"><font color="darkgray">{{ modal.text.report_detail.main.room_name }}</font></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-5">
+                  <div class="col-md-12">
+                    <h5>{{ modal.text.report_detail.problem_title }}</h5><hr>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="row">
+                      <div class="col-md-4">{{ modal.text.report_detail.detail.tool_name }}</div>
+                      <div class="col-md-8"><font color="darkgray">{{ modal.text.report_detail.main.tool_name }}</font></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">{{ modal.text.report_detail.detail.problem_detail }}</div>
+                      <div class="col-md-8"><font color="darkgray">{{ modal.text.report_detail.main.problem_detail }}</font></div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">{{ modal.text.report_detail.detail.report_date }}</div>
+                      <div class="col-md-8"><font color="darkgray">{{ modal.text.report_detail.main.report_date }}</font></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -336,15 +414,25 @@ export default {
           report: {
             table: {
               thead_no0: "#",
-              thead_no1: "ชื่ออุปกรณ์",
-              thead_no2: "ชื่อห้อง",
-              thead_no3: "แจ้งปัญหาวันที่",
-              thead_no4: "สถานะของรายงาน"
+              thead_no1: "หัวข้อการจอง",
+              thead_no2: "ชื่ออุปกรณ์",
+              thead_no3: "ชื่อห้อง",
+              thead_no4: "แจ้งปัญหาวันที่",
+              thead_no5: "สถานะของรายงาน"
             }
           }
         },
         report: {
-          table: [],
+          table: [
+            {
+              ReportId: null,
+              BookingTitle: null,
+              ToolName: null,
+              ReportDate: null,
+              RoomName: null,
+              ReportStatus: null
+            }
+          ],
           startRow: 0,
           rowPerPages: 10,
           currentPage: 0
@@ -361,6 +449,7 @@ export default {
       modal: {
         text: {
           title: "แจ้งอุปกรณ์เสียหาย",
+          title_report_detail: "รายละเอียด",
           room_name: "ชื่อห้อง - หัวข้อการจอง",
           tool_name: "ชื่ออุปกรณ์",
           detail_problem: "รายละเอียด",
@@ -371,6 +460,24 @@ export default {
           option: {
             room_name: "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--",
             tool_name: "เลือกอุปกรณ์"
+          },
+          report_detail: {
+            main: {
+              booking_title: null,
+              room_name: null,
+              tool_name: null,
+              problem_detail: null,
+              report_date: null
+            },
+            general_title: "ข้อมูลทั่วไป",
+            problem_title: "รายละเอียดของปัญหา",
+            detail: {
+              booking_title: "หัวข้อการจอง",
+              room_name: "ชื่อห้อง",
+              tool_name: "ชื่ออุปกรณ์",
+              problem_detail: "ปัญหาที่พบ",
+              report_date: "แจ้งปัญหาวันที่"
+            }
           }
         },
         form: {
@@ -399,7 +506,16 @@ export default {
         userId;
 
       var dateFormat = require("dateformat");
-      this.content.report.table = [];
+      this.content.report.table = [
+        {
+          ReportId: null,
+          BookingTitle: null,
+          ToolName: null,
+          ReportDate: null,
+          RoomName: null,
+          ReportStatus: null
+        }
+      ];
 
       axios
         .get(path)
@@ -408,15 +524,42 @@ export default {
             for (var index in res.data) {
               this.content.report.table.push({
                 ReportId: res.data[index].ReportId,
-                ReportToolName: res.data[index].ReportToolName,
+                BookingTitle: res.data[index].BookingTitle,
+                ToolName: res.data[index].ToolName,
                 ReportDate: dateFormat(
                   res.data[index].ReportDate,
                   "dd/mm/yyyy"
                 ),
-                ReportRoomName: res.data[index].ReportRoomName,
+                RoomName: res.data[index].RoomName,
                 ReportStatus: res.data[index].ReportStatus
               });
             }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    getToolReportByReportId(reportId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/report/id/" +
+        reportId;
+
+      var dateFormat = require("dateformat");
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            this.modal.text.report_detail.main.booking_title = res.data[0].BookingTitle
+            this.modal.text.report_detail.main.room_name = res.data[0].RoomName
+            this.modal.text.report_detail.main.tool_name = res.data[0].ToolName
+            this.modal.text.report_detail.main.problem_detail = res.data[0].ReportDetail
+            this.modal.text.report_detail.main.report_date = dateFormat(res.data[0].ReportDate, "dd/mm/yyyy")
           }
         })
         .catch(error => {
