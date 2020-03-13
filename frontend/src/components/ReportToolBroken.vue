@@ -169,7 +169,7 @@
     >
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-          <form>
+          <form @submit.prevent="preSendReport">
             <div class="modal-header">
               <h5 class="modal-title font-color-primary" id="report-title">{{ modal.text.title }}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -177,6 +177,15 @@
               </button>
             </div>
             <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div
+                    class="alert alert-danger"
+                    v-if="modal.form.alertMessage"
+                    role="alert"
+                  >{{ modal.form.alertMessage }}</div>
+                </div>
+              </div>
               <div class="form-group">
                 <label for="room-name-select">{{ modal.text.room_name }}</label>
                 <select
@@ -194,7 +203,7 @@
                   <option
                     v-for="(line, index) in modal.form.room_name"
                     v-bind:key="index"
-                    :value="line.RoomId"
+                    :value="line.RoomAccessId"
                   >{{ line.RoomName}} - {{ line.BookingTitle }}</option>
                 </select>
                 <small
@@ -202,57 +211,69 @@
                   class="form-text text-muted"
                 >{{ modal.text.description.room_name }}</small>
               </div>
-              <div class="row">
+              <div
+                class="row"
+                v-if="modal.form.roomNameSelect !== '--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--'"
+              >
                 <div class="col-md-12">
-                  <button type="button" class="btn btn-sm btn-success" @click="addToolReport()">
-                    <i class="fa fa-plus"></i>
-                    {{ button.add }}
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <hr />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div
-                    class="row"
-                    v-for="(tool, index) in modal.form.toolReport"
-                    v-bind:key="index"
-                  >
-                    <div class="col-md-6">
-                      <div class="form-group row">
-                        <label
-                          for="tool-name-select"
-                          class="col-sm-4 col-form-label"
-                        >{{ modal.text.tool_name }}</label>
-                        <div class="col-sm-8">
-                          <select class="form-control" v-model="tool.toolName" required>
-                            <option
-                              value="none"
-                              selected
-                              disabled
-                              hidden
-                            >{{ modal.text.option.tool_name }}</option>
-                            <option
-                              v-for="(toolOption, index) in modal.form.tool_name"
-                              v-bind:key="index"
-                              :value="toolOption.ToolId"
-                            >{{ toolOption.ToolName}}</option>
-                          </select>
-                        </div>
-                      </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <button type="button" class="btn btn-sm btn-success" @click="addToolReport()">
+                        <i class="fa fa-plus"></i>
+                        {{ button.add }}
+                      </button>
                     </div>
-                    <div class="col-md-6">
-                      <div class="form-group row">
-                        <label
-                          for="tool-name-select"
-                          class="col-sm-4 col-form-label"
-                        >{{ modal.text.detail_problem }}</label>
-                        <div class="col-sm-8">
-                          <textarea class="form-control" v-model="tool.detail" rows="1"></textarea>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <hr />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div
+                        class="row"
+                        v-for="(tool, index) in modal.form.toolReport"
+                        v-bind:key="index"
+                      >
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="tool-name-select"
+                              class="col-sm-4 col-form-label"
+                            >{{ modal.text.tool_name }}</label>
+                            <div class="col-sm-8">
+                              <select class="form-control" v-model="tool.toolId" required>
+                                <option
+                                  value="none"
+                                  selected
+                                  disabled
+                                  hidden
+                                >{{ modal.text.option.tool_name }}</option>
+                                <option
+                                  v-for="(toolOption, index) in modal.form.tool_name"
+                                  v-bind:key="index"
+                                  :value="toolOption.ToolId"
+                                >{{ toolOption.ToolName}}</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label
+                              for="tool-name-select"
+                              class="col-sm-4 col-form-label"
+                            >{{ modal.text.detail_problem }}</label>
+                            <div class="col-sm-8">
+                              <textarea
+                                class="form-control"
+                                v-model="tool.detail"
+                                rows="1"
+                                required
+                              ></textarea>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -358,10 +379,11 @@ export default {
           roomNameSelect: "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--",
           toolReport: [
             {
-              toolName: "",
+              toolId: null,
               detail: ""
             }
-          ]
+          ],
+          alertMessage: null
         }
       }
     };
@@ -418,13 +440,14 @@ export default {
 
       this.modal.form.toolReport = [
         {
-          toolName: "",
+          toolId: null,
           detail: ""
         }
       ];
       this.modal.form.room_name = [];
       this.modal.form.roomNameSelect = "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--";
       this.modal.form.tool_name = [];
+      this.modal.form.alertMessage = null;
 
       axios
         .get(path)
@@ -432,6 +455,7 @@ export default {
           if (res.data) {
             for (var index in res.data) {
               this.modal.form.room_name.push({
+                RoomAccessId: res.data[index].RoomAccessId,
                 RoomId: res.data[index].RoomId,
                 RoomName: res.data[index].RoomName,
                 BookingTitle: res.data[index].BookingTitle
@@ -448,7 +472,7 @@ export default {
         this.modal.form.toolReport.length < this.modal.form.tool_name.length
       ) {
         this.modal.form.toolReport.push({
-          toolName: "",
+          toolId: null,
           detail: ""
         });
       }
@@ -456,7 +480,7 @@ export default {
     onResetToolReport() {
       this.modal.form.toolReport = [
         {
-          toolName: "",
+          toolId: null,
           detail: ""
         }
       ];
@@ -469,21 +493,78 @@ export default {
         axiosConfig.APIGATEWAY.HOST +
         ":" +
         axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/" +
+        "/api/tool/report/tool/name/" +
         roomId;
 
+      this.modal.form.alertMessage = null;
       this.modal.form.tool_name = [];
 
       axios
         .get(path)
         .then(res => {
           if (res.data) {
-            for (var index in res.data) {
-              this.modal.form.tool_name.push({
-                ToolId: res.data[index].ToolId,
-                ToolName: res.data[index].ToolName
-              });
+            if (!res.data.isError) {
+              for (var index in res.data) {
+                this.modal.form.tool_name.push({
+                  ToolId: res.data[index].ToolId,
+                  ToolName: res.data[index].ToolName
+                });
+              }
             }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    preSendReport() {
+      if (
+        this.modal.form.roomNameSelect == null ||
+        this.modal.form.roomNameSelect == "" ||
+        this.modal.form.roomNameSelect ==
+          "--กรุณาเลือกห้องที่ต้องการแจ้งปัญหา--"
+      ) {
+        this.modal.form.alertMessage = "กรุณาเลือกห้องที่ต้องการแจ้งปัญหา";
+      }
+
+      if (this.modal.form.toolReport.length > 0) {
+        for (var index in this.modal.form.toolReport) {
+          if (
+            this.modal.form.toolReport[index].toolId == null ||
+            this.modal.form.toolReport[index].toolId == "" ||
+            this.modal.form.toolReport[index].detail == null ||
+            this.modal.form.toolReport[index].detail == ""
+          ) {
+            this.modal.form.alertMessage = "กรุณากรอกรายละเอียดให้ครบถ้วน";
+          }
+        }
+      }
+
+      let payload = {
+        RoomAccessId: this.modal.form.roomNameSelect,
+        ToolProblem: JSON.stringify(this.modal.form.toolReport)
+      };
+
+      this.SendReport(payload);
+    },
+    SendReport(request) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/report/send";
+
+      axios
+        .post(path, JSON.stringify(request))
+        .then(res => {
+          let response = res.data;
+          if (response.isError) {
+            this.modal.form.alertMessage = response.message;
+          } else {
+            this.$swal(response.message, "", "success");
+            $("#report-problem-modal").modal("hide");
+            this.onResetToolReport();
           }
         })
         .catch(error => {

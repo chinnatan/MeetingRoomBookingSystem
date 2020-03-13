@@ -12,5 +12,8 @@ router.get("/all", toolService.getAllTool);
 router.get("/:roomid", toolService.getToolByRoomId);
 router.get("/report/:userid", toolService.getToolReportByUserId);
 router.get("/report/room/name/:userid", toolService.getRoomNameForReportToolByUserId);
+router.get("/report/tool/name/:roomAccessId", toolService.getToolNameForReportToolByRoomAccessId);
+
+router.post("/report/send", toolService.sendReportTool);
 
 module.exports = router;
