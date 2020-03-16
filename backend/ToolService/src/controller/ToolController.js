@@ -11,9 +11,11 @@ router.use(bodyParser.json());
 router.get("/all", toolService.getAllTool);
 router.get("/:roomid", toolService.getToolByRoomId);
 router.get("/report/:userid", toolService.getToolReportByUserId);
+router.get("/report/id/:reportId", toolService.getToolReportByReportId);
 router.get("/report/room/name/:userid", toolService.getRoomNameForReportToolByUserId);
 router.get("/report/tool/name/:roomAccessId", toolService.getToolNameForReportToolByRoomAccessId);
 
 router.post("/report/send", toolService.sendReportTool);
+router.post("/report/admin/summary", toolService.summaryReportToolProblem);
 
 module.exports = router;

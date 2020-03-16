@@ -96,11 +96,11 @@ exports.getToolReportByReportId = (req, res) => {
   var reportId = req.params.reportId
 
   var sqlQueryReportById = "select r.ReportId, b.BookingTitle, rm.RoomName, t.ToolName, r.ReportDetail, r.ReportDate, r.ReportStatus from Report r " +
-  "join Tool t on (t.ToolId = r.ToolId) " +
-  "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
-  "join Booking b on (b.BookingId = ra.BookingId) " +
-  "join Room rm on (rm.RoomId = b.RoomId) where r.ReportId = ?"
-  mysqlPool.query(sqlQueryReportById, [reportId], function(err, results) {
+    "join Tool t on (t.ToolId = r.ToolId) " +
+    "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
+    "join Booking b on (b.BookingId = ra.BookingId) " +
+    "join Room rm on (rm.RoomId = b.RoomId) where r.ReportId = ?"
+  mysqlPool.query(sqlQueryReportById, [reportId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
       return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
@@ -215,3 +215,34 @@ exports.sendReportTool = (req, res) => {
   })
 }
 // -- Report Tool Problem -- //
+
+// --สำหรับผู้ดูแลระบบ-- //
+// -- Summary Report Tool Problem -- //
+exports.summaryReportToolProblem = (req, res) => {
+  const API_NAME = "SUMMARY REPORT TOOL PROBLEM"
+
+  let isAdmin = req.body.isAdmin
+
+  if (isAdmin) {
+    var sqlQuerySummaryReport = "select t.ToolName, rm.RoomName, t.ToolStatus, r.ReportStatus from Report r " +
+      "join Tool t on (t.ToolId = r.ToolId) " +
+      "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
+      "join Room rm on (rm.RoomId = t.RoomId)"
+    mysqlPool.query(sqlQuerySummaryReport, function (err, results) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      if (results.length > 0) {
+        return res.status(200).json(results)
+      } else {
+        return res.status(200).json({ "message": "ไม่พบข้อมูลการใช้งาน" })
+      }
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
+// -- Summary Report Tool Problem -- //
+// --สำหรับผู้ดูแลระบบ-- //
