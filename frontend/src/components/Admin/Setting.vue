@@ -7,7 +7,7 @@
     <div id="content" class="container h-100">
       <div class="row h-100">
         <div class="col-md-12">
-          <div class="row mt-5 p-3">
+          <div class="row mt-5 p-4">
             <div class="col-md-12">
               <h1 class="font-color-primary">{{ content.text.title }}</h1>
             </div>
@@ -268,7 +268,7 @@ export default {
     return {
       content: {
         text: {
-          title: "จัดการการเข้าใช้งาน",
+          title: "ตั้งค่าทั่วไป",
           settingHighestPeriodPerTime: "ระยะเวลาที่สามารถจองได้สูงสุดต่อครั้ง",
           settingSlowestActivation:
             "ระยะเวลาที่สามารถยืนยันการเข้าใช้งานได้ช้าที่สุด",

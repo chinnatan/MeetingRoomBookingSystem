@@ -89,7 +89,7 @@ export default {
   },
   data() {
     return {
-      lblBlacklist: "จัดการการเข้าใช้งาน",
+      lblBlacklist: "จัดการผู้ใช้งาน",
       lblBlacklistDetail: "สำหรับจัดการผู้ใช้งานที่ระบบจำกัดสิทธิ์การใช้งาน",
       lblBlacklistTable: {
         lblUID: "รหัสผู้ใช้งาน",
