@@ -88,6 +88,11 @@
                   replace
                 >{{ navbar.manageSystemDropdown.setting }}</router-link>
                 <router-link
+                  :to="{path: '/admin/manage/tool' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageSystemDropdown.tool }}</router-link>
+                <router-link
                   :to="{path: '/admin/manage/user' }"
                   class="dropdown-item"
                   replace
@@ -152,6 +157,7 @@ export default {
         manageSystem: "จัดการระบบ",
         manageSystemDropdown: {
           setting: "ตั้งค่าทั่วไป",
+          tool: "จัดการอุปกรณ์",
           user: "จัดการผู้ใช้งาน"
         },
         home: "หน้าหลัก",
