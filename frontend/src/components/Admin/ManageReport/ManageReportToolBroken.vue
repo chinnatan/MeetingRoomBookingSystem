@@ -106,10 +106,10 @@
                                 <td>{{ content.report.table[index + content.report.startRow].ReportDate }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].ToolStatus === 0"
-                                >{{ content.text.report.status.tool.available }}</td>
+                                >{{ content.text.report.status.tool.noavailable }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].ToolStatus === 1"
-                                >{{ content.text.report.status.tool.noavailable }}</td>
+                                >{{ content.text.report.status.tool.available }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].ReportStatus === 'A'"
                                 >{{ content.text.report.status.acknowledge }}</td>
