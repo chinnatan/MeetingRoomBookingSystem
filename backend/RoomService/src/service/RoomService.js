@@ -360,16 +360,16 @@ exports.checkActiveRoom = (req, res) => {
   var bookingId = req.body.bookingId;
 
   var sqlQueryRoomAccess = "select * from RoomAccess where BookingId = ?"
-  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function(err, results) {
+  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryRoomAccess] ERROR -> ${err}`);
       return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
     }
 
-    if(results.length > 0) {
-      return res.status(200).json({"isOpen": true});
+    if (results.length > 0) {
+      return res.status(200).json({ "isOpen": true });
     } else {
-      return res.status(200).json({"isOpen": false});
+      return res.status(200).json({ "isOpen": false });
     }
   })
 }
@@ -380,24 +380,91 @@ exports.saveEndDateWhenDoorOpen = (req, res) => {
   var bookingId = req.body.bookingId;
 
   var sqlQueryRoomAccess = "select * from RoomAccess where BookingId = ?"
-  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function(err, results) {
+  mysqlPool.query(sqlQueryRoomAccess, [bookingId], function (err, results) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryRoomAccess] ERROR -> ${err}`);
       return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
     }
 
-    if(results.length > 0) {
+    if (results.length > 0) {
       var sqlUpdateEndDate = "update RoomAccess set EndDate = ? where BookingId = ?"
-      mysqlPool.query(sqlUpdateEndDate, [new Date(), bookingId], function(err, results) {
+      mysqlPool.query(sqlUpdateEndDate, [new Date(), bookingId], function (err, results) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlUpdateEndDate] ERROR -> ${err}`);
           return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
         }
 
-        return res.status(200).json({"message": true});
+        return res.status(200).json({ "message": true });
       })
     } else {
-      return res.status(200).json({"message": false});
+      return res.status(200).json({ "message": false });
     }
   })
 }
+
+// --สำหรับผู้ดูแลระบบ-- //
+exports.saveRoomSetting = (req, res) => {
+  const API_NAME = "SAVE ROOM SETTING"
+
+  var isAdmin = req.body.isAdmin
+  var RoomId = req.body.RoomId
+  var RoomPermissionStudent = req.body.RoomPermissionStudent
+  var RoomPermissionProfessor = req.body.RoomPermissionProfessor
+  var RoomPermissionStaff = req.body.RoomPermissionStaff
+  var RoomActive = req.body.RoomActive
+  var Tool = JSON.parse(req.body.Tool)
+
+  if (isAdmin) {
+    mysqlPool.getConnection(function (err, connection) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL GET CONNECTION ERROR -> ${err}`);
+        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      connection.beginTransaction(function (err) {
+        if (err) {
+          connection.rollback(function () {
+            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err.message}`);
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+          })
+        }
+
+        var sqlUpdateRoom = "update Room set RoomPermissionStudent = ?, RoomPermissionProfessor = ?, RoomPermissionStaff = ?, RoomActive = ? where RoomId = ?"
+        connection.query(sqlUpdateRoom, [RoomPermissionStudent, RoomPermissionProfessor, RoomPermissionStaff, RoomActive, RoomId], function (err, results) {
+          if (err) {
+            connection.rollback(function () {
+              console.log(`[${SERVICE_NAME}][${API_NAME}] SQL UPDATE[sqlUpdateRoom] ERROR -> ${err.message}`);
+              return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            })
+          }
+
+          for (var index in Tool) {
+            var sqlUpdateTool = "update Tool set ToolStatus = ? where ToolId = ?"
+            connection.query(sqlUpdateTool, [Tool[index].ToolStatus, Tool[index].ToolId], function (err, results) {
+              if (err) {
+                connection.rollback(function () {
+                  console.log(`[${SERVICE_NAME}][${API_NAME}] SQL UPDATE[sqlUpdateTool] ERROR -> ${err.message}`);
+                  return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                })
+              }
+            })
+          }
+
+          connection.commit(function (err) {
+            if (err) {
+              connection.rollback(function () {
+                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+              })
+            }
+
+            return res.status(200).json({ "isError": false, "message": "การตั้งค่าห้องสำเร็จ" })
+          })
+        })
+      })
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
+// --สำหรับผู้ดูแลระบบ-- //
