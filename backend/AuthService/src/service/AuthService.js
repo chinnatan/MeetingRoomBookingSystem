@@ -59,7 +59,7 @@ exports.login = async (req, res) => {
 
             // --CASE 1 ไม่ทราบ Role ของบาง Actor-- //
             const SECRET = Config.ldap.MY_SECRET
-            
+
             if (req.body.username == "admin" && password == "admin") {
                 var sqlSelectUser = "select * from User where UserId = ?"
                 connection.query(sqlSelectUser, [req.body.username], function (err, results) {
@@ -162,8 +162,6 @@ exports.login = async (req, res) => {
                     }
 
                 })
-            } else if(req.body.username != null && password != null) {
-                return res.status(200).json({ "accesstoken": false, "message": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" })
             } else {
                 // เมื่อเชื่อมต่อฐานข้อมูลสำเร็จ ยืนยัน username และ password ผ่าน ldap
                 const client = new Client(url, baseDn);
@@ -314,3 +312,29 @@ exports.login = async (req, res) => {
         }
     });
 }
+
+// --สำหรับผู้ดูแลระบบ-- //
+exports.getAllUser = (req, res) => {
+    const API_NAME = "GET ALL USER"
+
+    let isAdmin = req.body.isAdmin
+
+    if (isAdmin) {
+        var sqlQueryUser = "select * from User"
+        mysqlPool.query(sqlQueryUser, function (err, results) {
+            if (err) {
+                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            }
+
+            if (results.length > 0) {
+                return res.status(200).json({ "isError": false, "results": results })
+            } else {
+                return res.status(200).json({ "isError": true, "message": "ไม่พบผู้ใช้งานในระบบ" })
+            }
+        })
+    } else {
+        return res.status(403).send()
+    }
+}
+// --สำหรับผู้ดูแลระบบ-- //

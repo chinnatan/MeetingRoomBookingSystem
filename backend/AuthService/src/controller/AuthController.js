@@ -10,4 +10,6 @@ router.use(bodyParser.json());
 
 router.post("/login", authService.login);
 
+router.post("/user/all", authService.getAllUser);
+
 module.exports = router;
