@@ -149,7 +149,7 @@ exports.getRoomNameForReportToolByUserId = (req, res) => {
     "where b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
     "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
     "join Room on (Room.RoomId = Booking.RoomId) " +
-    "join User on (User.UserId = Booking.UserId) where User.UserId = ?)"
+    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) and UserId = ?"
 
   mysqlPool.query(sqlQueryRoomName, [userId, userId], function (err, results) {
     if (err) {
