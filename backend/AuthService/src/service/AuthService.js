@@ -337,4 +337,46 @@ exports.getAllUser = (req, res) => {
         return res.status(403).send()
     }
 }
+
+exports.banned = (req, res) => {
+    const API_NAME = "BANNED"
+
+    let UserId = req.body.UserId
+    let isAdmin = req.body.isAdmin
+
+    if (isAdmin) {
+        var sqlBannedUser = "update User set BannedStatus = ?, BannedDate = ? where UserId = ?"
+        mysqlPool.query(sqlBannedUser, [1, new Date(), UserId], function (err, results) {
+            if (err) {
+                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            }
+
+            return res.status(200).json({ "isError": false, "message": "จำกัดสิทธิ์การเข้าใช้งานสำเร็จ" })
+        })
+    } else {
+        return res.status(403).send()
+    }
+}
+
+exports.unbanned = (req, res) => {
+    const API_NAME = "UN BANNED"
+
+    let UserId = req.body.UserId
+    let isAdmin = req.body.isAdmin
+
+    if (isAdmin) {
+        var sqlBannedUser = "update User set BannedStatus = ?, BannedDate = ? where UserId = ?"
+        mysqlPool.query(sqlBannedUser, [0, null, UserId], function (err, results) {
+            if (err) {
+                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            }
+
+            return res.status(200).json({ "isError": false, "message": "ยกเลิกจำกัดสิทธิ์การเข้าใช้งานสำเร็จ" })
+        })
+    } else {
+        return res.status(403).send()
+    }
+}
 // --สำหรับผู้ดูแลระบบ-- //

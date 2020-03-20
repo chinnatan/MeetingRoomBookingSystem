@@ -38,12 +38,12 @@
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].Fullname }}</td>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].BannedDate }}</td>
                                   <td v-if="content.table.user.body[index + content.table.user.startRow].BannedStatus == 0">
-                                    <button type="button" class="btn btn-sm btn-danger">
+                                    <button type="button" class="btn btn-sm btn-danger" @click="preSendBanned(content.table.user.body[index + content.table.user.startRow].UserId)">
                                       <i class="fa fa-lock"></i>
                                     </button>
                                   </td>
                                   <td v-else>
-                                    <button type="button" class="btn btn-sm btn-success">
+                                    <button type="button" class="btn btn-sm btn-success" @click="preSendUnBanned(content.table.user.body[index + content.table.user.startRow].UserId)">
                                       <i class="fa fa-unlock"></i>
                                     </button>
                                   </td>
@@ -140,6 +140,8 @@ export default {
         isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
       };
 
+      this.content.table.user.body = [{}]
+
       axios
         .post(path, payload)
         .then(res => {
@@ -156,11 +158,99 @@ export default {
                       ? "-"
                       : dateFormat(
                           res.data.results[index].BannedDate,
-                          "dd/mm/yyyy"
+                          "dd/mm/yyyy HH:mm"
                         )
                 });
               }
             }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    preSendBanned(userId) {
+      this.$swal({
+        title: "คุณแน่ใจหรือไม่ที่ต้องการจะจำกัดสิทธิ์การเข้าใช้งานของ " + userId + " ?",
+        text: "คุณจะไม่สามารถยกเลิกการกระทำของคุณได้",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "red",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then(result => {
+        if (result.value) {
+          this.SendBanned(userId);
+        } else {
+          this.$swal("ยกเลิก", "สิทธิ์การใช้งานของ " + userId + " ยังคงเหมือนเดิม", "info");
+        }
+      });
+    },
+    SendBanned(userId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/auth/user/ban";
+
+      let payload = {
+        UserId: userId,
+        isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
+      };
+
+      axios
+        .post(path, payload)
+        .then(res => {
+          if(!res.data.isError) {
+            this.$swal("", res.data.message, "success");
+            this.getUser();
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    preSendUnBanned(userId) {
+      this.$swal({
+        title: "คุณแน่ใจหรือไม่ที่ต้องการจะยกเลิกจำกัดสิทธิ์การเข้าใช้งานของ " + userId + " ?",
+        text: "คุณจะไม่สามารถยกเลิกการกระทำของคุณได้",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "red",
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then(result => {
+        if (result.value) {
+          this.SendUnBanned(userId);
+        } else {
+          this.$swal("ยกเลิก", userId + " ยังคงถูกจำกัดสิทธิ์การใช้งานเหมือนเดิม", "info");
+        }
+      });
+    },
+    SendUnBanned(userId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/auth/user/unban";
+
+      let payload = {
+        UserId: userId,
+        isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
+      };
+
+      axios
+        .post(path, payload)
+        .then(res => {
+          if(!res.data.isError) {
+            this.$swal("", res.data.message, "success");
+            this.getUser();
           }
         })
         .catch(error => {

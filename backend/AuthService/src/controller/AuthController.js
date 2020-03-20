@@ -11,5 +11,7 @@ router.use(bodyParser.json());
 router.post("/login", authService.login);
 
 router.post("/user/all", authService.getAllUser);
+router.post("/user/ban", authService.banned);
+router.post("/user/unban", authService.unbanned);
 
 module.exports = router;
