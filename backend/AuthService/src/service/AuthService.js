@@ -55,7 +55,6 @@ exports.login = async (req, res) => {
             console.log(`[${SERVICE_NAME}] Error -> ${err.message}`);
             return res.status(500).json({ "message": "ไม่สามารถเชื่อมต่อฐานข้อมูลได้" })
         } else {
-            console.log(`[${SERVICE_NAME}] Connected to Mysql -> ${HOST_MYSQL}:${PORT_MYSQL}`);
 
             // --CASE 1 ไม่ทราบ Role ของบาง Actor-- //
             const SECRET = Config.ldap.MY_SECRET

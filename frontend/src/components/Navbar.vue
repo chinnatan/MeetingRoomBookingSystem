@@ -46,7 +46,11 @@
               </div>
             </li>
             <li class="nav-item">
-              <router-link :to="{path: '/report/tool' }" class="nav-link" replace>{{ navbar.reportDamaged }}</router-link>
+              <router-link
+                :to="{path: '/report/tool' }"
+                class="nav-link"
+                replace
+              >{{ navbar.reportDamaged }}</router-link>
             </li>
             <li class="nav-item dropdown" v-if="user.isAdmin">
               <a
@@ -132,11 +136,13 @@
 
 <script>
 import router from "../router";
+import axios from "axios";
+const axiosConfig = require("../assets/config.json");
 
 export default {
   name: "Navbar",
   created() {
-    this.getUser()
+    this.getUser();
   },
   data() {
     return {
@@ -170,21 +176,66 @@ export default {
         mail: "",
         status: "",
         role: "",
-        isAdmin: null,
+        isAdmin: null
       }
     };
   },
   methods: {
     getUser() {
-      let user = JSON.parse(localStorage.getItem("user"))
-      this.navbar.account.username = user.fullname
-      this.user.mail = user.mail
-      this.user.status = user.status
-      this.user.role = user.role
-      this.user.isAdmin = user.isAdmin
+      let user = JSON.parse(localStorage.getItem("user"));
+      this.navbar.account.username = user.fullname;
+      this.user.mail = user.mail;
+      this.user.status = user.status;
+      this.user.role = user.role;
+      this.user.isAdmin = user.isAdmin;
+      this.isVerifyUser(user.id)
+    },
+    isVerifyUser(userId) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/auth/user/ban/check/" +
+        userId;
+
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token"))
+      };
+
+      axios
+        .get(path, { headers: headers })
+        .then(res => {
+          let rs = res.data;
+          if (rs.isTokenValid) {
+            this.$swal({
+              title: "Token Notification",
+              text: rs.message,
+              type: "warning",
+              showCancelButton: false,
+              confirmButtonColor: "red",
+              confirmButtonText: "ตกลง",
+              cancelButtonText: "ยกเลิก",
+              showCloseButton: true,
+              showLoaderOnConfirm: true
+            }).then(result => {
+              if (result.value) {
+                localStorage.clear();
+                router.push({ name: "SignIn" });
+              }
+            });
+          } else if (rs.isBanned) {
+            router.push({ name: "Permission" });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.alert = true;
+        });
     },
     signOut() {
-      localStorage.clear()
+      localStorage.clear();
       router.push({ name: "SignIn" });
     }
   }

@@ -42,8 +42,8 @@ export default {
       content: {
         text: {
           error_code: "Permission",
-          error_code_name: "This User is not allowed.",
-          error_code_description: "ขออภัยคุณไม่มีสิทธ์เข้าใช้งานระบบ"
+          error_code_name: "This User is not allowed, please contact administrator",
+          error_code_description: "ขออภัยคุณไม่มีสิทธ์เข้าใช้งานระบบ, กรุณาติดต่อผู้ดูแลระบบ"
         },
         isNotAllow: null
       },
