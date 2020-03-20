@@ -523,8 +523,13 @@ export default {
         axiosConfig.APIGATEWAY.PORT +
         "/api/booking/update";
 
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token"))
+      };
+
       axios
-        .put(path, JSON.stringify(results))
+        .put(path, JSON.stringify(results), { headers: headers })
         .then(res => {
           let response = res.data;
           if (response.error_message) {
@@ -533,22 +538,41 @@ export default {
               .getElementById("booking-schedule-title")
               .scrollIntoView({ behavior: "smooth" });
           } else {
-            this.content.text.message = null;
-            this.$swal(response.message, null, "success");
-            $("#edit-booking-modal").modal("hide");
-            this.content.booking.table = [
-              {
-                BookingId: undefined,
-                BookingTitle: undefined,
-                RoomName: undefined,
-                BookingStartDate: undefined,
-                BookingStartTime: undefined,
-                BookingEndTime: undefined
-              }
-            ];
-            this.getBookingByUserId(
-              JSON.parse(localStorage.getItem("user")).id
-            );
+            if (response.isTokenValid) {
+              this.$swal({
+                title: "Token Notification",
+                text: response.message,
+                type: "warning",
+                showCancelButton: false,
+                confirmButtonColor: "red",
+                confirmButtonText: "ตกลง",
+                cancelButtonText: "ยกเลิก",
+                showCloseButton: true,
+                showLoaderOnConfirm: true
+              }).then(result => {
+                if (result.value) {
+                  localStorage.clear();
+                  router.push({ name: "SignIn" });
+                }
+              });
+            } else {
+              this.content.text.message = null;
+              this.$swal(response.message, null, "success");
+              $("#edit-booking-modal").modal("hide");
+              this.content.booking.table = [
+                {
+                  BookingId: undefined,
+                  BookingTitle: undefined,
+                  RoomName: undefined,
+                  BookingStartDate: undefined,
+                  BookingStartTime: undefined,
+                  BookingEndTime: undefined
+                }
+              ];
+              this.getBookingByUserId(
+                JSON.parse(localStorage.getItem("user")).id
+              );
+            }
           }
         })
         .catch(error => {
@@ -586,10 +610,32 @@ export default {
         axiosConfig.APIGATEWAY.PORT +
         "/api/booking/cancel";
 
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token"))
+      };
+
       axios
-        .put(path, JSON.stringify(payload))
+        .put(path, JSON.stringify(payload), { headers: headers })
         .then(res => {
-          if(res.data.isCancel) {
+          if (res.data.isTokenValid) {
+            this.$swal({
+              title: "Token Notification",
+              text: response.message,
+              type: "warning",
+              showCancelButton: false,
+              confirmButtonColor: "red",
+              confirmButtonText: "ตกลง",
+              cancelButtonText: "ยกเลิก",
+              showCloseButton: true,
+              showLoaderOnConfirm: true
+            }).then(result => {
+              if (result.value) {
+                localStorage.clear();
+                router.push({ name: "SignIn" });
+              }
+            });
+          } else if (res.data.isCancel) {
             this.$swal("ยกเลิกการจอง", res.data.message, "success");
             this.content.booking.table = [
               {
@@ -608,7 +654,11 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.$swal("เกิดข้อผิดพลาด", "ไม่สามารถทำรายการได้ เนื่องจากเกิดความผิดพลาดของระบบ", "warning");
+          this.$swal(
+            "เกิดข้อผิดพลาด",
+            "ไม่สามารถทำรายการได้ เนื่องจากเกิดความผิดพลาดของระบบ",
+            "warning"
+          );
         });
     }
   }

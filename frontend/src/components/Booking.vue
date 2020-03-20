@@ -595,9 +595,14 @@ export default {
         axiosConfig.APIGATEWAY.PORT +
         "/api/booking/send";
 
+      const headers = {
+        "Content-Type": "application/json",
+        authorization: JSON.parse(localStorage.getItem("token"))
+      };
+
       try {
         axios
-          .post(path, JSON.stringify(results))
+          .post(path, JSON.stringify(results), { headers: headers })
           .then(res => {
             let response = res.data;
             if (response.error_message) {
@@ -607,7 +612,24 @@ export default {
                 .getElementById("form-booking")
                 .scrollIntoView({ behavior: "smooth" });
             } else {
-              if (response.isBanned) {
+              if (response.isTokenValid) {
+                this.$swal({
+                  title: "Token Notification",
+                  text: response.message,
+                  type: "warning",
+                  showCancelButton: false,
+                  confirmButtonColor: "red",
+                  confirmButtonText: "ตกลง",
+                  cancelButtonText: "ยกเลิก",
+                  showCloseButton: true,
+                  showLoaderOnConfirm: true
+                }).then(result => {
+                  if (result.value) {
+                    localStorage.clear();
+                    router.push({ name: "SignIn" });
+                  }
+                });
+              } else if (response.isBanned) {
                 router.push({ name: "Permission" });
               } else {
                 this.alertSuccess(response.message, response.pin);

@@ -17,6 +17,20 @@ const NAME = "API Gateway";
 const PORT = process.env.PORT || 4000;
 const HOST = "0.0.0.0";
 
+// Set CORS
+app.use((req, res, next) => {
+    const allowedOrigins = [
+        'http://localhost:8080/', 'http://localhost:8081/'
+    ];
+    if (!allowedOrigins.includes(req.headers.origin)) {
+        res.header("Access-Control-Allow-Origin", req.headers.origin);
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
+        res.header("Access-Control-Allow-Credentials", true);
+        res.header("Access-Control-Allow-Methods", "*");
+    }
+    return next();
+})
+
 // Middleware Authentication
 app.use((req, res, next) => {
     // TODO: my authentication logic
@@ -31,7 +45,8 @@ app.use((req, res, next) => {
             const token = req.headers.authorization
             jwt.verify(token, SECRET, function (err, detoken) {
                 if (err) {
-                    return res.status(401).json(err)
+                    console.log(err)
+                    return res.status(200).json({"isTokenValid": true, "message": "Token หมดอายุ กรุณาเข้าสู่ระบบใหม่อีกครั้ง"})
                 } else {
                     return next()
                     // return res.status(200).json(detoken) // Verify สำเร็จ แสดงข้อมูลในรูปแบบ JSON
@@ -44,20 +59,6 @@ app.use((req, res, next) => {
         res.status(500).json({ error: "Not Authorized" });
         throw new Error("Not Authorized");
     }
-})
-
-// Set CORS
-app.use((req, res, next) => {
-    const allowedOrigins = [
-        'http://localhost:8080/', 'http://localhost:8081/'
-    ];
-    if (!allowedOrigins.includes(req.headers.origin)) {
-        res.header("Access-Control-Allow-Origin", req.headers.origin);
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, authorization");
-        res.header("Access-Control-Allow-Credentials", true);
-        res.header("Access-Control-Allow-Methods", "*");
-    }
-    return next();
 })
 
 // Proxy request
