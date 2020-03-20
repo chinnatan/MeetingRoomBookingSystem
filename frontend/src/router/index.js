@@ -12,6 +12,7 @@ import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
 import ManageRoom from '@/components/Admin/ManageRoom'
 import Forbidden403 from '@/components/403'
 import NotFound404 from '@/components/404'
+import Permission from '@/components/Permission'
 
 Vue.use(Router)
 
@@ -107,6 +108,14 @@ let router = new Router({
       path: '/403',
       name: 'Forbidden',
       component: Forbidden403,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/permission',
+      name: 'Permission',
+      component: Permission,
       meta: {
         requiresAuth: true
       }

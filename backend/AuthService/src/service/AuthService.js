@@ -313,6 +313,26 @@ exports.login = async (req, res) => {
     });
 }
 
+exports.checkBanned = (req, res) => {
+    const API_NAME = "CHECK BANNED"
+
+    let UserId = req.params.UserId
+
+    var sqlCheckUserBan = "select * from User where UserId = ? and BannedStatus = ?"
+    mysqlPool.query(sqlCheckUserBan, [UserId, 1], function (err, results) {
+        if (err) {
+            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if(results.length > 0) {
+            return res.status(200).json({ "isError": false, "isBanned": true })
+        } else {
+            return res.status(200).json({ "isError": false, "isBanned": false })
+        }
+    })
+}
+
 // --สำหรับผู้ดูแลระบบ-- //
 exports.getAllUser = (req, res) => {
     const API_NAME = "GET ALL USER"

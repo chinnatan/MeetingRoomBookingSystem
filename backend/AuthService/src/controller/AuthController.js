@@ -8,6 +8,8 @@ var bodyParser = require('body-parser')
 router.use(bodyParser.urlencoded({ extended : true }));
 router.use(bodyParser.json());
 
+router.get("/user/ban/check/:UserId", authService.checkBanned);
+
 router.post("/login", authService.login);
 
 router.post("/user/all", authService.getAllUser);

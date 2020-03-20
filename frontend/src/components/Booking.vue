@@ -178,13 +178,21 @@
                                       class="col-md-6"
                                     >{{ txtBooking.lblSize }} {{ txtBooking.lblSizeRoom }} คน</div>
                                   </div>
-                                  <hr>
+                                  <hr />
                                   <div class="row">
                                     <div class="col-md-12">
-                                      <div class="row" v-for="(line, index) in room.tool" v-bind:key="index">
+                                      <div
+                                        class="row"
+                                        v-for="(line, index) in room.tool"
+                                        v-bind:key="index"
+                                      >
                                         <div class="col-md-6">{{ line.ToolName }}</div>
-                                        <div class="col-md-6" v-if="line.ToolStatus"><font color="#00ff00">สามารถใช้งานได้</font></div>
-                                        <div class="col-md-6" v-else><font color="red">ไม่สามารถใช้งานได้</font></div>
+                                        <div class="col-md-6" v-if="line.ToolStatus">
+                                          <font color="#00ff00">สามารถใช้งานได้</font>
+                                        </div>
+                                        <div class="col-md-6" v-else>
+                                          <font color="red">ไม่สามารถใช้งานได้</font>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -374,23 +382,38 @@
                 <tbody>
                   <tr v-for="(line, index) in modal.schedule" v-bind:key="index">
                     <td>
-                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingTitle }}</font>
+                      <font
+                        color="red"
+                        v-if="modal.notavaliable === true && index == 0"
+                      >{{ line.BookingTitle }}</font>
                       <font color="black" v-else>{{ line.BookingTitle }}</font>
                     </td>
                     <td>
-                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingStartDate }}</font>
+                      <font
+                        color="red"
+                        v-if="modal.notavaliable === true && index == 0"
+                      >{{ line.BookingStartDate }}</font>
                       <font color="black" v-else>{{ line.BookingStartDate }}</font>
                     </td>
                     <td>
-                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingStartTime }}</font>
+                      <font
+                        color="red"
+                        v-if="modal.notavaliable === true && index == 0"
+                      >{{ line.BookingStartTime }}</font>
                       <font color="black" v-else>{{ line.BookingStartTime }}</font>
                     </td>
                     <td>
-                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.BookingEndTime }}</font>
+                      <font
+                        color="red"
+                        v-if="modal.notavaliable === true && index == 0"
+                      >{{ line.BookingEndTime }}</font>
                       <font color="black" v-else>{{ line.BookingEndTime }}</font>
                     </td>
                     <td>
-                      <font color="red" v-if="modal.notavaliable === true && index == 0">{{ line.Fullname }}</font>
+                      <font
+                        color="red"
+                        v-if="modal.notavaliable === true && index == 0"
+                      >{{ line.Fullname }}</font>
                       <font color="black" v-else>{{ line.Fullname }}</font>
                     </td>
                   </tr>
@@ -406,6 +429,7 @@
 
 <script>
 import Navbar from "@/components/Navbar";
+import router from "../router";
 
 import Floor1 from "@/components/Floor/Floor1";
 import Floor2 from "@/components/Floor/Floor2";
@@ -516,7 +540,7 @@ export default {
       this.form.inputBookingStartDate = this.form.currentDate;
       this.form.inputBookingStartTime = this.form.currentTime;
 
-      this.getToolByRoomId(id)
+      this.getToolByRoomId(id);
 
       this.alert = false;
       this.alertMessage = null;
@@ -583,8 +607,12 @@ export default {
                 .getElementById("form-booking")
                 .scrollIntoView({ behavior: "smooth" });
             } else {
-              this.alertSuccess(response.message, response.pin);
-              this.alert = false;
+              if (response.isBanned) {
+                router.push({ name: "Permission" });
+              } else {
+                this.alertSuccess(response.message, response.pin);
+                this.alert = false;
+              }
             }
           })
           .catch(error => {
@@ -633,13 +661,15 @@ export default {
         "/api/room/" +
         roomId +
         axiosConfig.PATH.getRoomBookingStatusCurDateById;
-      
+
       const pathTimeNow =
         "http://" +
         axiosConfig.APIGATEWAY.HOST +
         ":" +
         axiosConfig.APIGATEWAY.PORT +
-        "/api/room/" + roomId + "/booking/time/now";
+        "/api/room/" +
+        roomId +
+        "/booking/time/now";
 
       var dateFormat = require("dateformat");
       this.modal.schedule = [];
@@ -648,33 +678,30 @@ export default {
         .get(pathTimeNow)
         .then(res => {
           if (res.data[0] != null) {
-            this.modal.notavaliable = true
+            this.modal.notavaliable = true;
             this.modal.schedule.push({
-                BookingTitle: res.data[0].BookingTitle,
-                BookingStartDate: dateFormat(
-                  res.data[0].BookingStartDate,
-                  "dd/mm/yyyy"
-                ),
-                BookingEndDate: dateFormat(
-                  res.data[0].BookingEndDate,
-                  "dd/mm/yyyy"
-                ),
-                BookingStartTime: dateFormat(
-                  res.data[0].BookingStartDate,
-                  "HH:MM"
-                ),
-                BookingEndTime: dateFormat(
-                  res.data[0].BookingEndDate,
-                  "HH:MM"
-                ),
-                Fullname: res.data[0].Fullname
-              });
+              BookingTitle: res.data[0].BookingTitle,
+              BookingStartDate: dateFormat(
+                res.data[0].BookingStartDate,
+                "dd/mm/yyyy"
+              ),
+              BookingEndDate: dateFormat(
+                res.data[0].BookingEndDate,
+                "dd/mm/yyyy"
+              ),
+              BookingStartTime: dateFormat(
+                res.data[0].BookingStartDate,
+                "HH:MM"
+              ),
+              BookingEndTime: dateFormat(res.data[0].BookingEndDate, "HH:MM"),
+              Fullname: res.data[0].Fullname
+            });
           } else {
-            this.modal.notavaliable = false
+            this.modal.notavaliable = false;
           }
         })
         .catch(error => {
-          console.log(error)
+          console.log(error);
         });
 
       axios

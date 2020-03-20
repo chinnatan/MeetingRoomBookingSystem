@@ -68,6 +68,8 @@ exports.addBooking = async (req, res) => {
     const axios = require('axios')
     let settingRs
     let setting
+    let userBannedRs
+    let userBanned
     try {
         settingRs = await axios.get('http://localhost:4000/api/setting/')
         setting = {
@@ -81,6 +83,9 @@ exports.addBooking = async (req, res) => {
                 }
             }
         }
+
+        userBannedRs = await axios.get('http://localhost:4000/api/auth/user/ban/check/' + UserId)
+        userBanned = userBannedRs.data.isBanned
     } catch (error) {
         return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
     }
@@ -88,6 +93,10 @@ exports.addBooking = async (req, res) => {
 
     // --CONDITION BEFORE BOOKING-- //
     const moment = require('moment')
+
+    if(userBanned) {
+        return res.status(200).json({ "isBanned": userBanned})
+    }
 
     try {
         var error_message
@@ -394,6 +403,8 @@ exports.editBooking = async (req, res) => {
     const axios = require('axios')
     let settingRs
     let setting
+    let userBannedRs
+    let userBanned
     try {
         settingRs = await axios.get('http://localhost:4000/api/setting/')
         setting = {
@@ -407,6 +418,9 @@ exports.editBooking = async (req, res) => {
                 }
             }
         }
+
+        userBannedRs = await axios.get('http://localhost:4000/api/auth/user/ban/check/' + UserId)
+        userBanned = userBannedRs.data.isBanned
     } catch (error) {
         return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
     }
@@ -414,6 +428,10 @@ exports.editBooking = async (req, res) => {
 
     // --CONDITION BEFORE BOOKING-- //
     const moment = require('moment')
+
+    if(userBanned) {
+        return res.status(200).json({ "isBanned": userBanned})
+    }
 
     try {
         var error_message
@@ -697,6 +715,8 @@ exports.cancelBooking = async (req, res) => {
     let setting
     let bookingRs
     let booking
+    let userBannedRs
+    let userBanned
     try {
         settingRs = await axios.get('http://localhost:4000/api/setting/')
         bookingRs = await axios.get('http://localhost:4000/api/booking/' + bookingId)
@@ -718,6 +738,9 @@ exports.cancelBooking = async (req, res) => {
             BookingEndDate: bookingRs.data[0].BookingEndDate,
             RoomName: bookingRs.data[0].RoomName
         }
+
+        userBannedRs = await axios.get('http://localhost:4000/api/auth/user/ban/check/' + UserId)
+        userBanned = userBannedRs.data.isBanned
     } catch (error) {
         return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
     }
@@ -729,6 +752,10 @@ exports.cancelBooking = async (req, res) => {
 
     // --CONDITION BEFORE BOOKING-- //
     const moment = require('moment')
+
+    if(userBanned) {
+        return res.status(200).json({ "isBanned": userBanned})
+    }
 
     try {
         var error_message
