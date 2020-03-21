@@ -437,7 +437,6 @@ import Floor2 from "@/components/Floor/Floor2";
 import Floor3 from "@/components/Floor/Floor3";
 
 import axios from "axios";
-
 const axiosConfig = require("../assets/config.json");
 
 export default {
