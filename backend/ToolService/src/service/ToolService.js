@@ -224,10 +224,12 @@ exports.summaryReportToolProblem = (req, res) => {
   let isAdmin = req.body.isAdmin
 
   if (isAdmin) {
-    var sqlQuerySummaryReport = "select t.ToolName, rm.RoomName, t.ToolStatus, r.ReportStatus from Report r " +
+    var sqlQuerySummaryReport = "select t.ToolName, rm.RoomName, t.ToolStatus, r.ReportStatus, u.Fullname from Report r " +
       "join Tool t on (t.ToolId = r.ToolId) " +
       "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
-      "join Room rm on (rm.RoomId = t.RoomId)"
+      "join Room rm on (rm.RoomId = t.RoomId) " +
+      "join Booking b on (b.BookingId = ra.BookingId) " +
+      "join User u on (u.UserId = b.UserId)"
     mysqlPool.query(sqlQuerySummaryReport, function (err, results) {
       if (err) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
@@ -245,4 +247,62 @@ exports.summaryReportToolProblem = (req, res) => {
   }
 }
 // -- Summary Report Tool Problem -- //
+
+// -- Get All Tool Report -- //
+exports.getAllToolReport = (req, res) => {
+  const API_NAME = "GET All TOOL REPORT"
+
+  let isAdmin = req.body.isAdmin
+
+  if (isAdmin) {
+    var sqlQueryReport = "select r.ReportId, b.BookingTitle, t.ToolName, rm.RoomName, r.ReportDate, r.ReportStatus, u.Fullname from Report r " +
+      "join RoomAccess ra on (r.RoomAccessId = ra.RoomAccessId) " +
+      "join Booking b on (ra.BookingId = b.BookingId) " +
+      "join Room rm on (rm.RoomId = b.RoomId) " +
+      "join User u on (u.UserId = b.UserId) " +
+      "join Tool t on (t.ToolId = r.ToolId) "
+    mysqlPool.query(sqlQueryReport, function (err, results) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
+        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      if (results.length > 0) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] -> Found`);
+        return res.status(200).json({ "isError": false, "results": results });
+      } else {
+        return res.status(404).send();
+      }
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
+// -- Get All Tool Report -- //
+
+// -- Update Report Status -- //
+exports.updateReportStatus = (req, res) => {
+  const API_NAME = "UPDATE REPORT STATUS"
+
+  let isAdmin = req.body.isAdmin
+  let reportId = req.body.ReportId
+  let reportStatus = req.body.ReportStatus
+
+  console.log(reportId)
+
+  if(isAdmin) {
+    var sqlUpdateReportStatus = "update Report set ReportStatus = ? where ReportId = ?"
+    mysqlPool.query(sqlUpdateReportStatus, [reportStatus, reportId], function(err) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
+        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      return res.status(200).json({ "isError": false, "message": "เปลี่ยนแปลงสถานะรายงานสำเร็จ" });
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
+// -- Update Report Status -- //
 // --สำหรับผู้ดูแลระบบ-- //

@@ -45,7 +45,6 @@ app.use((req, res, next) => {
             const token = req.headers.authorization
             jwt.verify(token, SECRET, function (err, detoken) {
                 if (err) {
-                    console.log(err)
                     return res.status(200).json({"isTokenValid": true, "message": "Token หมดอายุ กรุณาเข้าสู่ระบบใหม่อีกครั้ง"})
                 } else {
                     return next()

@@ -17,5 +17,7 @@ router.get("/report/tool/name/:roomAccessId", toolService.getToolNameForReportTo
 
 router.post("/report/send", toolService.sendReportTool);
 router.post("/report/admin/summary", toolService.summaryReportToolProblem);
+router.post("/report/all", toolService.getAllToolReport);
+router.post("/report/update", toolService.updateReportStatus);
 
 module.exports = router;
