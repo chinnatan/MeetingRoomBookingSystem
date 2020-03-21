@@ -101,6 +101,11 @@
                   class="dropdown-item"
                   replace
                 >{{ navbar.manageSystemDropdown.user }}</router-link>
+                <router-link
+                  :to="{path: '/admin/manage/tool/report' }"
+                  class="dropdown-item"
+                  replace
+                >{{ navbar.manageSystemDropdown.tool }}</router-link>
               </div>
             </li>
           </ul>
@@ -164,7 +169,8 @@ export default {
         manageSystemDropdown: {
           setting: "ตั้งค่าทั่วไป",
           room: "จัดการห้อง",
-          user: "จัดการผู้ใช้งาน"
+          user: "จัดการผู้ใช้งาน",
+          tool: "จัดการรายงานการแจ้งอุปกรณ์เสียหาย"
         },
         home: "หน้าหลัก",
         account: {
@@ -217,8 +223,9 @@ export default {
               confirmButtonColor: "red",
               confirmButtonText: "ตกลง",
               cancelButtonText: "ยกเลิก",
-              showCloseButton: true,
-              showLoaderOnConfirm: true
+              showCloseButton: false,
+              showLoaderOnConfirm: true,
+              allowOutsideClick: false
             }).then(result => {
               if (result.value) {
                 localStorage.clear();

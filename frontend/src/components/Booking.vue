@@ -258,6 +258,7 @@
                                   <input
                                     type="number"
                                     class="form-control"
+                                    min="1"
                                     v-model="form.inputBookingAttendees"
                                   />
                                 </div>
