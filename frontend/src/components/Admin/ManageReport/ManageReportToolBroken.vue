@@ -94,6 +94,7 @@
                                 <th scope="col">{{ content.text.report.table.thead_no3 }}</th>
                                 <th scope="col">{{ content.text.report.table.thead_no4 }}</th>
                                 <th scope="col">{{ content.text.report.table.thead_no5 }}</th>
+                                <th scope="col">{{ content.text.report.table.thead_no6 }}</th>
                               </tr>
                             </thead>
                             <tbody v-for="index in content.report.rowPerPages" v-bind:key="index">
@@ -104,6 +105,7 @@
                                 <td>{{ content.report.table[index + content.report.startRow].ToolName }}</td>
                                 <td>{{ content.report.table[index + content.report.startRow].RoomName }}</td>
                                 <td>{{ content.report.table[index + content.report.startRow].ReportDate }}</td>
+                                <td>{{ content.report.table[index + content.report.startRow].Fullname }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].ToolStatus === 0"
                                 >{{ content.text.report.status.tool.noavailable }}</td>
@@ -203,8 +205,9 @@ export default {
               thead_no1: "ชื่ออุปกรณ์",
               thead_no2: "ชื่อห้อง",
               thead_no3: "วันที่แจ้งความเสียหาย",
-              thead_no4: "สถานะของอุปกรณ์",
-              thead_no5: "สถานะของรายงาน"
+              thead_no4: "ชื่อผู้แจ้ง",
+              thead_no5: "สถานะของอุปกรณ์",
+              thead_no6: "สถานะของรายงาน"
             },
             message: "ไม่พบรายงานสรุปอุปกรณ์เสียหาย",
             status: {
@@ -258,6 +261,7 @@ export default {
                   res.data[summaryIndex].ReportDate,
                   "dd/mm/yyyy"
                 ),
+                Fullname: res.data[summaryIndex].Fullname,
                 ToolStatus: res.data[summaryIndex].ToolStatus,
                 ReportStatus: res.data[summaryIndex].ReportStatus
               });
