@@ -18,6 +18,17 @@
                 <div class="card-body">
                   <div class="row mt-2">
                     <div class="col-md-12">
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="ค้นหารหัสผู้ใช้งาน"
+                            v-model="content.table.user.search"
+                            @keyup="onSearch()"
+                          />
+                        </div>
+                      </div>
                       <div class="row">
                         <div class="col-md-12">
                           <div class="table-responsive" v-if="content.table.user.body.length > 1">
@@ -31,19 +42,34 @@
                                   <th scope="col"></th>
                                 </tr>
                               </thead>
-                              <tbody v-for="index in content.table.user.rowPerPages" v-bind:key="index">
-                                <tr v-if="index + content.table.user.startRow < content.table.user.body.length">
+                              <tbody
+                                v-for="index in content.table.user.rowPerPages"
+                                v-bind:key="index"
+                              >
+                                <tr
+                                  v-if="index + content.table.user.startRow < content.table.user.body.length"
+                                >
                                   <th scope="row">{{ index + content.table.user.startRow }}</th>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].UserId }}</td>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].Fullname }}</td>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].BannedDate }}</td>
-                                  <td v-if="content.table.user.body[index + content.table.user.startRow].BannedStatus == 0">
-                                    <button type="button" class="btn btn-sm btn-danger" @click="preSendBanned(content.table.user.body[index + content.table.user.startRow].UserId)">
+                                  <td
+                                    v-if="content.table.user.body[index + content.table.user.startRow].BannedStatus == 0"
+                                  >
+                                    <button
+                                      type="button"
+                                      class="btn btn-sm btn-danger"
+                                      @click="preSendBanned(content.table.user.body[index + content.table.user.startRow].UserId)"
+                                    >
                                       <i class="fa fa-lock"></i>
                                     </button>
                                   </td>
                                   <td v-else>
-                                    <button type="button" class="btn btn-sm btn-success" @click="preSendUnBanned(content.table.user.body[index + content.table.user.startRow].UserId)">
+                                    <button
+                                      type="button"
+                                      class="btn btn-sm btn-success"
+                                      @click="preSendUnBanned(content.table.user.body[index + content.table.user.startRow].UserId)"
+                                    >
                                       <i class="fa fa-unlock"></i>
                                     </button>
                                   </td>
@@ -51,6 +77,11 @@
                               </tbody>
                             </table>
                           </div>
+                        </div>
+                      </div>
+                      <div class="row" v-if="content.table.user.body.length === 0 || content.table.user.body.length === 1">
+                        <div class="col-md-12">
+                          {{ content.table.user.messageNotFoundUser }}
                         </div>
                       </div>
                       <div class="row" v-if="content.table.user.body.length > 1">
@@ -118,9 +149,12 @@ export default {
         table: {
           user: {
             body: [{}],
+            tempBody: [{}],
             startRow: 0,
             rowPerPages: 10,
-            currentPage: 0
+            currentPage: 0,
+            search: null,
+            messageNotFoundUser: "ไม่พบผู้ใช้งาน"
           }
         }
       }
@@ -140,7 +174,12 @@ export default {
         isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
       };
 
-      this.content.table.user.body = [{}]
+      this.content.table.user.body = [{}];
+      this.content.table.user.tempBody = [
+        {
+          UserId: null
+        }
+      ];
 
       axios
         .post(path, payload)
@@ -149,6 +188,20 @@ export default {
             for (var index in res.data.results) {
               if (res.data.results[index].Role != "Admin") {
                 this.content.table.user.body.push({
+                  UserId: res.data.results[index].UserId,
+                  Fullname: res.data.results[index].Fullname,
+                  Email: res.data.results[index].Email,
+                  BannedStatus: res.data.results[index].BannedStatus,
+                  BannedDate:
+                    res.data.results[index].BannedDate == null
+                      ? "-"
+                      : dateFormat(
+                          res.data.results[index].BannedDate,
+                          "dd/mm/yyyy HH:mm"
+                        )
+                });
+
+                this.content.table.user.tempBody.push({
                   UserId: res.data.results[index].UserId,
                   Fullname: res.data.results[index].Fullname,
                   Email: res.data.results[index].Email,
@@ -171,7 +224,10 @@ export default {
     },
     preSendBanned(userId) {
       this.$swal({
-        title: "คุณแน่ใจหรือไม่ที่ต้องการจะจำกัดสิทธิ์การเข้าใช้งานของ " + userId + " ?",
+        title:
+          "คุณแน่ใจหรือไม่ที่ต้องการจะจำกัดสิทธิ์การเข้าใช้งานของ " +
+          userId +
+          " ?",
         text: "คุณจะไม่สามารถยกเลิกการกระทำของคุณได้",
         type: "warning",
         showCancelButton: true,
@@ -184,7 +240,11 @@ export default {
         if (result.value) {
           this.SendBanned(userId);
         } else {
-          this.$swal("ยกเลิก", "สิทธิ์การใช้งานของ " + userId + " ยังคงเหมือนเดิม", "info");
+          this.$swal(
+            "ยกเลิก",
+            "สิทธิ์การใช้งานของ " + userId + " ยังคงเหมือนเดิม",
+            "info"
+          );
         }
       });
     },
@@ -204,7 +264,7 @@ export default {
       axios
         .post(path, payload)
         .then(res => {
-          if(!res.data.isError) {
+          if (!res.data.isError) {
             this.$swal("", res.data.message, "success");
             this.getUser();
           }
@@ -215,7 +275,10 @@ export default {
     },
     preSendUnBanned(userId) {
       this.$swal({
-        title: "คุณแน่ใจหรือไม่ที่ต้องการจะยกเลิกจำกัดสิทธิ์การเข้าใช้งานของ " + userId + " ?",
+        title:
+          "คุณแน่ใจหรือไม่ที่ต้องการจะยกเลิกจำกัดสิทธิ์การเข้าใช้งานของ " +
+          userId +
+          " ?",
         text: "คุณจะไม่สามารถยกเลิกการกระทำของคุณได้",
         type: "warning",
         showCancelButton: true,
@@ -228,7 +291,11 @@ export default {
         if (result.value) {
           this.SendUnBanned(userId);
         } else {
-          this.$swal("ยกเลิก", userId + " ยังคงถูกจำกัดสิทธิ์การใช้งานเหมือนเดิม", "info");
+          this.$swal(
+            "ยกเลิก",
+            userId + " ยังคงถูกจำกัดสิทธิ์การใช้งานเหมือนเดิม",
+            "info"
+          );
         }
       });
     },
@@ -248,7 +315,7 @@ export default {
       axios
         .post(path, payload)
         .then(res => {
-          if(!res.data.isError) {
+          if (!res.data.isError) {
             this.$swal("", res.data.message, "success");
             this.getUser();
           }
@@ -256,6 +323,30 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    onSearch() {
+      let searchText = this.content.table.user.search.trim();
+
+      this.content.table.user.body = [{}];
+
+      if (searchText == null || searchText == "") {
+        this.getUser();
+      } else {
+        for (
+          var index = 1;
+          index < this.content.table.user.tempBody.length;
+          index++
+        ) {
+          let searchFound = this.content.table.user.tempBody[
+            index
+          ].UserId.indexOf(searchText);
+          if (searchFound > -1) {
+            this.content.table.user.body.push(
+              this.content.table.user.tempBody[index]
+            );
+          }
+        }
+      }
     },
     onPageChange(page) {
       this.content.report.currentPage = page;
