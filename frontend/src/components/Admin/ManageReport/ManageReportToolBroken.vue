@@ -359,25 +359,9 @@ export default {
 
       this.content.report.table = [{}]
 
-      if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus == null) {
+      if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (this.content.report.tempTable[index].RoomName == roomName) {
-            this.content.report.table.push({
-                ToolName: this.content.report.tempTable[index].ToolName,
-                RoomName: this.content.report.tempTable[index].RoomName,
-                ReportDate: dateFormat(
-                  this.content.report.tempTable[index].ReportDate,
-                  "dd/mm/yyyy"
-                ),
-                Fullname: this.content.report.tempTable[index].Fullname,
-                ToolStatus: this.content.report.tempTable[index].ToolStatus,
-                ReportStatus: this.content.report.tempTable[index].ReportStatus
-              });
-          }
-        }
-      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus == null) {
-        for (var index in this.content.report.tempTable) {
-          if (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate)) {
+          if (this.content.report.tempTable[index].ReportStatus == reportStatus) {
             this.content.report.table.push({
                 ToolName: this.content.report.tempTable[index].ToolName,
                 RoomName: this.content.report.tempTable[index].RoomName,
@@ -407,9 +391,41 @@ export default {
               });
           }
         }
-      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus != null) {
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus == null) {
         for (var index in this.content.report.tempTable) {
-          if (this.content.report.tempTable[index].ReportStatus == reportStatus) {
+          if (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].ReportStatus == reportStatus && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate)) {
             this.content.report.table.push({
                 ToolName: this.content.report.tempTable[index].ToolName,
                 RoomName: this.content.report.tempTable[index].RoomName,
@@ -426,6 +442,22 @@ export default {
       } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus == null) {
         for (var index in this.content.report.tempTable) {
           if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
             this.content.report.table.push({
                 ToolName: this.content.report.tempTable[index].ToolName,
                 RoomName: this.content.report.tempTable[index].RoomName,
@@ -471,6 +503,22 @@ export default {
               });
           }
         }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if ((Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate)) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
       } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus == null) {
         for (var index in this.content.report.tempTable) {
           if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate))) {
@@ -487,9 +535,9 @@ export default {
               });
           }
         }
-      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus != null) {
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
             this.content.report.table.push({
                 ToolName: this.content.report.tempTable[index].ToolName,
                 RoomName: this.content.report.tempTable[index].RoomName,
@@ -503,9 +551,9 @@ export default {
               });
           }
         }
-      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus != null) {
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
             this.content.report.table.push({
                 ToolName: this.content.report.tempTable[index].ToolName,
                 RoomName: this.content.report.tempTable[index].RoomName,

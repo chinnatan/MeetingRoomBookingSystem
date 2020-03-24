@@ -25,7 +25,7 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-row text-left">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label for="select-room">{{ content.text.filter.select_room_label }}</label>
                             <select
@@ -47,7 +47,7 @@
                             </select>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label
                               for="select-start-date"
@@ -60,7 +60,7 @@
                             />
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label
                               for="select-end-date"
@@ -71,6 +71,24 @@
                               v-model="content.filter.endDate"
                               @change="onFilter()"
                             />
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label
+                              for="select-status-date"
+                            >{{ content.text.filter.select_status_label }}</label>
+                            <select class="form-control" v-model="content.filter.bookingStatus" @change="onFilter()">
+                              <option
+                                :value="content.filter.bookingStatus"
+                                selected
+                                disabled
+                                hidden
+                              >{{ content.filter.bookingStatus }}</option>
+                              <option :value="content.text.filter.status.booking">{{ content.text.filter.status.booking }}</option>
+                              <option :value="content.text.filter.status.cancel">{{ content.text.filter.status.cancel }}</option>
+                              <option :value="content.text.filter.status.use">{{ content.text.filter.status.use }}</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -121,13 +139,13 @@
                                 <td>{{ content.report.table[index + content.report.startRow].Fullname }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].BookingStatus === 'B'"
-                                >ยังไม่ได้ใช้งาน</td>
+                                >{{ content.text.filter.status.booking }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].BookingStatus === 'C'"
-                                >ยกเลิก</td>
+                                >{{ content.text.filter.status.cancel }}</td>
                                 <td
                                   v-if="content.report.table[index + content.report.startRow].BookingStatus === 'U'"
-                                >ใช้งาน</td>
+                                >{{ content.text.filter.status.use }}</td>
                               </tr>
                             </tbody>
                           </table>
@@ -202,8 +220,14 @@ export default {
             select_room_label: "เลือกห้องที่ต้องการ",
             select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
             select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
+            select_status_label: "เลือกสถานะการใช้งาน",
             option: {
               default_select_room: "--กรุณาเลือกห้องที่ต้องการ--"
+            },
+            status: {
+              booking: "ยังไม่ได้ใช้งาน",
+              cancel: "ยกเลิก",
+              use: "ใช้งาน"
             }
           },
           report: {
@@ -232,7 +256,8 @@ export default {
           },
           room: "--กรุณาเลือกห้องที่ต้องการ--",
           startDate: null,
-          endDate: null
+          endDate: null,
+          bookingStatus: "--กรุณาเลือกสถานะที่ต้องการ--"
         }
       },
       button: {
@@ -320,14 +345,68 @@ export default {
         this.content.filter.startDate != null
           ? dateFormat(this.content.filter.startDate, "yyyy-mm-dd")
           : null;
-      var endDate =
+      let endDate =
         this.content.filter.endDate != null
           ? dateFormat(this.content.filter.endDate, "yyyy-mm-dd")
           : null;
+      let bookingStatus = null
+
+      if(this.content.filter.bookingStatus == this.content.text.filter.status.booking) {
+        bookingStatus = "B"
+      } else if(this.content.filter.bookingStatus == this.content.text.filter.status.cancel) {
+        bookingStatus = "C"
+      } else if(this.content.filter.bookingStatus == this.content.text.filter.status.use) {
+        bookingStatus = "U"
+      }
 
       this.content.report.table = [{}];
 
-      if (roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null) { // 1
+      if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && bookingStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].BookingStatus == bookingStatus) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && bookingStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate)) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && bookingStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate)) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && bookingStatus == null) {
         for (var index in this.content.report.tempTable) {
           if (this.content.report.tempTable[index].RoomName == roomName) {
             this.content.report.table.push({
@@ -342,12 +421,9 @@ export default {
             });
           }
         }
-      } else if (roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null) { // 2
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && bookingStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            Date.parse(this.content.report.tempTable[index].BookingDate) >=
-            Date.parse(startDate)
-          ) {
+          if (this.content.report.tempTable[index].BookingStatus == bookingStatus && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate)) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
@@ -360,12 +436,9 @@ export default {
             });
           }
         }
-      } else if (roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null) { // 3
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && bookingStatus == null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            Date.parse(this.content.report.tempTable[index].BookingDate) <=
-            Date.parse(endDate)
-          ) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate)) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
@@ -378,13 +451,9 @@ export default {
             });
           }
         }
-      } else if (roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null) { // 4
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && bookingStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            this.content.report.tempTable[index].RoomName == roomName &&
-            Date.parse(this.content.report.tempTable[index].BookingDate) >=
-              Date.parse(startDate)
-          ) {
+          if (Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
@@ -397,13 +466,9 @@ export default {
             });
           }
         }
-      } else if (roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null) { // 5
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && bookingStatus == null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            this.content.report.tempTable[index].RoomName == roomName &&
-            Date.parse(this.content.report.tempTable[index].BookingDate) <=
-              Date.parse(endDate)
-          ) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate)) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
@@ -416,14 +481,9 @@ export default {
             });
           }
         }
-      } else if (roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null) { // 6
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && bookingStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            Date.parse(this.content.report.tempTable[index].BookingDate) >=
-              Date.parse(startDate) &&
-            Date.parse(this.content.report.tempTable[index].BookingDate) <=
-              Date.parse(endDate)
-          ) {
+          if (this.content.report.tempTable[index].RoomName == roomName && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
@@ -436,15 +496,69 @@ export default {
             });
           }
         }
-      } else if (roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null) { // 7
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && bookingStatus != null) {
         for (var index in this.content.report.tempTable) {
-          if (
-            this.content.report.tempTable[index].RoomName == roomName &&
-            Date.parse(this.content.report.tempTable[index].BookingDate) >=
-              Date.parse(startDate) &&
-            Date.parse(this.content.report.tempTable[index].BookingDate) <=
-              Date.parse(endDate)
-          ) {
+          if ((Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate)) && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && bookingStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate))) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && bookingStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate) && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && bookingStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && bookingStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate)) && this.content.report.tempTable[index].BookingStatus == bookingStatus) {
             this.content.report.table.push({
               BookingTitle: this.content.report.tempTable[index].BookingTitle,
               RoomName: this.content.report.tempTable[index].RoomName,
