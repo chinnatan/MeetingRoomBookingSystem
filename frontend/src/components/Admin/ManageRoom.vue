@@ -18,10 +18,21 @@
                 <div class="card-body">
                   <div class="row mt-2">
                     <div class="col-md-12">
+                      <div class="row mb-4">
+                        <div class="col-md-12">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="ค้นหาห้อง"
+                            v-model="content.table.room.search"
+                            @keyup="onSearch()"
+                          />
+                        </div>
+                      </div>
                       <div class="row">
                         <div
                           class="col-md-12"
-                          v-if="content.table.room.body.length === 0"
+                          v-if="content.table.room.body.length === 0 || content.table.room.body.length === 1"
                         >{{ content.table.room.message }}</div>
                       </div>
                       <div class="row">
@@ -70,9 +81,9 @@
                           </div>
                         </div>
                       </div>
-                      <div class="row">
+                      <div class="row" v-if="content.table.room.body.length > 1">
                         <div class="col-md-12">
-                          <nav aria-label="...">
+                          <nav>
                             <ul class="pagination justify-content-center">
                               <div
                                 v-for="page in Math.ceil(content.table.room.body.length / content.table.room.rowPerPages)"
@@ -288,6 +299,7 @@ export default {
         table: {
           room: {
             body: [{}],
+            tempBody: [{}],
             startRow: 0,
             rowPerPages: 10,
             currentPage: 0,
@@ -295,7 +307,8 @@ export default {
             status: {
               open: "เปิดให้ใช้งาน",
               noopen: "ไม่เปิดให้ใช้งาน"
-            }
+            },
+            search: null
           }
         },
         modal: {
@@ -327,6 +340,7 @@ export default {
         "/api/room/all";
 
       this.content.table.room.body = [{}];
+      this.content.table.room.tempBody = [{}];
 
       axios
         .get(path)
@@ -334,6 +348,17 @@ export default {
           if (res.data) {
             for (var index in res.data) {
               this.content.table.room.body.push({
+                RoomId: res.data[index].RoomId,
+                RoomName: res.data[index].RoomName,
+                RoomFloor: res.data[index].RoomFloor,
+                RoomPermissionStudent: res.data[index].RoomPermissionStudent,
+                RoomPermissionProfessor:
+                  res.data[index].RoomPermissionProfessor,
+                RoomPermissionStaff: res.data[index].RoomPermissionStaff,
+                RoomActive: res.data[index].RoomActive
+              });
+
+              this.content.table.room.tempBody.push({
                 RoomId: res.data[index].RoomId,
                 RoomName: res.data[index].RoomName,
                 RoomFloor: res.data[index].RoomFloor,
@@ -461,6 +486,30 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    },
+    onSearch() {
+      let searchText = this.content.table.room.search.trim();
+
+      this.content.table.room.body = [{}];
+
+      if (searchText == null || searchText == "") {
+        this.getRoom();
+      } else {
+        for (
+          var index = 1;
+          index < this.content.table.room.tempBody.length;
+          index++
+        ) {
+          let searchFound = this.content.table.room.tempBody[
+            index
+          ].RoomName.indexOf(searchText);
+          if (searchFound > -1) {
+            this.content.table.room.body.push(
+              this.content.table.room.tempBody[index]
+            );
+          }
+        }
+      }
     },
     onPageChange(page) {
       this.content.table.room.currentPage = page;
