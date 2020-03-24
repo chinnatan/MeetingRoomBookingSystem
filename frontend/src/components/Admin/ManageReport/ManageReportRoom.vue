@@ -158,7 +158,7 @@
               </div>
             </div>
           </div>
-          <div class="row mt-2 mb-5">
+          <div class="row mt-2 mb-5" v-if="content.report.table.length > 1">
             <div class="col-md-12">
               <button
                 type="button"

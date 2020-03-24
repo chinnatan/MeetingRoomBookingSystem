@@ -224,7 +224,7 @@ exports.summaryReportToolProblem = (req, res) => {
   let isAdmin = req.body.isAdmin
 
   if (isAdmin) {
-    var sqlQuerySummaryReport = "select t.ToolName, rm.RoomName, t.ToolStatus, r.ReportStatus, u.Fullname from Report r " +
+    var sqlQuerySummaryReport = "select t.ToolName, rm.RoomName, t.ToolStatus, r.ReportStatus, u.Fullname, r.ReportDate from Report r " +
       "join Tool t on (t.ToolId = r.ToolId) " +
       "join RoomAccess ra on (ra.RoomAccessId = r.RoomAccessId) " +
       "join Room rm on (rm.RoomId = t.RoomId) " +

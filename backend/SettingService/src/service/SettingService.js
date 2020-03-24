@@ -7,6 +7,7 @@ const SERVICE_NAME = Config.SERVER.NAME;
 exports.getSetting = (req, res) => {
     const API_NAME = "GET SETTING"
 
+
     // ตรวจสอบว่ามีไฟล์หรือไม่
     if (fs.existsSync(settingPath)) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] -> File Setting Found`);
@@ -44,7 +45,7 @@ exports.getSetting = (req, res) => {
             }
         }
         // เขียนไฟล์ขึ้นมาใหม่และแสดงผล
-        fs.writeFile('./src/setting.json', JSON.stringify(setting), function (err) {
+        fs.writeFile(settingPath, JSON.stringify(setting), function (err) {
             if (err) {
                 console.log(`[${SERVICE_NAME}][${API_NAME}] -> ${err}`);
                 throw err;

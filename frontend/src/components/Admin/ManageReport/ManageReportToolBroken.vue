@@ -25,38 +25,56 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-row text-left">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label for="select-room">{{ content.text.filter.select_room_label }}</label>
-                            <select class="form-control" id="select-room">
+                            <select class="form-control" v-model="content.filter.room" @change="onFilter()">
                               <option
-                                value="none"
+                                :value="content.filter.room"
                                 selected
                                 disabled
                                 hidden
-                              >{{ content.text.filter.option.default_select_room }}</option>
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
+                              >{{ content.filter.room }}</option>
+                              <option
+                                v-for="(name, index) in content.filter.table.room"
+                                :key="index"
+                                :value="name.RoomName"
+                              >{{ name.RoomName }}</option>
                             </select>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label
                               for="select-start-date"
                             >{{ content.text.filter.select_start_date_label }}</label>
-                            <input type="date" class="form-control" id="select-start-date" />
+                            <input type="date" class="form-control" v-model="content.filter.startDate" @change="onFilter()" />
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label
                               for="select-end-date"
                             >{{ content.text.filter.select_end_date_label }}</label>
-                            <input type="date" class="form-control" id="select-end-date" />
+                            <input type="date" class="form-control" v-model="content.filter.endDate" @change="onFilter()"/>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label
+                              for="select-status-date"
+                            >{{ content.text.filter.select_status_label }}</label>
+                            <select class="form-control" v-model="content.filter.reportStatus" @change="onFilter()">
+                              <option
+                                :value="content.filter.reportStatus"
+                                selected
+                                disabled
+                                hidden
+                              >{{ content.filter.reportStatus }}</option>
+                              <option :value="content.text.report.status.acknowledge">{{ content.text.report.status.acknowledge }}</option>
+                              <option :value="content.text.report.status.inprocess">{{ content.text.report.status.inprocess }}</option>
+                              <option :value="content.text.report.status.completed">{{ content.text.report.status.completed }}</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -73,18 +91,18 @@
                   <div class="row">
                     <div
                       class="col-md-12"
-                      v-if="content.report.table.length === 0"
+                      v-if="content.report.table.length === 0 || content.report.table.length === 1"
                     >{{ content.text.report.message }}</div>
                   </div>
                   <div id="reportToolPrint">
                     <div class="row">
-                      <div class="col-md-12" v-if="content.report.table.length !== 0">
+                      <div class="col-md-12" v-if="content.report.table.length > 1">
                         <h5 class="card-title">{{ content.text.report.title }}</h5>
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="table-responsive" v-if="content.report.table.length !== 0">
+                        <div class="table-responsive" v-if="content.report.table.length > 1">
                           <table class="table">
                             <thead>
                               <tr>
@@ -128,7 +146,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="content.report.table.length > 1">
                     <div class="col-md-12">
                       <nav aria-label="...">
                         <ul class="pagination justify-content-center">
@@ -151,7 +169,7 @@
               </div>
             </div>
           </div>
-          <div class="row mt-2 mb-5">
+          <div class="row mt-2 mb-5" v-if="content.report.table.length > 1">
             <div class="col-md-12">
               <button
                 type="button"
@@ -182,6 +200,7 @@ export default {
   },
   created() {
     this.getSummaryReportTool();
+    this.getAllRoomName();
   },
   data() {
     return {
@@ -194,6 +213,7 @@ export default {
             select_room_label: "เลือกห้องที่ต้องการ",
             select_start_date_label: "เลือกวันที่ต้องการเริ่มต้น",
             select_end_date_label: "เลือกวันที่ต้องการสิ้นสุด",
+            select_status_label: "เลือกสถานะรายงานที่ต้องการ",
             option: {
               default_select_room: "--กรุณาเลือกห้องที่ต้องการ--"
             }
@@ -223,9 +243,19 @@ export default {
         },
         report: {
           table: [{}],
+          tempTable: [{}],
           startRow: 0,
           rowPerPages: 10,
           currentPage: 0
+        },
+        filter: {
+          table: {
+            room: []
+          },
+          room: "--กรุณาเลือกห้องที่ต้องการ--",
+          startDate: null,
+          endDate: null,
+          reportStatus: "--กรุณาเลือกสถานะที่ต้องการ--"
         }
       },
       button: {
@@ -244,6 +274,7 @@ export default {
 
       var dateFormat = require("dateformat");
       this.content.report.table = [{}];
+      this.content.filter.table.room = [{}]
 
       let payload = {
         isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
@@ -265,12 +296,246 @@ export default {
                 ToolStatus: res.data[summaryIndex].ToolStatus,
                 ReportStatus: res.data[summaryIndex].ReportStatus
               });
+
+              this.content.report.tempTable.push({
+                ToolName: res.data[summaryIndex].ToolName,
+                RoomName: res.data[summaryIndex].RoomName,
+                ReportDate: res.data[summaryIndex].ReportDate,
+                Fullname: res.data[summaryIndex].Fullname,
+                ToolStatus: res.data[summaryIndex].ToolStatus,
+                ReportStatus: res.data[summaryIndex].ReportStatus
+              });
             }
           }
         })
         .catch(error => {
           console.log(error);
         });
+    },
+    getAllRoomName() {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/room/all";
+
+      this.content.filter.table.room = [];
+
+      axios
+        .get(path)
+        .then(res => {
+          if (res.data) {
+            for (var index in res.data) {
+              this.content.filter.table.room.push({
+                RoomId: res.data[index].RoomId,
+                RoomName: res.data[index].RoomName
+              });
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    onFilter() {
+      let dateFormat = require("dateformat");
+      let roomName = this.content.filter.room
+      let startDate = this.content.filter.startDate != null
+          ? dateFormat(this.content.filter.startDate, "yyyy-mm-dd")
+          : null;
+      let endDate = this.content.filter.endDate != null
+          ? dateFormat(this.content.filter.endDate, "yyyy-mm-dd")
+          : null;
+      let reportStatus = null
+
+      if(this.content.filter.reportStatus == this.content.text.report.status.acknowledge) {
+        reportStatus = "A"
+      } else if(this.content.filter.reportStatus == this.content.text.report.status.inprocess) {
+        reportStatus = "IN"
+      } else if(this.content.filter.reportStatus == this.content.text.report.status.completed) {
+        reportStatus = "C"
+      }
+
+      this.content.report.table = [{}]
+
+      if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate)) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate == null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate))) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate == null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate == null && endDate != null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus != null) {
+        for (var index in this.content.report.tempTable) {
+          if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].ReportDate) <= Date.parse(endDate)) && this.content.report.tempTable[index].ReportStatus == reportStatus) {
+            this.content.report.table.push({
+                ToolName: this.content.report.tempTable[index].ToolName,
+                RoomName: this.content.report.tempTable[index].RoomName,
+                ReportDate: dateFormat(
+                  this.content.report.tempTable[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                Fullname: this.content.report.tempTable[index].Fullname,
+                ToolStatus: this.content.report.tempTable[index].ToolStatus,
+                ReportStatus: this.content.report.tempTable[index].ReportStatus
+              });
+          }
+        }
+      }
     },
     onPageChange(page) {
       this.content.report.currentPage = page;
