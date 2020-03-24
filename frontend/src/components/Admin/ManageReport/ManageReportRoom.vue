@@ -322,7 +322,7 @@ export default {
           : null;
       var endDate =
         this.content.filter.endDate != null
-          ? dateFormat(this.content.filter.endDate, "yyyy-mm-dd HH:mm")
+          ? dateFormat(this.content.filter.endDate, "yyyy-mm-dd")
           : null;
 
       this.content.report.table = [{}];
