@@ -62,7 +62,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <label
-                              for="select-status-date"
+                              for="select-status"
                             >{{ content.text.filter.select_status_label }}</label>
                             <select class="form-control" v-model="content.filter.reportStatus" @change="onFilter()">
                               <option
@@ -232,7 +232,7 @@ export default {
             message: "ไม่พบรายงานสรุปอุปกรณ์เสียหาย",
             status: {
               acknowledge: "แจ้งปัญหาเรียบร้อย",
-              inprocess: "กำลังดำเนินการแก้ไขปัญหา",
+              inprocess: "กำลังแก้ไขปัญหา",
               completed: "แก้ไขปัญหาเรียบร้อย",
               tool: {
                 available: "ใช้งานได้",
