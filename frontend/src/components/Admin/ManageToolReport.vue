@@ -671,6 +671,23 @@ export default {
             });
           }
         }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus == null) {
+        for (var index in this.content.table.tool_report.tempBody) {
+          if ((Date.parse(this.content.table.tool_report.tempBody[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.table.tool_report.tempBody[index].ReportDate) <= Date.parse(endDate))) {
+            this.content.table.tool_report.body.push({
+              ReportId: this.content.table.tool_report.tempBody[index].ReportId,
+                BookingTitle: this.content.table.tool_report.tempBody[index].BookingTitle,
+                ToolName: this.content.table.tool_report.tempBody[index].ToolName,
+                RoomName: this.content.table.tool_report.tempBody[index].RoomName,
+                Fullname: this.content.table.tool_report.tempBody[index].Fullname,
+                ReportDate: dateFormat(
+                  this.content.table.tool_report.tempBody[index].ReportDate,
+                  "dd/mm/yyyy"
+                ),
+                ReportStatus: this.content.table.tool_report.tempBody[index].ReportStatus
+            });
+          }
+        }
       } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && reportStatus == null) {
         for (var index in this.content.table.tool_report.tempBody) {
           if (this.content.table.tool_report.tempBody[index].RoomName == roomName && (Date.parse(this.content.table.tool_report.tempBody[index].ReportDate) >= Date.parse(startDate) && Date.parse(this.content.table.tool_report.tempBody[index].ReportDate) <= Date.parse(endDate))) {

@@ -511,6 +511,21 @@ export default {
             });
           }
         }
+      } else if(roomName == "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && bookingStatus == null) {
+        for (var index in this.content.report.tempTable) {
+          if ((Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate))) {
+            this.content.report.table.push({
+              BookingTitle: this.content.report.tempTable[index].BookingTitle,
+              RoomName: this.content.report.tempTable[index].RoomName,
+              BookingDate: dateFormat(
+                this.content.report.tempTable[index].BookingDate,
+                "dd/mm/yyyy"
+              ),
+              Fullname: this.content.report.tempTable[index].Fullname,
+              BookingStatus: this.content.report.tempTable[index].BookingStatus
+            });
+          }
+        }
       } else if(roomName != "--กรุณาเลือกห้องที่ต้องการ--" && startDate != null && endDate != null && bookingStatus == null) {
         for (var index in this.content.report.tempTable) {
           if (this.content.report.tempTable[index].RoomName == roomName && (Date.parse(this.content.report.tempTable[index].BookingDate) >= Date.parse(startDate) && Date.parse(this.content.report.tempTable[index].BookingDate) <= Date.parse(endDate))) {
