@@ -216,6 +216,90 @@ exports.sendReportTool = (req, res) => {
 }
 // -- Report Tool Problem -- //
 
+exports.callStaff = (req, res) => {
+  const API_NAME = "CALL STAFF"
+
+  let userEmail = req.body.UserEmail
+  let userId = req.body.UserId
+
+  var sqlQueryCheck = "select distinct * from Booking b " +
+    "join RoomAccess ra on (ra.BookingId = b.BookingId) " +
+    "join Room r on (r.RoomId = b.RoomId) " +
+    "where b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
+    "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
+    "join Room on (Room.RoomId = Booking.RoomId) " +
+    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) and UserId = ?"
+
+  mysqlPool.query(sqlQueryCheck, [userId, userId], function (err, results) {
+    if (err) {
+      console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+      return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+    }
+
+    if (results.length > 0) {
+      const moment = require('moment')
+
+      let roomName
+      let currentDate = new Date()
+      let endDate
+      let flag
+
+      for (var index in results) {
+        if (results[index].EndDate == null) {
+          endDate = undefined
+        } else {
+          endDate = results[index].EndDate
+        }
+        flag = moment(currentDate).isBetween(results[index].StartDate, endDate, null, '()')
+        if (flag) {
+          roomName = results[index].RoomName
+        }
+      }
+
+      if (flag) {
+        const nodemailer = require('nodemailer');
+
+        // config สำหรับของ gmail
+        const transporter = nodemailer.createTransport({
+          service: 'gmail',
+          secure: false, // use SSL
+          port: 25, // port for secure SMTP
+          auth: {
+            user: Config.GMAIL.USER, // your email
+            pass: Config.GMAIL.PWD // your email password
+          },
+          tls: {
+            rejectUnauthorized: false
+          }
+        });
+
+        let addMailOptions = {
+          from: userEmail,                // sender
+          to: 'korn.chinnatan@gmail.com',                // list of receivers
+          subject: `[MRBS] ห้อง ${roomName} ต้องการความช่วยเหลือ`,              // Mail subject
+          html: `<b>ห้อง ${roomName} ต้องการความช่วยเหลือ<br>`   // HTML body
+        };
+
+        transporter.sendMail(addMailOptions, function (err, info) {
+          if (err) {
+            console.log(`[TRANSPORTER][ADD MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
+            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+          } else {
+            console.log(info);
+            transporter.close(); // shut down the connection pool, no more messages
+          }
+        });
+
+        return res.status(200).json({ "isError": false, "message": "แจ้งเจ้าหน้าที่สำเร็จ กรุณารอสักครู่" })
+      } else {
+        return res.status(200).json({ "isError": true, "message": "ไม่พบการใช้งาน ณ เวลา ปัจจุบัน" })
+      }
+    } else {
+      return res.status(200).json({ "isError": true, "message": "ไม่พบข้อมูลการเข้าใช้งานห้อง" })
+    }
+  })
+}
+
 // --สำหรับผู้ดูแลระบบ-- //
 // -- Summary Report Tool Problem -- //
 exports.summaryReportToolProblem = (req, res) => {
@@ -290,9 +374,9 @@ exports.updateReportStatus = (req, res) => {
 
   console.log(reportId)
 
-  if(isAdmin) {
+  if (isAdmin) {
     var sqlUpdateReportStatus = "update Report set ReportStatus = ? where ReportId = ?"
-    mysqlPool.query(sqlUpdateReportStatus, [reportStatus, reportId], function(err) {
+    mysqlPool.query(sqlUpdateReportStatus, [reportStatus, reportId], function (err) {
       if (err) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
         return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })

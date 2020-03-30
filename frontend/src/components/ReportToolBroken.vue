@@ -17,8 +17,7 @@
               <button
                 type="button"
                 class="btn btn-outline-danger col-md-12"
-                data-toggle="modal"
-                data-target="#report-problem-modal"
+                @click="onCallStaff()"
               >{{ button.report_problem_now }}</button>
             </div>
           </div>
@@ -480,7 +479,7 @@ export default {
       },
       button: {
         report_problem: "แจ้งปัญหา",
-        report_problem_now: "แจ้งปัญหาแบบทันที",
+        report_problem_now: "เรียกเจ้าหน้าที่",
         close: "ปิด",
         reset: "คืนค่าเริ่มต้น",
         accept: "ยืนยัน",
@@ -1064,6 +1063,48 @@ export default {
           }
         }
       }
+    },
+    onCallStaff() {
+      this.$swal({
+        title: "คุณต้องการเรียกเจ้าหน้าที่หรือไม่ ?",
+        text: "คุณต้องแน่ใจว่า ณ เวลานี้คุณใช้บริการห้องอยู่",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "",
+        confirmButtonText: "ต้องการ",
+        cancelButtonText: "ไม่ต้องการ",
+        showCloseButton: true,
+        showLoaderOnConfirm: true
+      }).then(result => {
+        if (result.value) {
+          const payload = {
+            UserEmail: JSON.parse(localStorage.getItem('user')).mail,
+            UserId: JSON.parse(localStorage.getItem('user')).id
+          };
+          this.CallStaff(payload);
+        }
+      });
+    },
+    CallStaff(payload) {
+      const path =
+        "http://" +
+        axiosConfig.APIGATEWAY.HOST +
+        ":" +
+        axiosConfig.APIGATEWAY.PORT +
+        "/api/tool/report/call/staff";
+
+      axios
+        .post(path, payload)
+        .then(res => {
+          if (res.data.isError) {
+            this.$swal("ไม่สำเร็จ", res.data.message, "warning");
+          } else {
+            this.$swal("สำเร็จ", res.data.message, "success");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

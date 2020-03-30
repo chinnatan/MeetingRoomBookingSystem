@@ -19,5 +19,6 @@ router.post("/report/send", toolService.sendReportTool);
 router.post("/report/admin/summary", toolService.summaryReportToolProblem);
 router.post("/report/all", toolService.getAllToolReport);
 router.post("/report/update", toolService.updateReportStatus);
+router.post("/report/call/staff", toolService.callStaff);
 
 module.exports = router;
