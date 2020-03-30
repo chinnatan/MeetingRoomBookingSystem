@@ -581,6 +581,7 @@ export default {
           BookingEndTime: this.form.inputBookingEndTime,
           BookingAttendees: this.form.inputBookingAttendees,
           UserId: JSON.parse(localStorage.getItem("user")).id,
+          UserEmail: JSON.parse(localStorage.getItem("user")).mail,
           RoomId: this.txtBooking.lblRoomId
         };
 

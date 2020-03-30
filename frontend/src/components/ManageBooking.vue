@@ -180,8 +180,8 @@
                   id="alert-message"
                   class="alert alert-danger"
                   role="alert"
-                  v-if="content.text.message"
-                >{{ content.text.message }}</div>
+                  v-if="content.text.modalMessage"
+                >{{ content.text.modalMessage }}</div>
               </div>
             </div>
             <form method="POST" @submit.prevent="preSendEditBooking">
@@ -327,6 +327,7 @@ export default {
         text: {
           title: "จัดการการจอง",
           message: "ไม่พบรายการการจองห้องของคุณ หรือคุณอาจจะยังไม่เคยทำการจองห้อง",
+          modalMessage: null,
           loadmore: "โหลดข้อมูลเพิ่มเติม",
           filter: {
             title: "กรองข้อมูลตาม",
@@ -527,7 +528,7 @@ export default {
         this.content.modal.edit_booking.form.BookingEndTime == null ||
         this.content.modal.edit_booking.form.BookingAttendees == null
       ) {
-        this.content.text.message = "กรุณากรอกข้อมูลให้ครบถ้วน";
+        this.content.text.modalMessage = "กรุณากรอกข้อมูลให้ครบถ้วน";
         document
           .getElementById("booking-schedule-title")
           .scrollIntoView({ behavior: "smooth" });
@@ -543,6 +544,7 @@ export default {
           BookingEndTime: this.content.modal.edit_booking.form.BookingEndTime,
           BookingAttendees: this.content.modal.edit_booking.form
             .BookingAttendees,
+          UserEmail: JSON.parse(localStorage.getItem("user")).mail,
           RoomId: this.content.modal.edit_booking.form.readonly.RoomId
         };
 
@@ -567,7 +569,7 @@ export default {
         .then(res => {
           let response = res.data;
           if (response.error_message) {
-            this.content.text.message = response.error_message;
+            this.content.text.modalMessage = response.error_message;
             document
               .getElementById("booking-schedule-title")
               .scrollIntoView({ behavior: "smooth" });
@@ -590,7 +592,7 @@ export default {
                 }
               });
             } else {
-              this.content.text.message = null;
+              this.content.text.modalMessage = null;
               this.$swal(response.message, null, "success");
               $("#edit-booking-modal").modal("hide");
               this.content.booking.table = [
@@ -628,7 +630,8 @@ export default {
       }).then(result => {
         if (result.value) {
           const payload = {
-            BookingId: bookingId
+            BookingId: bookingId,
+            UserEmail: JSON.parse(localStorage.getItem("user")).mail,
           };
           this.SenCancelBooking(payload);
         } else {

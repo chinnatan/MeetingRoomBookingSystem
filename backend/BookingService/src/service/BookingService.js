@@ -47,6 +47,7 @@ exports.addBooking = async (req, res) => {
     var BookingStatus = "B"
     var BookingAttendees = req.body.BookingAttendees
     var UserId = req.body.UserId
+    var UserEmail = req.body.UserEmail
     var RoomId = req.body.RoomId
 
     let [startTimeHour, startTimeMinute] = BookingStartTime.split(':')
@@ -164,8 +165,8 @@ exports.addBooking = async (req, res) => {
     }
     // --CONDITION BEFORE BOOKING-- //
 
-    var sqlQueryBookingSchedule = "select BookingStartDate, BookingEndDate from Booking where RoomId = ?"
-    mysqlPool.query(sqlQueryBookingSchedule, [RoomId], function (err, results) {
+    var sqlQueryBookingSchedule = "select BookingStartDate, BookingEndDate from Booking where RoomId = ? and BookingStatus != ?"
+    mysqlPool.query(sqlQueryBookingSchedule, [RoomId, "C"], function (err, results) {
         if (err) {
             console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
             return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
@@ -237,7 +238,7 @@ exports.addBooking = async (req, res) => {
                                 var roomName = results[0].RoomName
                                 let addMailOptions = {
                                     from: Config.GMAIL.USER,                // sender
-                                    to: '59070040@it.kmitl.ac.th',                // list of receivers
+                                    to: UserEmail,                // list of receivers
                                     subject: `[MRBS] รหัสผ่านสำหรับการเข้าใช้งานห้อง ${roomName}`,              // Mail subject
                                     html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
                                     <b>หัวข้อการจอง : </b>${BookingTitle}<br>
@@ -382,6 +383,7 @@ exports.editBooking = async (req, res) => {
     var BookingStartTime = req.body.BookingStartTime
     var BookingEndTime = req.body.BookingEndTime
     var BookingAttendees = req.body.BookingAttendees
+    var UserEmail = req.body.UserEmail
     var RoomId = req.body.RoomId
 
     let [startTimeHour, startTimeMinute] = BookingStartTime.split(':')
@@ -491,8 +493,8 @@ exports.editBooking = async (req, res) => {
     }
     // --CONDITION BEFORE BOOKING-- //
 
-    var sqlQueryBookingSchedule = "select BookingStartDate, BookingEndDate from Booking where RoomId = ?"
-    mysqlPool.query(sqlQueryBookingSchedule, [RoomId], function (err, results) {
+    var sqlQueryBookingSchedule = "select BookingStartDate, BookingEndDate from Booking where RoomId = ? and BookingStatus != ?"
+    mysqlPool.query(sqlQueryBookingSchedule, [RoomId, "C"], function (err, results) {
         if (err) {
             console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
             return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
@@ -655,7 +657,7 @@ exports.editBooking = async (req, res) => {
                                 var BookingPin = results[0].BookingPin
                                 let editMailOption = {
                                     from: Config.GMAIL.USER,                // sender
-                                    to: '59070040@it.kmitl.ac.th',                // list of receivers
+                                    to: UserEmail,                // list of receivers
                                     subject: `[MRBS][แก้ไข] รายละเอียดการจองที่ได้รับการแก้ไขของห้อง ${roomName}`,              // Mail subject
                                     html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
                                     <b>หัวข้อการจอง : </b>${BookingTitle}<br>
@@ -700,6 +702,7 @@ exports.cancelBooking = async (req, res) => {
     const API_NAME = "CANCEL BOOKING"
 
     var bookingId = req.body.BookingId
+    var UserEmail = req.body.UserEmail
 
     // --GET SETTING SYSTEM AND BOOKING-- //
     const axios = require('axios')
@@ -832,7 +835,7 @@ exports.cancelBooking = async (req, res) => {
 
                 let cancelMailOption = {
                     from: Config.GMAIL.USER,                // sender
-                    to: '59070040@it.kmitl.ac.th',                // list of receivers
+                    to: UserEmail,                // list of receivers
                     subject: `[MRBS][ยกเลิก] รายละเอียดการยกเลิกการจองของห้อง ${booking.RoomName}`,              // Mail subject
                     html: `<b>ห้องที่ทำการจอง : </b>${booking.RoomName} <font color='red'>ยกเลิก</font><br>
                     <b>หัวข้อการจอง : </b>${booking.BookingTitle} <font color='red'>ยกเลิก</font><br>
