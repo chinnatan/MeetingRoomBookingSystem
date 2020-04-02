@@ -76,6 +76,7 @@ public class HomeFragment extends Fragment {
     private TextView homeStatus;
     private ListView bookingList;
     private Button homeActiveBtn;
+    private Button homeBookingBtn;
 
     private int roomid;
     private int bookingid;
@@ -88,6 +89,7 @@ public class HomeFragment extends Fragment {
     private SQLiteDatabase myDB;
 
     private Handler displayTime = new Handler(getMainLooper());
+    private Runnable displayTimeRunnable;
 
     @Nullable
     @Override
@@ -164,17 +166,26 @@ public class HomeFragment extends Fragment {
         homeStatus = getView().findViewById(R.id.home_status);
         homeHeader = getView().findViewById(R.id.home_header);
         homeActiveBtn = getView().findViewById(R.id.home_active_btn);
+        homeBookingBtn = getView().findViewById(R.id.home_booking_btn);
     }
 
     private void initDisplayTime() {
         currentDate.setText(new SimpleDateFormat("dd/MM/YYYY", Locale.US).format(new Date()));
-        displayTime.postDelayed(new Runnable() {
+        displayTimeRunnable = new Runnable() {
             @Override
             public void run() {
                 currentTime.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
-                displayTime.postDelayed(this, 1000);
+                displayTime.postDelayed(displayTimeRunnable, 1000);
             }
-        }, 10);
+        };
+        displayTime.postDelayed(displayTimeRunnable, 10);
+//        displayTime.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                currentTime.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
+//                displayTime.postDelayed(displayTimeRunnable, 1000);
+//            }
+//        }, 10);
     }
 
     private void initApiService() {
@@ -193,6 +204,13 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 checkRoomAccess(bookingid);
+            }
+        });
+
+        homeBookingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new BookingFragment()).addToBackStack(null).commit();
             }
         });
     }
