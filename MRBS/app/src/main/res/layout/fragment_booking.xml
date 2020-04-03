@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,8 +9,8 @@
         android:id="@+id/booking_title_wrap"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        tools:ignore="MissingConstraints"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorPrimaryDark"
+        tools:ignore="MissingConstraints">
 
         <android.widget.Toolbar
             android:id="@+id/booking_toolbar"
@@ -30,7 +29,7 @@
         android:id="@+id/booking_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
+        android:fillViewport="false"
         app:layout_constraintTop_toBottomOf="@id/booking_title_wrap">
 
         <LinearLayout
@@ -47,8 +46,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="รหัสผู้ใช้งาน">
+                    android:text="รหัสผู้ใช้งาน"
+                    android:textSize="20dp">
 
                 </TextView>
 
@@ -70,8 +69,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="หัวข้อ">
+                    android:text="หัวข้อ"
+                    android:textSize="20dp">
 
                 </TextView>
 
@@ -93,8 +92,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="รายละเอียดการจอง">
+                    android:text="รายละเอียดการจอง"
+                    android:textSize="20dp">
 
                 </TextView>
 
@@ -117,17 +116,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="วันที่ต้องการจอง">
+                    android:text="จำนวนผู้เข้าร่วม"
+                    android:textSize="20dp">
 
                 </TextView>
 
                 <EditText
-                    android:id="@+id/booking_date"
+                    android:id="@+id/booking_attendees"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
                     android:ems="10"
+                    android:inputType="number|numberDecimal"
                     android:theme="@android:style/Theme.Black">
 
                 </EditText>
@@ -142,8 +141,33 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="เวลาเริ่มต้นที่ต้องการจอง">
+                    android:text="วันที่ต้องการจอง"
+                    android:textSize="20dp">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/booking_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="date"
+                    android:theme="@android:style/Theme.Black">
+
+                </EditText>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="เวลาเริ่มต้นที่ต้องการจอง"
+                    android:textSize="20dp">
 
                 </TextView>
 
@@ -166,8 +190,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="เวลาสิ้นสุดที่ต้องการจอง">
+                    android:text="เวลาสิ้นสุดที่ต้องการจอง"
+                    android:textSize="20dp">
 
                 </TextView>
 
@@ -188,6 +212,7 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/booking_submit_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="ยืนยัน"

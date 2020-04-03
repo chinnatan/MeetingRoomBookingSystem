@@ -179,13 +179,6 @@ public class HomeFragment extends Fragment {
             }
         };
         displayTime.postDelayed(displayTimeRunnable, 10);
-//        displayTime.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                currentTime.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
-//                displayTime.postDelayed(displayTimeRunnable, 1000);
-//            }
-//        }, 10);
     }
 
     private void initApiService() {

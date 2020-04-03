@@ -1,6 +1,8 @@
 package com.chinnatan.mrbs.Interface;
 
 import com.chinnatan.mrbs.Model.BookingDao;
+import com.chinnatan.mrbs.Model.BookingRq;
+import com.chinnatan.mrbs.Model.BookingRs;
 import com.chinnatan.mrbs.Model.DoorOpenRq;
 import com.chinnatan.mrbs.Model.DoorOpenRs;
 import com.chinnatan.mrbs.Model.MessageRs;
@@ -36,4 +38,7 @@ public interface JsonPlaceHolderApi {
 
     @POST("api/room/active/save")
     Call<MessageRs> saveEndDate(@Body DoorOpenRq body);
+
+    @POST("api/booking/send")
+    Call<BookingRs> sendBooking(@Body BookingRq body);
 }
