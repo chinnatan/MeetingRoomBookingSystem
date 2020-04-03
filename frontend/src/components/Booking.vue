@@ -606,8 +606,8 @@ export default {
           .post(path, JSON.stringify(results), { headers: headers })
           .then(res => {
             let response = res.data;
-            if (response.error_message) {
-              this.alertDanger(response.error_message);
+            if (response.isError) {
+              this.alertDanger(response.message);
               this.alert = true;
               document
                 .getElementById("form-booking")
@@ -656,6 +656,8 @@ export default {
       this.form.inputBookingAttendees = null;
       this.form.currentDate = null;
       this.form.currentTime = null;
+      this.alert = false;
+      this.alertMessage = null;
 
       // Set Up Current Date
       var dateFormat = require("dateformat");

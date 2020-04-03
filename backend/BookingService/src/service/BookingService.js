@@ -35,6 +35,12 @@ function generatePin() {
 exports.addBooking = async (req, res) => {
     const API_NAME = "ADD BOOKING"
 
+    var stateCheck = false
+
+    if(req.body.isApplication) {
+        stateCheck = true
+    }
+
     // BOOKING //
     var BookingTitle = req.body.BookingTitle
     var BookingDetail = req.body.BookingDetail
@@ -88,7 +94,7 @@ exports.addBooking = async (req, res) => {
         userBannedRs = await axios.get('http://localhost:4000/api/auth/user/ban/check/' + UserId)
         userBanned = userBannedRs.data.isBanned
     } catch (error) {
-        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
+        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
     }
     // --GET SETTING SYSTEM-- //
 
@@ -161,7 +167,7 @@ exports.addBooking = async (req, res) => {
             throw error_message
         }
     } catch (error) {
-        return res.status(200).json({ "error_message": error_message })
+        return res.status(200).json({ "isError": true, "message": error_message })
     }
     // --CONDITION BEFORE BOOKING-- //
 
@@ -169,7 +175,7 @@ exports.addBooking = async (req, res) => {
     mysqlPool.query(sqlQueryBookingSchedule, [RoomId, "C"], function (err, results) {
         if (err) {
             console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err}`);
-            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
         }
 
         if (results.length > 0) {
@@ -178,25 +184,24 @@ exports.addBooking = async (req, res) => {
                 var end = moment(endDateTime).isBetween(results[resultsIndex].BookingStartDate, results[resultsIndex].BookingEndDate, null, '(]')
                 var error_message = "ไม่สามารถทำรายการได้ เนื่องจากมีผู้อื่นจองช่วงเวลานั้นเรียบร้อยแล้ว"
                 if (first == false && end == true) {
-                    console.log("FIRST")
-                    return res.status(200).json({ "error_message": error_message })
+                    return res.status(200).json({ "isError": true, "message": error_message })
                 } else if (first && end) {
-                    return res.status(200).json({ "error_message": error_message })
+                    return res.status(200).json({ "isError": true, "message": error_message })
                 } else if (first == true && end == false) {
-                    return res.status(200).json({ "error_message": error_message })
+                    return res.status(200).json({ "isError": true, "message": error_message })
                 }
             }
 
             mysqlPool.getConnection(function (err, connection) {
                 if (err) {
                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL CONNECTION ERROR -> ${err}`);
-                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                 }
 
                 connection.beginTransaction(function (err) {
                     if (err) {
                         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
-                        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                     }
 
                     var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStatus, BookingAttendees, UserId, RoomId) values (?,?,?,?,?,?,?,?,?,?)"
@@ -204,7 +209,7 @@ exports.addBooking = async (req, res) => {
                         if (err) {
                             connection.rollback(function () {
                                 console.log(`[${SERVICE_NAME}][${API_NAME}] SQL INSERT ERROR -> ${err}`);
-                                return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                             })
                         }
 
@@ -230,7 +235,7 @@ exports.addBooking = async (req, res) => {
                             if (err) {
                                 connection.rollback(function () {
                                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
-                                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                 })
                             }
 
@@ -250,7 +255,7 @@ exports.addBooking = async (req, res) => {
                                     if (err) {
                                         connection.rollback(function () {
                                             console.log(`[TRANSPORTER][ADD MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
-                                            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                         })
                                     } else {
                                         console.log(info);
@@ -264,7 +269,7 @@ exports.addBooking = async (req, res) => {
                             if (err) {
                                 connection.rollback(function () {
                                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
-                                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                 })
                             }
 
@@ -272,7 +277,7 @@ exports.addBooking = async (req, res) => {
 
                             axios.get('http://localhost:4001/api/trigger/booking');
 
-                            return res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
+                            return res.status(200).json({ "isError": false, "pin": BookingPin, "message": "จองห้องสำเร็จ" })
                         })
                     })
                 })
@@ -281,13 +286,13 @@ exports.addBooking = async (req, res) => {
             mysqlPool.getConnection(function (err, connection) {
                 if (err) {
                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL CONNECTION ERROR -> ${err}`);
-                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                 }
 
                 connection.beginTransaction(function (err) {
                     if (err) {
                         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
-                        return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                     }
 
                     var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStatus, BookingAttendees, UserId, RoomId) values (?,?,?,?,?,?,?,?,?,?)"
@@ -295,7 +300,7 @@ exports.addBooking = async (req, res) => {
                         if (err) {
                             connection.rollback(function () {
                                 console.log(`[${SERVICE_NAME}][${API_NAME}] SQL INSERT ERROR -> ${err}`);
-                                return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                             })
                         }
 
@@ -321,7 +326,7 @@ exports.addBooking = async (req, res) => {
                             if (err) {
                                 connection.rollback(function () {
                                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
-                                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                 })
                             }
 
@@ -341,7 +346,7 @@ exports.addBooking = async (req, res) => {
                                     if (err) {
                                         connection.rollback(function () {
                                             console.log(`[TRANSPORTER][ADD MAIL OPTION] SEND MAIL ERROR -> ${err.message}`);
-                                            return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                         })
                                     } else {
                                         console.log(info);
@@ -355,13 +360,13 @@ exports.addBooking = async (req, res) => {
                             if (err) {
                                 connection.rollback(function () {
                                     console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
-                                    return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                 })
                             }
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Booking Successfully"`);
 
-                            return res.status(200).json({ "pin": BookingPin, "message": "จองห้องสำเร็จ" })
+                            return res.status(200).json({ "isError": false, "pin": BookingPin, "message": "จองห้องสำเร็จ" })
                         })
                     })
                 })
