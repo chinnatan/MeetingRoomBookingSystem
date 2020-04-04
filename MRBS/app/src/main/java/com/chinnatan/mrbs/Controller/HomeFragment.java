@@ -206,8 +206,6 @@ public class HomeFragment extends Fragment {
         homeBookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callBooking.cancel();
-                callBookingCurrentTime.cancel();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new BookingFragment()).addToBackStack(null).commit();
             }
         });
@@ -259,13 +257,17 @@ public class HomeFragment extends Fragment {
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
-                call.clone().enqueue(this);
+                if(MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
+                }
             }
 
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBooking : " + t.getLocalizedMessage());
-                call.clone().enqueue(this);
+                if(MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
+                }
             }
         });
     }
@@ -294,13 +296,17 @@ public class HomeFragment extends Fragment {
                     bookingid = 0;
                 }
 
-                call.clone().enqueue(this);
+                if(MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
+                }
             }
 
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBookingCurrentTime : " + t.getMessage());
-                call.clone().enqueue(this);
+                if(MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
+                }
             }
         });
     }

@@ -14,6 +14,7 @@ import com.chinnatan.mrbs.Controller.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String stateFragmentName = null;
     private static final String TAG = "MAINACTIVITY";
 
     private Fragment fragment;
@@ -51,15 +52,16 @@ public class MainActivity extends AppCompatActivity {
 
     public static void onFragmentChanged(String fragmentName) {
         Log.d(TAG, "onFragmentChanged: (Change to page)" + fragmentName);
-        if (fragmentName.equalsIgnoreCase("HOME") || fragmentName.equalsIgnoreCase("SETTING") || fragmentName.equalsIgnoreCase("REQUEST") || fragmentName.equalsIgnoreCase("VETERINARY")) {
+        if (fragmentName.equalsIgnoreCase("HOME") || fragmentName.equalsIgnoreCase("SETTING") || fragmentName.equalsIgnoreCase("BOOKING")) {
             if (fragmentName.equals("HOME")) {
                 Log.d(TAG, "CHECK THIS IS HOME");
+                stateFragmentName = fragmentName;
             } else if (fragmentName.equals("SETTING")) {
-                Log.d(TAG, "check THIS IS SETTING");
-            } else if (fragmentName.equals("REQUEST")) {
-                Log.d(TAG, "check nav 2");
-            } else if (fragmentName.equals("MY")) {
-                Log.d(TAG, "check nav 3");
+                Log.d(TAG, "CHECK THIS IS SETTING");
+                stateFragmentName = fragmentName;
+            } else if (fragmentName.equals("BOOKING")) {
+                Log.d(TAG, "CHECK THIS IS BOOKING");
+                stateFragmentName = fragmentName;
             }
         }
     }
