@@ -1,8 +1,10 @@
 package com.chinnatan.mrbs.Controller;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -116,7 +118,7 @@ public class BookingFragment extends Fragment {
         bookingDate.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP){
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     final Calendar cldr = Calendar.getInstance();
                     int day = cldr.get(Calendar.DAY_OF_MONTH);
                     int month = cldr.get(Calendar.MONTH);
@@ -140,7 +142,7 @@ public class BookingFragment extends Fragment {
         bookingStartTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     final Calendar cldr = Calendar.getInstance();
                     int hour = cldr.get(Calendar.HOUR_OF_DAY);
                     int minutes = cldr.get(Calendar.MINUTE);
@@ -162,7 +164,7 @@ public class BookingFragment extends Fragment {
         bookingEndTime.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
                     final Calendar cldr = Calendar.getInstance();
                     int hour = cldr.get(Calendar.HOUR_OF_DAY);
                     int minutes = cldr.get(Calendar.MINUTE);
@@ -192,7 +194,7 @@ public class BookingFragment extends Fragment {
                 strBookingAttendees = String.valueOf(bookingAttendees.getText());
 
                 if (strBookingUser.equals("") || strBookingTitle.equals("") || strBookingDetail.equals("") || strBookingDate.equals("") || strBookingStartTime.equals("") || strBookingEndTime.equals("") || strBookingAttendees.equals("")) {
-                    Toast.makeText(getContext(), "กรุณากรอกข้อมูลให้ครบถ้วน", Toast.LENGTH_LONG).show();
+                    displayFailureDialog("กรุณากรอกข้อมูลให้ครบถ้วน");
                 } else {
                     Call<BookingRs> call = JsonPlaceHolderApi.sendBooking(new BookingRq(true, strBookingTitle, strBookingDetail, strBookingDate, strBookingStartTime, strBookingEndTime, strBookingAttendees, strBookingUser, intBookingRoomId));
                     call.enqueue(new Callback<BookingRs>() {
@@ -205,9 +207,9 @@ public class BookingFragment extends Fragment {
 
                             BookingRs bookingRs = response.body();
                             if (bookingRs.isError()) {
-                                Toast.makeText(getContext(), bookingRs.getMessage(), Toast.LENGTH_LONG).show();
+                                displayFailureDialog(bookingRs.getMessage());
                             } else {
-                                Toast.makeText(getContext(), bookingRs.getMessage() + "รหัสสำหรับเข้าใช้งาน : " + bookingRs.getPin(), Toast.LENGTH_LONG).show();
+                                displaySuccessBookingDialog(bookingRs.getMessage(), bookingRs.getPin());
                             }
                         }
 
@@ -238,5 +240,30 @@ public class BookingFragment extends Fragment {
                 getActivity().onBackPressed();
             }
         });
+    }
+
+    private void displaySuccessBookingDialog(String message, String pin) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog_Alert);
+        builder.setTitle("สำเร็จ")
+                .setMessage(message + "\n" + "รหัสผ่าน : " + pin)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                })
+                .show();
+    }
+
+    private void displayFailureDialog(String message) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Light_Dialog_Alert);
+        builder.setTitle("เกิดข้อผิดพลาด")
+                .setMessage(message)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .show();
     }
 }

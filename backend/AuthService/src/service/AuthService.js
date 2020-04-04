@@ -324,10 +324,30 @@ exports.checkBanned = (req, res) => {
             return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
         }
 
-        if(results.length > 0) {
+        if (results.length > 0) {
             return res.status(200).json({ "isError": false, "isBanned": true })
         } else {
             return res.status(200).json({ "isError": false, "isBanned": false })
+        }
+    })
+}
+
+exports.getUserByUserId = (req, res) => {
+    const API_NAME = "GET USER BY USER ID"
+
+    let userId = req.params.UserId;
+
+    var sqlQueryUser = "select * from User where UserId = ?"
+    mysqlPool.query(sqlQueryUser, [userId], function (err, results) {
+        if (err) {
+            console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if (results.length > 0) {
+            return res.status(200).json({ "isError": false, "results": results })
+        } else {
+            return res.status(200).json({ "isError": true, "message": "ไม่พบผู้ใช้งานในระบบ"})
         }
     })
 }

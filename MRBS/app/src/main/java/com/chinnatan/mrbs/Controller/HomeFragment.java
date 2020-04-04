@@ -91,6 +91,9 @@ public class HomeFragment extends Fragment {
     private Handler displayTime = new Handler(getMainLooper());
     private Runnable displayTimeRunnable;
 
+    private Call<List<BookingDao>> callBooking;
+    private Call<List<BookingDao>> callBookingCurrentTime;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -196,21 +199,23 @@ public class HomeFragment extends Fragment {
         homeActiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkRoomAccess(bookingid);
+                displayInputPasswordDialog(bookingid);
             }
         });
 
         homeBookingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                callBooking.cancel();
+                callBookingCurrentTime.cancel();
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_view, new BookingFragment()).addToBackStack(null).commit();
             }
         });
     }
 
     private void getBooking(int roomid) {
-        Call<List<BookingDao>> call = JsonPlaceHolderApi.getBooking(roomid);
-        call.enqueue(new Callback<List<BookingDao>>() {
+        callBooking = JsonPlaceHolderApi.getBooking(roomid);
+        callBooking.enqueue(new Callback<List<BookingDao>>() {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
@@ -266,8 +271,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void getBookingCurrentTime(final int roomid) {
-        Call<List<BookingDao>> call = JsonPlaceHolderApi.getBookingCurrentTime(roomid);
-        call.enqueue(new Callback<List<BookingDao>>() {
+        callBookingCurrentTime = JsonPlaceHolderApi.getBookingCurrentTime(roomid);
+        callBookingCurrentTime.enqueue(new Callback<List<BookingDao>>() {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {

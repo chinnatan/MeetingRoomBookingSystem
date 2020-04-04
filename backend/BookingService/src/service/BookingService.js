@@ -37,7 +37,7 @@ exports.addBooking = async (req, res) => {
 
     var stateCheck = false
 
-    if(req.body.isApplication) {
+    if (req.body.isApplication) {
         stateCheck = true
     }
 
@@ -53,8 +53,21 @@ exports.addBooking = async (req, res) => {
     var BookingStatus = "B"
     var BookingAttendees = req.body.BookingAttendees
     var UserId = req.body.UserId
-    var UserEmail = req.body.UserEmail
     var RoomId = req.body.RoomId
+
+    const axios = require('axios')
+    var UserEmail
+    if (stateCheck) {
+        let userRs
+        try {
+            userRs = await axios.get('http://localhost:4000/api/auth/user/' + UserId)
+            UserEmail = userRs.data.results[0].Email
+        } catch (error) {
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
+        }
+    } else {
+        UserEmail = req.body.UserEmail
+    }
 
     let [startTimeHour, startTimeMinute] = BookingStartTime.split(':')
     let [endTimeHour, endTimeMinute] = BookingEndTime.split(':')
@@ -72,7 +85,6 @@ exports.addBooking = async (req, res) => {
     var currentDate = new Date()
 
     // --GET SETTING SYSTEM-- //
-    const axios = require('axios')
     let settingRs
     let setting
     let userBannedRs
@@ -101,8 +113,8 @@ exports.addBooking = async (req, res) => {
     // --CONDITION BEFORE BOOKING-- //
     const moment = require('moment')
 
-    if(userBanned) {
-        return res.status(200).json({ "isBanned": userBanned})
+    if (userBanned) {
+        return res.status(200).json({ "isBanned": userBanned })
     }
 
     try {
@@ -205,7 +217,7 @@ exports.addBooking = async (req, res) => {
                     }
 
                     var sqlInsertBooking = "insert into Booking (BookingTitle, BookingDetail, BookingPin, BookingDate, BookingStartDate, BookingEndDate, BookingStatus, BookingAttendees, UserId, RoomId) values (?,?,?,?,?,?,?,?,?,?)"
-                    connection.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, startDateTime, endDateTime, BookingStatus, BookingAttendees, UserId, RoomId], function (err, results) {
+                    connection.query(sqlInsertBooking, [BookingTitle, BookingDetail, BookingPin, BookingDate, startDateTime, endDateTime, BookingStatus, BookingAttendees, UserId, RoomId], function (err) {
                         if (err) {
                             connection.rollback(function () {
                                 console.log(`[${SERVICE_NAME}][${API_NAME}] SQL INSERT ERROR -> ${err}`);

@@ -9,6 +9,7 @@ router.use(bodyParser.urlencoded({ extended : true }));
 router.use(bodyParser.json());
 
 router.get("/user/ban/check/:UserId", authService.checkBanned);
+router.get("/user/:UserId", authService.getUserByUserId);
 
 router.post("/login", authService.login);
 
