@@ -44,6 +44,63 @@ var mysqlPool = MySQL.createPool({
     database: DATA_MYSQL
 });
 
+// Run Check Ban Every Day
+var cron = require('node-cron');
+cron.schedule('0 0 0 * * *', function () {
+    console.log(`[${SERVICE_NAME}] running a check ban user every day`);
+
+    var sqlQueryBooking = "select distinct u.UserId from Booking b " +
+        "join User u on (u.UserId = b.UserId)  " +
+        "where b.BookingStatus not in ('C', 'U') and u.Role != 'Admin' and u.BannedStatus = 0"
+    mysqlPool.query(sqlQueryBooking, function (err, results) {
+        if (err) {
+            console.log(`[${SERVICE_NAME}] sqlQueryBooking Error -> ${err}`)
+            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if (results.length > 0) {
+            for (var index in results) {
+                let UserId = results[index].UserId
+                console.log(`[${SERVICE_NAME}] Found : ${UserId}`)
+
+                mysqlPool.getConnection(function (err, connection) {
+                    if (err) {
+                        console.log(`[${SERVICE_NAME}] Error -> ${err.message}`);
+                        return res.status(500).json({ "isError": true, "message": "ไม่สามารถเชื่อมต่อฐานข้อมูลได้" })
+                    }
+
+                    connection.beginTransaction(function (err) {
+                        if (err) {
+                            console.log(`[${SERVICE_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err}`);
+                            return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                        }
+
+                        var sqlBanUser = "update User set BannedStatus = 1, BannedDate = ? where UserId = ?"
+                        connection.query(sqlBanUser, [new Date(), UserId], function (err, results) {
+                            if (err) {
+                                console.log(`[${SERVICE_NAME}] sqlBanUser Error -> ${err}`)
+                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                            }
+
+                            connection.commit(function (err) {
+                                if (err) {
+                                    connection.rollback(function () {
+                                        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                                        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                    })
+                                }
+
+                                console.log(`[${SERVICE_NAME}] ${UserId} is Banned.`)
+                            })
+                        })
+                    })
+                })
+            }
+        }
+    })
+});
+
+
 exports.login = async (req, res) => {
     const url = Config.ldap.url;
     const baseDn = Config.ldap.baseDn;
@@ -347,7 +404,7 @@ exports.getUserByUserId = (req, res) => {
         if (results.length > 0) {
             return res.status(200).json({ "isError": false, "results": results })
         } else {
-            return res.status(200).json({ "isError": true, "message": "ไม่พบผู้ใช้งานในระบบ"})
+            return res.status(200).json({ "isError": true, "message": "ไม่พบผู้ใช้งานในระบบ" })
         }
     })
 }
