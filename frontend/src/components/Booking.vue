@@ -155,11 +155,6 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="card shadow">
-                            <img
-                              src="../assets/image/itkmitl-building.jpg"
-                              class="card-img-top"
-                              alt="..."
-                            />
                             <div class="card-body">
                               <div class="row">
                                 <div class="col-md-12">
