@@ -101,6 +101,7 @@
                               <th scope="col">{{ content.text.manage.table.thead_no3 }}</th>
                               <th scope="col">{{ content.text.manage.table.thead_no4 }}</th>
                               <th scope="col">{{ content.text.manage.table.thead_no5 }}</th>
+                              <th scope="col">{{ content.text.manage.table.thead_no6 }}</th>
                               <th scope="col"></th>
                             </tr>
                           </thead>
@@ -109,6 +110,7 @@
                               <th scope="row">{{ index }}</th>
                               <td>{{ content.booking.table[index].BookingTitle }}</td>
                               <td>{{ content.booking.table[index].RoomName }}</td>
+                              <td>{{ content.booking.table[index].BookingPin }}</td>
                               <td>{{ content.booking.table[index].BookingStartDate }}</td>
                               <td>{{ content.booking.table[index].BookingStartTime }}</td>
                               <td>{{ content.booking.table[index].BookingEndTime }}</td>
@@ -343,9 +345,10 @@ export default {
               thead_no0: "#",
               thead_no1: "หัวข้อการจอง",
               thead_no2: "ห้อง",
-              thead_no3: "วันที่จอง",
-              thead_no4: "เวลาเริ่มต้น",
-              thead_no5: "เวลาสิ้นสุด"
+              thead_no3: "รหัสเข้าใช้งาน",
+              thead_no4: "วันที่จอง",
+              thead_no5: "เวลาเริ่มต้น",
+              thead_no6: "เวลาสิ้นสุด"
             }
           },
           modal: {
@@ -370,7 +373,8 @@ export default {
               RoomName: undefined,
               BookingStartDate: undefined,
               BookingStartTime: undefined,
-              BookingEndTime: undefined
+              BookingEndTime: undefined,
+              BookingPin: undefined
             }
           ],
           tempTable: [{}],
@@ -423,7 +427,8 @@ export default {
           RoomName: undefined,
           BookingStartDate: undefined,
           BookingStartTime: undefined,
-          BookingEndTime: undefined
+          BookingEndTime: undefined,
+          BookingPin: undefined
         }
       ];
 
@@ -438,6 +443,7 @@ export default {
                 BookingId: res.data[bookingIndex].BookingId,
                 BookingTitle: res.data[bookingIndex].BookingTitle,
                 RoomName: res.data[bookingIndex].RoomName,
+                BookingPin: res.data[bookingIndex].BookingPin,
                 BookingStartDate: dateFormat(
                   res.data[bookingIndex].BookingStartDate,
                   "dd/mm/yyyy"
@@ -456,6 +462,7 @@ export default {
                 BookingId: res.data[bookingIndex].BookingId,
                 BookingTitle: res.data[bookingIndex].BookingTitle,
                 RoomName: res.data[bookingIndex].RoomName,
+                BookingPin: res.data[bookingIndex].BookingPin,
                 BookingStartDate: res.data[bookingIndex].BookingStartDate,
                 BookingEndDate: res.data[bookingIndex].BookingEndDate
               });
@@ -745,6 +752,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -767,6 +775,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -789,6 +798,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -811,6 +821,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -833,6 +844,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -855,6 +867,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
@@ -877,6 +890,7 @@ export default {
               BookingId: this.content.booking.tempTable[index].BookingId,
               BookingTitle: this.content.booking.tempTable[index].BookingTitle,
               RoomName: this.content.booking.tempTable[index].RoomName,
+              BookingPin: this.content.booking.tempTable[index].BookingPin,
               BookingStartDate: dateFormat(
                 this.content.booking.tempTable[index].BookingStartDate,
                 "dd/mm/yyyy"
