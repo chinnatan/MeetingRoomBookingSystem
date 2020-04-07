@@ -63,7 +63,7 @@
                               <h5 class="font-color-primary">หมายเหตุ</h5>
                               <ul class="list-unstyled">
                                 <li>
-                                  <font color="green">{{ lblNote.color.lblGreen }}</font>
+                                  <font color="#00ff00">{{ lblNote.color.lblGreen }}</font>
                                   - {{ lblNote.detail.lblGreen }}
                                 </li>
                                 <li>
@@ -71,11 +71,11 @@
                                   - {{ lblNote.detail.lblRed }}
                                 </li>
                                 <li>
-                                  <font color="lightblue">{{ lblNote.color.lblLightBlue }}</font>
+                                  <font color="#aaffff">{{ lblNote.color.lblLightBlue }}</font>
                                   - {{ lblNote.detail.lblLightBlue }}
                                 </li>
                                 <li>
-                                  <font color="gray">{{ lblNote.color.lblGray }}</font>
+                                  <font color="#bfbfbf">{{ lblNote.color.lblGray }}</font>
                                   - {{ lblNote.detail.lblGray }}
                                 </li>
                               </ul>
