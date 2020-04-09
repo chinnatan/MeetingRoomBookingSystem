@@ -78,19 +78,57 @@ cron.schedule('0 0 0 * * *', function () {
                         var sqlBanUser = "update User set BannedStatus = 1, BannedDate = ? where UserId = ?"
                         connection.query(sqlBanUser, [new Date(), UserId], function (err, results) {
                             if (err) {
-                                console.log(`[${SERVICE_NAME}] sqlBanUser Error -> ${err}`)
-                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                connection.rollback(function () {
+                                    console.log(`[${SERVICE_NAME}] sqlBanUser Error -> ${err}`)
+                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                })
                             }
 
-                            connection.commit(function (err) {
+                            var sqlQueryBookingForDelete = "select * from Booking where UserId = ?"
+                            connection.query(sqlQueryBookingForDelete, [UserId], function (err, results) {
                                 if (err) {
                                     connection.rollback(function () {
-                                        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                                        console.log(`[${SERVICE_NAME}] sqlQueryBookingForDelete Error -> ${err}`)
                                         return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
                                     })
                                 }
 
-                                console.log(`[${SERVICE_NAME}] ${UserId} is Banned.`)
+                                if (results.length > 0) {
+                                    for(var index in results) {
+                                        let BookingId = results[index].BookingId
+                                        var sqlDeleteBooking = "delete from Booking where BookingId = ? and BookingStatus = ? and UserId = ?"
+                                        connection.query(sqlDeleteBooking, [BookingId, "B", UserId], function(err) {
+                                            if (err) {
+                                                connection.rollback(function () {
+                                                    console.log(`[${SERVICE_NAME}] sqlDeleteBooking Error -> ${err}`)
+                                                    return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                                })
+                                            }
+                                        })
+                                    }
+
+                                    connection.commit(function (err) {
+                                        if (err) {
+                                            connection.rollback(function () {
+                                                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                            })
+                                        }
+
+                                        console.log(`[${SERVICE_NAME}] ${UserId} is Banned.`)
+                                    })
+                                } else {
+                                    connection.commit(function (err) {
+                                        if (err) {
+                                            connection.rollback(function () {
+                                                console.log(`[${SERVICE_NAME}][${API_NAME}] SQL COMMIT ERROR -> ${err.message}`);
+                                                return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+                                            })
+                                        }
+
+                                        console.log(`[${SERVICE_NAME}] ${UserId} is Banned.`)
+                                    })
+                                }
                             })
                         })
                     })
