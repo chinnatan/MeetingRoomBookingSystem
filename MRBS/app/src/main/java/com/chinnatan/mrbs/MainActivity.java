@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void onFragmentChanged(String fragmentName) {
-        Log.d(TAG, "onFragmentChanged: (Change to page)" + fragmentName);
+        Log.d(TAG, "onFragmentChanged: (Change to page) " + fragmentName);
         if (fragmentName.equalsIgnoreCase("HOME") || fragmentName.equalsIgnoreCase("SETTING") || fragmentName.equalsIgnoreCase("BOOKING")) {
             if (fragmentName.equals("HOME")) {
                 Log.d(TAG, "CHECK THIS IS HOME");

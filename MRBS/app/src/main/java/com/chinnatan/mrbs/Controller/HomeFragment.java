@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void call(Object... args) {
                     int socketRoomId = (int) args[0];
-                    if(roomid == socketRoomId) {
+                    if (roomid == socketRoomId) {
                         saveEndDate(bookingid);
                     }
                 }
@@ -221,7 +221,9 @@ public class HomeFragment extends Fragment {
                     bookingArrayList.clear();
                     bookingAdapter.notifyDataSetChanged();
                     bookingList.setAdapter(bookingAdapter);
-                    call.clone().enqueue(this);
+                    if (MainActivity.stateFragmentName.equals(TAG)) {
+                        call.clone().enqueue(this);
+                    }
                     return;
                 }
 
@@ -257,7 +259,7 @@ public class HomeFragment extends Fragment {
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
-                if(MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
                 }
             }
@@ -265,7 +267,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBooking : " + t.getLocalizedMessage());
-                if(MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
                 }
             }
@@ -296,7 +298,7 @@ public class HomeFragment extends Fragment {
                     bookingid = 0;
                 }
 
-                if(MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
                 }
             }
@@ -304,7 +306,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBookingCurrentTime : " + t.getMessage());
-                if(MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
                 }
             }
@@ -325,7 +327,7 @@ public class HomeFragment extends Fragment {
                 if (roomAccessRs.getErrorMesage() != null && roomAccessRs.getMessage() == null) {
                     Toast.makeText(getContext(), roomAccessRs.getErrorMesage(), Toast.LENGTH_LONG).show();
                 } else {
-                    if(roomAccessRs.getMessage().equals("ยืนยันสำเร็จ")) {
+                    if (roomAccessRs.getMessage().equals("ยืนยันสำเร็จ")) {
                         ContentValues contentValues = new ContentValues();
                         contentValues.put("RoomId", roomid);
                         contentValues.put("isOpen", true);
@@ -351,12 +353,12 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<DoorOpenRs>() {
             @Override
             public void onResponse(Call<DoorOpenRs> call, Response<DoorOpenRs> response) {
-                if(!response.isSuccessful()) {
+                if (!response.isSuccessful()) {
                     return;
                 }
 
                 DoorOpenRs doorOpenRs = response.body();
-                if(doorOpenRs.isOpen()) {
+                if (doorOpenRs.isOpen()) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("RoomId", roomid);
                     contentValues.put("isOpen", true);
@@ -379,12 +381,12 @@ public class HomeFragment extends Fragment {
         call.enqueue(new Callback<MessageRs>() {
             @Override
             public void onResponse(Call<MessageRs> call, Response<MessageRs> response) {
-                if(!response.isSuccessful()) {
+                if (!response.isSuccessful()) {
                     return;
                 }
 
                 MessageRs messageRs = response.body();
-                if(messageRs.isMessage()) {
+                if (messageRs.isMessage()) {
                     Log.d(TAG, "SAVE END DATE : SUCCESS");
                 } else {
                     Log.d(TAG, "SAVE END DATE : NOT SUCCESS");
