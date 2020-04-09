@@ -113,8 +113,10 @@ exports.addBooking = async (req, res) => {
     // --CONDITION BEFORE BOOKING-- //
     const moment = require('moment')
 
-    if (userBanned) {
+    if (userBanned && !stateCheck) {
         return res.status(200).json({ "isBanned": userBanned })
+    } else if(userBanned && stateCheck) {
+        return res.status(200).json({ "isError": true, "message": "ชื่อผู้ใช้งานนี้ไม่มีสิทธิ์ใช้งานระบบ กรุณาแจ้งผู้ดูแลระบบ"})
     }
 
     try {
