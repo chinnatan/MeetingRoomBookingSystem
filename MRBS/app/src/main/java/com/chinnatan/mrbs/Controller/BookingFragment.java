@@ -151,7 +151,7 @@ public class BookingFragment extends Fragment {
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                    bookingStartTime.setText(sHour + ":" + sMinute);
+                                    bookingStartTime.setText(sHour + ":" + String.format("%02d", sMinute));
                                 }
                             }, hour, minutes, true);
                     startTimePicker.show();
@@ -173,7 +173,7 @@ public class BookingFragment extends Fragment {
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                    bookingEndTime.setText(sHour + ":" + sMinute);
+                                    bookingEndTime.setText(sHour + ":" + String.format("%02d", sMinute));
                                 }
                             }, hour, minutes, true);
                     endTimePicker.show();
