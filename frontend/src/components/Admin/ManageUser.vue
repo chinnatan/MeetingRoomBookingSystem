@@ -39,6 +39,7 @@
                                   <th scope="col">{{ content.text.table.user.thead_no1 }}</th>
                                   <th scope="col">{{ content.text.table.user.thead_no2 }}</th>
                                   <th scope="col">{{ content.text.table.user.thead_no3 }}</th>
+                                  <th scope="col">{{ content.text.table.user.thead_no4 }}</th>
                                   <th scope="col"></th>
                                 </tr>
                               </thead>
@@ -53,6 +54,14 @@
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].UserId }}</td>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].Fullname }}</td>
                                   <td>{{ content.table.user.body[index + content.table.user.startRow].BannedDate }}</td>
+                                  <td
+                                    v-if="content.table.user.body[index + content.table.user.startRow].BannedStatus == 0"
+                                  >
+                                    {{ content.text.status.unban }}
+                                  </td>
+                                  <td v-else>
+                                    {{ content.text.status.ban }}
+                                  </td>
                                   <td
                                     v-if="content.table.user.body[index + content.table.user.startRow].BannedStatus == 0"
                                   >
@@ -142,8 +151,13 @@ export default {
               thead_no0: "#",
               thead_no1: "รหัสผู้ใช้งาน",
               thead_no2: "ชื่อ - นามสกุล",
-              thead_no3: "จำกัดสิทธิ์เมื่อ"
+              thead_no3: "สถานะการใช้งาน",
+              thead_no4: "จำกัดสิทธิ์เมื่อ"
             }
+          },
+          status: {
+            ban: "ถูกจำกัดสิทธิ์การใช้งาน",
+            unban: "ไม่ถูกจำกัดสิทธิ์การใช้งาน"
           }
         },
         table: {
