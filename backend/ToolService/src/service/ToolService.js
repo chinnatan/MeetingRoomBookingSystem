@@ -246,7 +246,7 @@ exports.callStaff = (req, res) => {
 
       for (var index in results) {
         if (results[index].EndDate == null) {
-          endDate = undefined
+          endDate = null
         } else {
           endDate = results[index].EndDate
         }
