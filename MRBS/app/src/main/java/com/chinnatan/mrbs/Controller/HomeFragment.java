@@ -1,5 +1,6 @@
 package com.chinnatan.mrbs.Controller;
 
+import android.animation.ValueAnimator;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,6 +78,7 @@ public class HomeFragment extends Fragment {
     private TextView message;
     private TextView homeRoomName;
     private TextView homeStatus;
+    private TextView homeTopicSlide;
     private ListView bookingList;
     private Button homeActiveBtn;
     private Button homeBookingBtn;
@@ -116,6 +121,22 @@ public class HomeFragment extends Fragment {
         initApiService();
         initAdapter();
         initElementListener();
+
+        homeTopicSlide.setMaxEms(1000);
+        final ValueAnimator animator = ValueAnimator.ofFloat(0.9f, -1.0f);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(6000L);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                final float progress = (float) animation.getAnimatedValue();
+                final float width = homeTopicSlide.getWidth();
+                final float translationX = width * progress;
+                homeTopicSlide.setTranslationX(translationX);
+            }
+        });
+        animator.start();
 
         myDB = getActivity().openOrCreateDatabase("my.db", Context.MODE_PRIVATE, null);
         Cursor cursor = myDB.rawQuery("select * from setting", null);
@@ -167,6 +188,7 @@ public class HomeFragment extends Fragment {
         bookingList = getView().findViewById(R.id.home_booking_list);
         homeRoomName = getView().findViewById(R.id.home_roomname);
         homeStatus = getView().findViewById(R.id.home_status);
+        homeTopicSlide = getView().findViewById(R.id.home_topic_slide);
         homeHeader = getView().findViewById(R.id.home_header);
         homeActiveBtn = getView().findViewById(R.id.home_active_btn);
         homeBookingBtn = getView().findViewById(R.id.home_booking_btn);
@@ -285,13 +307,12 @@ public class HomeFragment extends Fragment {
 
                 List<BookingDao> bookingDaos = response.body();
                 if (bookingDaos.size() > 0 && bookingDaos.get(0).getMessage() == null) {
-                    Log.d(TAG, "NO AVALIABLE");
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
                     homeActiveBtn.setVisibility(View.VISIBLE);
                     homeStatus.setText("ไม่พร้อม");
                     bookingid = bookingDaos.get(0).getBookingId();
+                    homeTopicSlide.setText(bookingDaos.get(0).getBookingTitle() + " | กำลังใช้งาน");
                 } else {
-                    Log.d(TAG, "AVALIABLE");
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
                     homeActiveBtn.setVisibility(View.INVISIBLE);
                     homeStatus.setText("พร้อม");
