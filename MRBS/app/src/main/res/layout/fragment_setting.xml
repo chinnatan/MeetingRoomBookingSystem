@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="เลือกต้องที่ต้องการแสดงผล"
+                android:text="เลือกห้องที่ต้องการแสดงผล"
                 android:textSize="24dp">
 
             </TextView>
