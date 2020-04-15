@@ -332,6 +332,7 @@ export default {
           if (!res.data.isError) {
             this.$swal("", res.data.message, "success");
             this.getUser();
+            this.content.table.user.search = null
           }
         })
         .catch(error => {
