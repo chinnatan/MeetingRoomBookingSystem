@@ -317,6 +317,7 @@ public class HomeFragment extends Fragment {
                     homeActiveBtn.setVisibility(View.INVISIBLE);
                     homeStatus.setText("พร้อม");
                     bookingid = 0;
+                    homeTopicSlide.setText(null);
                 }
 
                 if (MainActivity.stateFragmentName.equals(TAG)) {
