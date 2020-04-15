@@ -481,6 +481,7 @@ export default {
             this.$swal("บันทึก", res.data.message, "success");
             $("#manage-room-modal").modal("hide");
             this.getRoom();
+            this.content.table.room.search = null
           }
         })
         .catch(error => {
