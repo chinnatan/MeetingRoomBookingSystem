@@ -767,6 +767,7 @@ export default {
             this.$swal(response.message, "", "success");
             $("#report-problem-modal").modal("hide");
             this.onResetToolReport();
+            this.getToolReportByUserId(JSON.parse(localStorage.getItem("user")).id);
           }
         })
         .catch(error => {
