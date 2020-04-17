@@ -15,6 +15,7 @@ router.get("/floor/:roomfloor", roomService.getRoomByFloor);
 router.get("/:roomid/booking", roomService.getRoomBookingStatusById);
 router.get("/:roomid/booking/now", roomService.getRoomBookingStatusCurDateById);
 router.get("/:roomid/booking/time/now", roomService.getRoomBookingStatusCurDateAndCurTime);
+router.post("/frequently/top5", roomService.frequentlyUseTop5);
 
 router.post("/setting/save", roomService.saveRoomSetting);
 

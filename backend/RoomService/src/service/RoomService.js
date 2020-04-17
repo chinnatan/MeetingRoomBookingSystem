@@ -467,4 +467,32 @@ exports.saveRoomSetting = (req, res) => {
     return res.status(403).send()
   }
 }
+
+exports.frequentlyUseTop5 = (req, res) => {
+  const API_NAME = "FREQUENTLY USE TOP 5"
+
+  var isAdmin = req.body.isAdmin
+
+  if (isAdmin) {
+    var sqlQueryTop5 = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Booking " +
+      "join Room on (Room.RoomId = Booking.RoomId) " +
+      "group by Room.RoomId " +
+      "order by NUMBER desc limit 5"
+
+    mysqlPool.query(sqlQueryTop5, function (err, results) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      if (results.length > 0) {
+        return res.status(200).json({ "isError": false, "data": results })
+      } else {
+        return res.status(200).json({ "isError": true, "data": "ไม่พบการจัดอันดับ" })
+      }
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
 // --สำหรับผู้ดูแลระบบ-- //

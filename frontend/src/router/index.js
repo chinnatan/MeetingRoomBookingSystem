@@ -11,6 +11,7 @@ import ManageReportToolBroken from '@/components/Admin/ManageReport/ManageReport
 import ManageReportRoom from '@/components/Admin/ManageReport/ManageReportRoom'
 import ManageRoom from '@/components/Admin/ManageRoom'
 import ManageToolReport from '@/components/Admin/ManageToolReport'
+import Dashboard from '@/components/Admin/Dashboard'
 import Forbidden403 from '@/components/403'
 import NotFound404 from '@/components/404'
 import Permission from '@/components/Permission'
@@ -109,6 +110,15 @@ let router = new Router({
       path: '/admin/manage/room',
       name: 'ManageRoom',
       component: ManageRoom,
+      meta: {
+        requiresAuth: true,
+        isAdmin: true
+      }
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
       meta: {
         requiresAuth: true,
         isAdmin: true
