@@ -245,11 +245,11 @@ exports.callStaff = (req, res) => {
       let startDate = new Date(results[0].StartDate)
       let currentDate = new Date()
 
-      let roomName
-      let isSameOrAfter = moment(currentDate).isSameOrAfter(startDate)
-      let isBetween = moment(startDate).isBetween(bookingStartDate, bookingEndDate, null, '[]')
+      let roomName = results[0].RoomName
+      let isBetweenCurrentDate = moment(currentDate).isBetween(bookingStartDate, bookingEndDate, null, '[]')
+      let isBetweenStartDate = moment(startDate).isBetween(bookingStartDate, bookingEndDate, null, '[]')
 
-      if (isSameOrAfter && isBetween) {
+      if (isBetweenCurrentDate && isBetweenStartDate) {
         const nodemailer = require('nodemailer');
 
         // config สำหรับของ gmail

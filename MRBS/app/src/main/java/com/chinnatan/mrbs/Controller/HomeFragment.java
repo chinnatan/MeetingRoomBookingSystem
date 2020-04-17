@@ -244,6 +244,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
                     connectSuccess();
+                    message.setVisibility(View.VISIBLE);
                     message.setText("ไม่พบข้อมูลการจอง");
                     bookingArrayList.clear();
                     bookingAdapter.notifyDataSetChanged();
@@ -284,6 +285,7 @@ public class HomeFragment extends Fragment {
                     bookingAdapter.notifyDataSetChanged();
                     bookingList.setAdapter(bookingAdapter);
                 } else {
+                    message.setVisibility(View.VISIBLE);
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
