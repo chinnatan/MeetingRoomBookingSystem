@@ -40,8 +40,10 @@ import com.chinnatan.mrbs.Model.BookingDao;
 import com.chinnatan.mrbs.Model.DoorOpenRq;
 import com.chinnatan.mrbs.Model.DoorOpenRs;
 import com.chinnatan.mrbs.Model.MessageRs;
+import com.chinnatan.mrbs.Model.Room;
 import com.chinnatan.mrbs.Model.RoomAccessRq;
 import com.chinnatan.mrbs.Model.RoomAccessRs;
+import com.chinnatan.mrbs.Model.RoomDao;
 import com.chinnatan.mrbs.R;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -83,6 +85,7 @@ public class HomeFragment extends Fragment {
     private Button homeActiveBtn;
     private Button homeBookingBtn;
 
+    private boolean isRoomActiveFlag = false;
     private int roomid;
     private int bookingid;
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
@@ -111,8 +114,7 @@ public class HomeFragment extends Fragment {
         MainActivity.onFragmentChanged((TAG));
 
         init();
-        getBooking(roomid);
-        getBookingCurrentTime(roomid);
+        isRoomActive();
     }
 
     private void init() {
@@ -241,18 +243,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
-                    elementVisible();
+                    connectSuccess();
                     message.setText("ไม่พบข้อมูลการจอง");
                     bookingArrayList.clear();
                     bookingAdapter.notifyDataSetChanged();
                     bookingList.setAdapter(bookingAdapter);
-                    if (MainActivity.stateFragmentName.equals(TAG)) {
+                    if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
                         call.clone().enqueue(this);
                     }
                     return;
                 }
 
-                elementVisible();
+                connectSuccess();
                 message.setVisibility(View.INVISIBLE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -285,7 +287,7 @@ public class HomeFragment extends Fragment {
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
-                if (MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
                     call.clone().enqueue(this);
                 }
             }
@@ -293,9 +295,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBooking : " + t.getLocalizedMessage());
-                if (MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
                     call.clone().enqueue(this);
-                    elementInVisible();
+                    connectFailed();
                 }
             }
         });
@@ -310,7 +312,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
-                elementVisible();
+                connectSuccess();
 
                 List<BookingDao> bookingDaos = response.body();
 
@@ -328,7 +330,7 @@ public class HomeFragment extends Fragment {
                     homeTopicSlide.setText(null);
                 }
 
-                if (MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
                     call.clone().enqueue(this);
                 }
             }
@@ -336,9 +338,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<List<BookingDao>> call, Throwable t) {
                 Log.e(TAG, "getBookingCurrentTime : " + t.getMessage());
-                if (MainActivity.stateFragmentName.equals(TAG)) {
+                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
                     call.clone().enqueue(this);
-                    elementInVisible();
+                    connectFailed();
                 }
             }
         });
@@ -374,35 +376,57 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<RoomAccessRs> call, Throwable t) {
                 Log.e(TAG, t.getMessage());
-                call.clone().enqueue(this);
+                Toast.makeText(getContext(), "กรุณาลองใหม่อีกครั้ง", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    private void checkRoomAccess(int bookingId) {
-        Call<DoorOpenRs> call = JsonPlaceHolderApi.checkActiveRoom(new DoorOpenRq(bookingId));
-        call.enqueue(new Callback<DoorOpenRs>() {
+    private void isRoomActive() {
+        Call<List<RoomDao>> call = JsonPlaceHolderApi.getRoomName();
+        call.enqueue(new Callback<List<RoomDao>>() {
             @Override
-            public void onResponse(Call<DoorOpenRs> call, Response<DoorOpenRs> response) {
+            public void onResponse(Call<List<RoomDao>> call, Response<List<RoomDao>> response) {
                 if (!response.isSuccessful()) {
+                    if (MainActivity.stateFragmentName.equals(TAG)) {
+                        call.clone().enqueue(this);
+                        isRoomActiveFlag = false;
+                        connectFailed();
+                    }
                     return;
                 }
 
-                DoorOpenRs doorOpenRs = response.body();
-                if (doorOpenRs.isOpen()) {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("RoomId", roomid);
-                    contentValues.put("isOpen", true);
-                    Gson gson = new Gson();
-                    socketNodeMCUService.emit("triggerOpenDoor", gson.toJson(contentValues));
-                } else {
-                    displayInputPasswordDialog(bookingid);
+                List<RoomDao> roomDaos = response.body();
+
+                for(RoomDao roomDao : roomDaos) {
+                    if(roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 0) {
+                        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWarning));
+                        homeActiveBtn.setVisibility(View.INVISIBLE);
+                        homeStatus.setVisibility(View.INVISIBLE);
+                        homeTopicSlide.setVisibility(View.INVISIBLE);
+                        message.setTextSize(24);
+                        message.setText("ห้องนี้ถูกปิดใช้งาน");
+                        homeBookingBtn.setVisibility(View.INVISIBLE);
+                        isRoomActiveFlag = false;
+                    } else if (roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 1){
+                        getBooking(roomid);
+                        getBookingCurrentTime(roomid);
+                        isRoomActiveFlag = true;
+                    }
+                }
+
+                if (MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
                 }
             }
 
             @Override
-            public void onFailure(Call<DoorOpenRs> call, Throwable t) {
-                call.clone().enqueue(this);
+            public void onFailure(Call<List<RoomDao>> call, Throwable t) {
+                Log.e(TAG, "isRoomActive : " + t.getMessage());
+                if (MainActivity.stateFragmentName.equals(TAG)) {
+                    call.clone().enqueue(this);
+                    isRoomActiveFlag = false;
+                    connectFailed();
+                }
             }
         });
     }
@@ -462,13 +486,13 @@ public class HomeFragment extends Fragment {
         builder.show();
     }
 
-    private void elementVisible() {
+    private void connectSuccess() {
         homeStatus.setVisibility(View.VISIBLE);
         homeTopicSlide.setVisibility(View.VISIBLE);
         homeBookingBtn.setVisibility(View.VISIBLE);
     }
 
-    private void elementInVisible() {
+    private void connectFailed() {
         homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWarning));
         homeActiveBtn.setVisibility(View.INVISIBLE);
         homeStatus.setVisibility(View.INVISIBLE);
