@@ -228,7 +228,8 @@ exports.callStaff = (req, res) => {
     "where b.BookingId not in (select Booking.BookingId from Report join RoomAccess on (Report.RoomAccessId = RoomAccess.RoomAccessId) " +
     "join Booking on (RoomAccess.BookingId = Booking.BookingId) " +
     "join Room on (Room.RoomId = Booking.RoomId) " +
-    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) and UserId = ?"
+    "join User on (User.UserId = Booking.UserId) where User.UserId = ?) and UserId = ? " +
+    "order by b.BookingId DESC LIMIT 1"
 
   mysqlPool.query(sqlQueryCheck, [userId, userId], function (err, results) {
     if (err) {
@@ -239,24 +240,16 @@ exports.callStaff = (req, res) => {
     if (results.length > 0) {
       const moment = require('moment')
 
-      let roomName
+      let bookingStartDate = new Date(results[0].BookingStartDate)
+      let bookingEndDate = new Date(results[0].BookingEndDate)
+      let startDate = new Date(results[0].StartDate)
       let currentDate = new Date()
-      let endDate
-      let flag
 
-      for (var index in results) {
-        if (results[index].EndDate == null) {
-          endDate = null
-        } else {
-          endDate = results[index].EndDate
-        }
-        flag = moment(currentDate).isBetween(results[index].StartDate, endDate, null, '()')
-        if (flag) {
-          roomName = results[index].RoomName
-        }
-      }
+      let roomName
+      let isSameOrAfter = moment(currentDate).isSameOrAfter(startDate)
+      let isBetween = moment(startDate).isBetween(bookingStartDate, bookingEndDate, null, '[]')
 
-      if (flag) {
+      if (isSameOrAfter && isBetween) {
         const nodemailer = require('nodemailer');
 
         // config สำหรับของ gmail
@@ -295,7 +288,7 @@ exports.callStaff = (req, res) => {
         return res.status(200).json({ "isError": true, "message": "ไม่พบการใช้งาน ณ เวลา ปัจจุบัน" })
       }
     } else {
-      return res.status(200).json({ "isError": true, "message": "ไม่พบข้อมูลการเข้าใช้งานห้อง" })
+      return res.status(200).json({ "isError": true, "message": "ไม่พบการใช้งาน ณ เวลา ปัจจุบัน" })
     }
   })
 }
