@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment {
 
             socketService.connect();
         } catch (URISyntaxException e) {
-            Log.e("SOCKET-SERVICE", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
 
         try {
@@ -177,7 +177,7 @@ public class HomeFragment extends Fragment {
 
             socketNodeMCUService.connect();
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -192,6 +192,8 @@ public class HomeFragment extends Fragment {
         homeHeader = getView().findViewById(R.id.home_header);
         homeActiveBtn = getView().findViewById(R.id.home_active_btn);
         homeBookingBtn = getView().findViewById(R.id.home_booking_btn);
+
+        message.setTextSize(22);
     }
 
     private void initDisplayTime() {
@@ -239,6 +241,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<BookingDao>> call, Response<List<BookingDao>> response) {
                 if (!response.isSuccessful()) {
+                    elementVisible();
                     message.setText("ไม่พบข้อมูลการจอง");
                     bookingArrayList.clear();
                     bookingAdapter.notifyDataSetChanged();
@@ -249,6 +252,7 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                elementVisible();
                 message.setVisibility(View.INVISIBLE);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -291,6 +295,7 @@ public class HomeFragment extends Fragment {
                 Log.e(TAG, "getBooking : " + t.getLocalizedMessage());
                 if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
+                    elementInVisible();
                 }
             }
         });
@@ -305,7 +310,10 @@ public class HomeFragment extends Fragment {
                     return;
                 }
 
+                elementVisible();
+
                 List<BookingDao> bookingDaos = response.body();
+
                 if (bookingDaos.size() > 0 && bookingDaos.get(0).getMessage() == null) {
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
                     homeActiveBtn.setVisibility(View.VISIBLE);
@@ -330,6 +338,7 @@ public class HomeFragment extends Fragment {
                 Log.e(TAG, "getBookingCurrentTime : " + t.getMessage());
                 if (MainActivity.stateFragmentName.equals(TAG)) {
                     call.clone().enqueue(this);
+                    elementInVisible();
                 }
             }
         });
@@ -451,6 +460,22 @@ public class HomeFragment extends Fragment {
         });
 
         builder.show();
+    }
+
+    private void elementVisible() {
+        homeStatus.setVisibility(View.VISIBLE);
+        homeTopicSlide.setVisibility(View.VISIBLE);
+        homeBookingBtn.setVisibility(View.VISIBLE);
+    }
+
+    private void elementInVisible() {
+        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWarning));
+        homeActiveBtn.setVisibility(View.INVISIBLE);
+        homeStatus.setVisibility(View.INVISIBLE);
+        homeTopicSlide.setVisibility(View.INVISIBLE);
+        message.setTextSize(22);
+        message.setText("ไม่สามารถเชื่อมต่อระบบได้");
+        homeBookingBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override

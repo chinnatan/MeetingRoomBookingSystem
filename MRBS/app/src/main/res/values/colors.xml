@@ -10,4 +10,5 @@
 
     <color name="colorAvaliable">#06CB7C</color>
     <color name="colorNoAvaliable">#B00020</color>
+    <color name="colorWarning">#FFCC00</color>
 </resources>
