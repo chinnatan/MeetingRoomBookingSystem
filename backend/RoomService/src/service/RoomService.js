@@ -476,7 +476,8 @@ exports.frequentlyUseRanking = (req, res) => {
 
   if (isAdmin) {
     var sqlQueryRanking = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Booking " +
-      "join Room on (Room.RoomId = Booking.RoomId) " +
+      "right join Room on (Room.RoomId = Booking.RoomId) " +
+      "where Room.RoomId not in (3) " +
       "group by Room.RoomId " +
       "order by NUMBER desc limit ?"
 

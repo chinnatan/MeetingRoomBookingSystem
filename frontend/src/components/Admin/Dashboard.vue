@@ -295,7 +295,7 @@ export default {
             active: "เปิดใช้งาน",
             inactive: "ปิดใช้งาน",
             overview: "ภาพรวมห้องในระบบ",
-            ranking: "ห้องที่ถูกใช้งานสูงสุด"
+            ranking: "ห้องที่ถูกจองสูงสุด"
           },
           tool: {
             header: "อุปกรณ์ในระบบ",
@@ -374,7 +374,11 @@ export default {
               });
 
               this.content.room.labelRanking.push(res.data.data[index].RoomName);
-              this.content.room.dataSetRanking.push(res.data.data[index].NUMBER);
+              if(res.data.data[index].NUMBER == 1) {
+                this.content.room.dataSetRanking.push(0);
+              } else {
+               this.content.room.dataSetRanking.push(res.data.data[index].NUMBER);
+              }
             }
           }
 
