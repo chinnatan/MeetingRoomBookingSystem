@@ -403,6 +403,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ReportToolBroken",
   components: {
@@ -536,13 +540,7 @@ export default {
   },
   methods: {
     getToolReportByUserId(userId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/" +
-        userId;
+      const path = API + "/api/tool/report/" + userId;
 
       var dateFormat = require("dateformat");
       this.content.report.table = [
@@ -600,13 +598,7 @@ export default {
         });
     },
     getToolReportByReportId(reportId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/id/" +
-        reportId;
+      const path = API + "/api/tool/report/id/" + reportId;
 
       var dateFormat = require("dateformat");
 
@@ -632,13 +624,7 @@ export default {
     },
     getRoomNameForReportTool() {
       let userId = JSON.parse(localStorage.getItem("user")).id;
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/room/name/" +
-        userId;
+      const path = API + "/api/tool/report/room/name/" + userId;
 
       this.modal.form.toolReport = [
         {
@@ -690,13 +676,7 @@ export default {
       this.modal.form.tool_name = [];
     },
     getToolNameForReportTool(roomId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/tool/name/" +
-        roomId;
+      const path = API + "/api/tool/report/tool/name/" + roomId;
 
       this.modal.form.alertMessage = null;
       this.modal.form.tool_name = [];
@@ -750,12 +730,7 @@ export default {
       this.SendReport(payload);
     },
     SendReport(request) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/send";
+      const path = API + "/api/tool/report/send";
 
       axios
         .post(path, JSON.stringify(request))
@@ -775,12 +750,7 @@ export default {
         });
     },
     getAllRoomName() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.filter.table.room = [];
 
@@ -1087,12 +1057,7 @@ export default {
       });
     },
     CallStaff(payload) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/call/staff";
+      const path = API + "/api/tool/report/call/staff";
 
       axios
         .post(path, payload)

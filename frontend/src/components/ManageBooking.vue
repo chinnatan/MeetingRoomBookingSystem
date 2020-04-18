@@ -314,6 +314,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageBooking",
   components: {
@@ -411,13 +415,7 @@ export default {
   },
   methods: {
     getBookingByUserId(userId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/user/" +
-        userId;
+      const path = API + "/api/booking/user/" + userId;
       var dateFormat = require("dateformat");
 
       this.content.booking.table = [
@@ -477,13 +475,7 @@ export default {
         });
     },
     getBookingByBookingId(bookingId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/" +
-        bookingId;
+      const path = API + "/api/booking/" + bookingId;
 
       var dateFormat = require("dateformat");
       this.content.modal.edit_booking.form.currentDate = new Date();
@@ -559,12 +551,7 @@ export default {
       }
     },
     SendEditBooking(results) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/update";
+      const path = API + "/api/booking/update";
 
       const headers = {
         "Content-Type": "application/json",
@@ -647,12 +634,7 @@ export default {
       });
     },
     SenCancelBooking(payload) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/cancel";
+      const path = API + "/api/booking/cancel";
 
       const headers = {
         "Content-Type": "application/json",
@@ -706,12 +688,7 @@ export default {
         });
     },
     getAllRoomName() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.filter.table.room = [];
 

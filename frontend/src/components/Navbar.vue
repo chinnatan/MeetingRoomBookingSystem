@@ -144,6 +144,10 @@ import router from "../router";
 import axios from "axios";
 const axiosConfig = require("../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "Navbar",
   created() {
@@ -197,13 +201,7 @@ export default {
       this.isVerifyUser(user.id)
     },
     isVerifyUser(userId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/auth/user/ban/check/" +
-        userId;
+      const path = API + "/api/auth/user/ban/check/" + userId;
 
       const headers = {
         "Content-Type": "application/json",

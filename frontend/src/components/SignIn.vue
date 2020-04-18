@@ -72,9 +72,11 @@
 <script>
 import axios from "axios";
 import router from "../router";
+const axiosConfig = require("../assets/config.json");
 
-const HOST = "localhost";
-const PORT = "4000";
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
 
 export default {
   name: "SignIn",
@@ -116,7 +118,7 @@ export default {
       }
     },
     signIn(payloads) {
-      const path = "http://" + HOST + ":" + PORT + "/api/auth/login";
+      const path = API + "/api/auth/login";
       const headers = {
         "Content-Type": "application/json",
         authorization: "login"

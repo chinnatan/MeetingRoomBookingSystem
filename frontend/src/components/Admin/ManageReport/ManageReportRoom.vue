@@ -199,6 +199,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageReportRoom",
   components: {
@@ -267,12 +271,7 @@ export default {
   },
   methods: {
     getSummaryBooking() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/admin/summary";
+      const path = API + "/api/booking/admin/summary";
 
       var dateFormat = require("dateformat");
       this.content.report.table = [{}];
@@ -313,12 +312,7 @@ export default {
         });
     },
     getAllRoomName() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.filter.table.room = [];
 

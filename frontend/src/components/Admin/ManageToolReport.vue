@@ -276,6 +276,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageToolReport",
   components: {
@@ -351,12 +355,7 @@ export default {
   },
   methods: {
     getToolReport() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/all";
+      const path = API + "/api/tool/report/all";
 
       var dateFormat = require("dateformat");
       let payload = {
@@ -432,12 +431,7 @@ export default {
       }
     },
     updateReportStatus(payload) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/update";
+      const path = API + "/api/tool/report/update";
 
       axios
         .post(path, payload)
@@ -453,12 +447,7 @@ export default {
         });
     },
     getAllRoomName() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.filter.table.room = [];
 

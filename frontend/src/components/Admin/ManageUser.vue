@@ -133,6 +133,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageUser",
   components: {
@@ -176,12 +180,7 @@ export default {
   },
   methods: {
     getUser() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/auth/user/all";
+      const path = API + "/api/auth/user/all";
 
       var dateFormat = require("dateformat");
       let payload = {
@@ -263,12 +262,7 @@ export default {
       });
     },
     SendBanned(userId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/auth/user/ban";
+      const path = API + "/api/auth/user/ban";
 
       let payload = {
         UserId: userId,
@@ -314,12 +308,7 @@ export default {
       });
     },
     SendUnBanned(userId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/auth/user/unban";
+      const path = API + "/api/auth/user/unban";
 
       let payload = {
         UserId: userId,

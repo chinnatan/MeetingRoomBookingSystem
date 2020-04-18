@@ -434,6 +434,10 @@ import Floor3 from "@/components/Floor/Floor3";
 import axios from "axios";
 const axiosConfig = require("../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "Booking",
   components: {
@@ -584,12 +588,7 @@ export default {
       }
     },
     SendBooking(results) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/booking/send";
+      const path = API + "/api/booking/send";
 
       const headers = {
         "Content-Type": "application/json",
@@ -673,23 +672,9 @@ export default {
       this.selected = false;
     },
     getBookingScheduleCurDate(roomId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/" +
-        roomId +
-        axiosConfig.PATH.getRoomBookingStatusCurDateById;
+      const path = API + "/api/room/" + roomId + axiosConfig.PATH.getRoomBookingStatusCurDateById;
 
-      const pathTimeNow =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/" +
-        roomId +
-        "/booking/time/now";
+      const pathTimeNow = API + "/api/room/" + roomId + "/booking/time/now";
 
       var dateFormat = require("dateformat");
       this.modal.schedule = [];
@@ -757,13 +742,7 @@ export default {
         });
     },
     getToolByRoomId(roomId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/" +
-        roomId;
+      const path = API + "/api/tool/" + roomId;
 
       this.room.tool = [];
 

@@ -193,6 +193,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageReportToolBroken",
   components: {
@@ -265,12 +269,7 @@ export default {
   },
   methods: {
     getSummaryReportTool() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/report/admin/summary";
+      const path = API + "/api/tool/report/admin/summary";
 
       var dateFormat = require("dateformat");
       this.content.report.table = [{}];
@@ -313,12 +312,7 @@ export default {
         });
     },
     getAllRoomName() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.filter.table.room = [];
 

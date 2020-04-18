@@ -256,6 +256,10 @@ import axios from "axios";
 
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "Setting",
   components: {
@@ -303,12 +307,7 @@ export default {
   },
   methods: {
     getSetting() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/setting";
+      const path = API + "/api/setting";
 
       axios
         .get(path)
@@ -413,12 +412,7 @@ export default {
       }
     },
     UpdateSetting(payload) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/setting/update";
+      const path = API + "/api/setting/update";
 
       axios
         .put(path, payload)

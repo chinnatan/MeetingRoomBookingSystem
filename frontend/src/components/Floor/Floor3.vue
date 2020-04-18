@@ -314,6 +314,10 @@
 import axios from "axios";
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "Floor3",
   created() {
@@ -488,15 +492,7 @@ export default {
       }
     },
     getRoomByName(name) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api" +
-        axiosConfig.PATH.getRoomByName +
-        "/" +
-        name;
+      const path = API + "/api" + axiosConfig.PATH.getRoomByName + "/" + name;
 
       try {
         axios
@@ -764,12 +760,7 @@ export default {
       );
     },
     getBookingScheduleCurDateAndCurTime(roomId, rectId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/" + roomId + "/booking/time/now";
+      const path = API + "/api/room/" + roomId + "/booking/time/now";
 
       axios
         .get(path)

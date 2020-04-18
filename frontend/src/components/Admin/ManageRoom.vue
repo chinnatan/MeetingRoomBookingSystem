@@ -273,6 +273,10 @@ import Navbar from "@/components/Navbar";
 import axios from "axios";
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "ManageRoom",
   components: {
@@ -332,12 +336,7 @@ export default {
   },
   methods: {
     getRoom() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.table.room.body = [{}];
       this.content.table.room.tempBody = [{}];
@@ -402,13 +401,7 @@ export default {
       }
     },
     getTool(roomId) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/tool/" +
-        roomId;
+      const path = API + "/api/tool/" + roomId;
 
       this.content.modal.room.radio.tool = [];
 
@@ -464,12 +457,7 @@ export default {
       }
     },
     SendRoomSetting(payload) {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/setting/save";
+      const path = API + "/api/room/setting/save";
 
       axios
         .post(path, JSON.stringify(payload))

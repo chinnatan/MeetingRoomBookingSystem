@@ -261,6 +261,10 @@ import Chart from "chart.js";
 import axios from "axios";
 const axiosConfig = require("../../assets/config.json");
 
+const HOST = axiosConfig.APIGATEWAY.HOST;
+const PORT = axiosConfig.APIGATEWAY.PORT;
+const API = "http://" + HOST + ":" + PORT
+
 export default {
   name: "Dashboard",
   components: {
@@ -304,12 +308,7 @@ export default {
   mounted() {},
   methods: {
     getAllRoomInSystem() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/all";
+      const path = API + "/api/room/all";
 
       this.content.room.data = [];
       this.content.room.isActive = 0;
@@ -341,12 +340,7 @@ export default {
         });
     },
     getRoomUseTop5() {
-      const path =
-        "http://" +
-        axiosConfig.APIGATEWAY.HOST +
-        ":" +
-        axiosConfig.APIGATEWAY.PORT +
-        "/api/room/frequently/top5";
+      const path = API + "/api/room/frequently/top5";
 
       this.content.room.dataTop5 = [];
 
