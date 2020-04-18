@@ -72,12 +72,22 @@
                 <div
                   class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
                 >
-                  <h6 class="m-0 text-primary">{{ content.text.room.top5 }}</h6>
+                  <h6 class="m-0 text-primary">{{ content.text.room.ranking }} {{ content.room.dataSetRanking.length }} อันดับ</h6>
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fa fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                      <div class="dropdown-header">จัดอันดับ:</div>
+                      <a class="dropdown-item" @click="getRoomRanking(5)">5 อันดับ</a>
+                      <a class="dropdown-item" @click="getRoomRanking(10)">10 อันดับ</a>
+                    </div>
+                  </div>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                   <div class="chart-area">
-                    <canvas id="roomTop5Chart"></canvas>
+                    <canvas id="roomRankingChart"></canvas>
                   </div>
                 </div>
               </div>
@@ -182,9 +192,9 @@
                       class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                       aria-labelledby="dropdownMenuLink"
                     >
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
+                      <div class="dropdown-header">จัดอันดับ:</div>
+                      <a class="dropdown-item" href="#">5 อันดับ</a>
+                      <a class="dropdown-item" href="#">10 อันดับ</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -272,7 +282,7 @@ export default {
   },
   created() {
     this.getAllRoomInSystem();
-    this.getRoomUseTop5();
+    this.getRoomRanking(5);
   },
   data() {
     return {
@@ -285,7 +295,7 @@ export default {
             active: "เปิดใช้งาน",
             inactive: "ปิดใช้งาน",
             overview: "ภาพรวมห้องในระบบ",
-            top5: "ห้องที่ถูกใช้งานสูงสุด 5 อันดับ"
+            ranking: "ห้องที่ถูกใช้งานสูงสุด"
           },
           tool: {
             header: "อุปกรณ์ในระบบ",
@@ -298,9 +308,9 @@ export default {
           data: [],
           isActive: 0,
           isInActive: 0,
-          dataTop5: [],
-          labelTop5: [],
-          dataSetTop5: []
+          dataRanking: [],
+          labelRanking: [],
+          dataSetRanking: []
         }
       }
     };
@@ -339,13 +349,17 @@ export default {
           console.log(error);
         });
     },
-    getRoomUseTop5() {
-      const path = API + "/api/room/frequently/top5";
+    getRoomRanking(ranking) {
+      const path = API + "/api/room/frequently/ranking";
 
-      this.content.room.dataTop5 = [];
+      let isRanking = ranking
+      this.content.room.dataRanking = [];
+      this.content.room.labelRanking = [];
+      this.content.room.dataSetRanking = []
 
       let payload = {
-        isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin
+        isAdmin: JSON.parse(localStorage.getItem("user")).isAdmin,
+        isRanking: isRanking
       };
 
       axios
@@ -353,18 +367,18 @@ export default {
         .then(res => {
           if (!res.data.isError) {
             for (var index in res.data.data) {
-              this.content.room.dataTop5.push({
+              this.content.room.dataRanking.push({
                 RoomId: res.data.data[index].RoomId,
                 RoomName: res.data.data[index].RoomName,
                 Number: res.data.data[index].NUMBER
               });
 
-              this.content.room.labelTop5.push(res.data.data[index].RoomName);
-              this.content.room.dataSetTop5.push(res.data.data[index].NUMBER);
+              this.content.room.labelRanking.push(res.data.data[index].RoomName);
+              this.content.room.dataSetRanking.push(res.data.data[index].NUMBER);
             }
           }
 
-          this.roomTop5Chart();
+          this.roomRankingChart();
         })
         .catch(error => {
           console.log(error);
@@ -405,15 +419,15 @@ export default {
         }
       });
     },
-    roomTop5Chart() {
-      var ctx = document.getElementById("roomTop5Chart");
+    roomRankingChart() {
+      var ctx = document.getElementById("roomRankingChart");
       var myChart = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: this.content.room.labelTop5,
+          labels: this.content.room.labelRanking,
           datasets: [
             {
-              data: this.content.room.dataSetTop5,
+              data: this.content.room.dataSetRanking,
               borderColor: "#6E7EF5",
               backgroundColor: "#6E7EF5"
             }
@@ -430,3 +444,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.dropdown.no-arrow .dropdown-toggle::after {
+  display: none;
+}
+</style>

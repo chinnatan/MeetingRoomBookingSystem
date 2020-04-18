@@ -468,18 +468,19 @@ exports.saveRoomSetting = (req, res) => {
   }
 }
 
-exports.frequentlyUseTop5 = (req, res) => {
-  const API_NAME = "FREQUENTLY USE TOP 5"
+exports.frequentlyUseRanking = (req, res) => {
+  const API_NAME = "FREQUENTLY USE RANKING"
 
   var isAdmin = req.body.isAdmin
+  var isRanking = req.body.isRanking
 
   if (isAdmin) {
-    var sqlQueryTop5 = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Booking " +
+    var sqlQueryRanking = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Booking " +
       "join Room on (Room.RoomId = Booking.RoomId) " +
       "group by Room.RoomId " +
-      "order by NUMBER desc limit 5"
+      "order by NUMBER desc limit ?"
 
-    mysqlPool.query(sqlQueryTop5, function (err, results) {
+    mysqlPool.query(sqlQueryRanking, [isRanking], function (err, results) {
       if (err) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
         return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
