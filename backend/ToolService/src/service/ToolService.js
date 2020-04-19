@@ -365,8 +365,6 @@ exports.updateReportStatus = (req, res) => {
   let reportId = req.body.ReportId
   let reportStatus = req.body.ReportStatus
 
-  console.log(reportId)
-
   if (isAdmin) {
     var sqlUpdateReportStatus = "update Report set ReportStatus = ? where ReportId = ?"
     mysqlPool.query(sqlUpdateReportStatus, [reportStatus, reportId], function (err) {
@@ -382,4 +380,35 @@ exports.updateReportStatus = (req, res) => {
   }
 }
 // -- Update Report Status -- //
+
+exports.frequentlyReportToolInProblemRanking = (req, res) => {
+  const API_NAME = "FREQUENTLY REPORT TOOL IN PROBLEM RANKING"
+
+  let isAdmin = req.body.isAdmin
+  let isRanking = req.body.isRanking
+  let isMonth = req.body.isMonth
+
+  if (isAdmin) {
+    var sqlQueryRanking = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Report " +
+      "right join Tool on (Tool.ToolId = Report.ToolId) " +
+      "join Room on (Room.RoomId = Tool.RoomId) " +
+      "where Report.ReportDate >= DATE_ADD(NOW(), interval -? month) " +
+      "group by Room.RoomId " +
+      "order by NUMBER desc limit ?"
+    mysqlPool.query(sqlQueryRanking, [isRanking, isMonth], function (err, results) {
+      if (err) {
+        console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
+        return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+      }
+
+      if (results.length > 0) {
+        return res.status(200).json({ "isError": false, "data": results })
+      } else {
+        return res.status(200).json({ "isError": true, "data": "ไม่พบการจัดอันดับ" })
+      }
+    })
+  } else {
+    return res.status(403).send()
+  }
+}
 // --สำหรับผู้ดูแลระบบ-- //

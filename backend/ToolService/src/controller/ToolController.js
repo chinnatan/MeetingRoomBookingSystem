@@ -20,5 +20,6 @@ router.post("/report/admin/summary", toolService.summaryReportToolProblem);
 router.post("/report/all", toolService.getAllToolReport);
 router.post("/report/update", toolService.updateReportStatus);
 router.post("/report/call/staff", toolService.callStaff);
+router.post("/report/frequently/problem/ranking", toolService.frequentlyReportToolInProblemRanking);
 
 module.exports = router;

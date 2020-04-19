@@ -471,8 +471,8 @@ exports.saveRoomSetting = (req, res) => {
 exports.frequentlyUseRanking = (req, res) => {
   const API_NAME = "FREQUENTLY USE RANKING"
 
-  var isAdmin = req.body.isAdmin
-  var isRanking = req.body.isRanking
+  let isAdmin = req.body.isAdmin
+  let isRanking = req.body.isRanking
 
   if (isAdmin) {
     var sqlQueryRanking = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Booking " +
