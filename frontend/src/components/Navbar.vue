@@ -127,10 +127,11 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link
                   :to="{path: '/admin/dashboard'}"
+                  v-if="user.isAdmin"
                   v-on:click.native="Dashboard"
                   class="dropdown-item"
                 >{{ navbar.account.dashboard }}</router-link>
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-divider" v-if="user.isAdmin"></div>
                 <router-link
                   :to="'#'"
                   v-on:click.native="signOut"
