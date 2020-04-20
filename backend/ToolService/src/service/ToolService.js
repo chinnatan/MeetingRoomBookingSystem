@@ -389,13 +389,13 @@ exports.frequentlyReportToolInProblemRanking = (req, res) => {
   let isMonth = req.body.isMonth
 
   if (isAdmin) {
-    var sqlQueryRanking = "select Room.RoomId, Room.RoomName, count(*) as NUMBER from Report " +
+    var sqlQueryRanking = "select Room.RoomId, Room.RoomName, Report.ReportDate, count(*) as NUMBER from Report " +
       "right join Tool on (Tool.ToolId = Report.ToolId) " +
       "join Room on (Room.RoomId = Tool.RoomId) " +
       "where Report.ReportDate >= DATE_ADD(NOW(), interval -? month) " +
-      "group by Room.RoomId " +
+      "group by Room.RoomId, Report.ReportDate " +
       "order by NUMBER desc limit ?"
-    mysqlPool.query(sqlQueryRanking, [isRanking, isMonth], function (err, results) {
+    mysqlPool.query(sqlQueryRanking, [isMonth, isRanking * isMonth], function (err, results) {
       if (err) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
         return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })

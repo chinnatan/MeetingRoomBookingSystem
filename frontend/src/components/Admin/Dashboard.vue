@@ -274,7 +274,7 @@ const HOST = axiosConfig.APIGATEWAY.HOST;
 const PORT = axiosConfig.APIGATEWAY.PORT;
 const API = "http://" + HOST + ":" + PORT;
 
-let toolReportProblemChart
+let toolReportProblemChart;
 
 export default {
   name: "Dashboard",
@@ -327,7 +327,21 @@ export default {
           ranking: 5,
           month: 3
         }
-      }
+      },
+      monthArray: [
+        "มกราคม",
+        "กุมภาพันธ์",
+        "มีนาคม",
+        "เมษายน",
+        "พฤษภาคม",
+        "มิถุนายน",
+        "กรกฎาคม",
+        "สิงหาคม",
+        "กันยานยน",
+        "ตุลาคม",
+        "พฤศจิกายน",
+        "ธันวาคม"
+      ]
     };
   },
   mounted() {},
@@ -555,6 +569,8 @@ export default {
         .post(path, payload)
         .then(res => {
           if (!res.data.isError) {
+            let data = [];
+            let tempLabel = null;
             for (var index in res.data.data) {
               this.content.tool.dataReportToolInRoomProblemRanking.push({
                 RoomId: res.data.data[index].RoomId,
@@ -562,12 +578,42 @@ export default {
                 Number: res.data.data[index].NUMBER
               });
 
-              this.content.tool.dataSetReportToolInRoomProblemRanking.push({
-                label: res.data.data[index].RoomName,
-                data: [res.data.data[index].NUMBER],
-                borderColor: "#6E7EF5",
-                backgroundColor: "#6E7EF5"
-              });
+              if (tempLabel != res.data.data[index].RoomName) {
+                console.log("###########--- " + res.data.data[index].RoomName + " ---###########")
+                for (var indexMonth in this.content.tool.labelReportToolInRoomProblemRanking) {
+                  let number = 0;
+
+                  for (var indexData in res.data.data) {
+                    console.log("PAST MONTH : " + this.content.tool.labelReportToolInRoomProblemRanking[indexMonth])
+                    console.log("MONTH FROM MYSQL : " + this.monthArray[new Date(res.data.data[indexData].ReportDate).getMonth() ])
+
+                    if (res.data.data[index].RoomName === res.data.data[indexData].RoomName && this.content.tool.labelReportToolInRoomProblemRanking[indexMonth] === this.monthArray[new Date(res.data.data[indexData].ReportDate).getMonth()]) {
+                      number = number + res.data.data[indexData].NUMBER;
+                    }
+                  }
+
+                  if (number == 0) {
+                    data.push(0);
+                  } else {
+                    data.push(number);
+                  }
+
+                  console.log("DATA : " + data)
+                }
+
+                let color = this.getRandomColor()
+
+                this.content.tool.dataSetReportToolInRoomProblemRanking.push({
+                  label: res.data.data[index].RoomName,
+                  data: data,
+                  borderColor: color,
+                  backgroundColor: color
+                });
+
+                data = []
+
+                tempLabel = res.data.data[index].RoomName;
+              }
             }
           }
 
@@ -582,21 +628,6 @@ export default {
       var month = 1;
       var currMonth = month;
 
-      var monthArray = [
-        "มกราคม",
-        "กุมภาพันธ์",
-        "มีนาคม",
-        "เมษายน",
-        "พฤษภาคม",
-        "มิถุนายน",
-        "กรกฎาคม",
-        "สิงหาคม",
-        "กันยานยน",
-        "ตุลาคม",
-        "พฤศจิกายน",
-        "ธันวาคม"
-      ];
-
       var menuMonths = [];
       let count = isMonth;
 
@@ -604,7 +635,7 @@ export default {
         if (currMonth < 0) currMonth += 12;
         if (currMonth >= 12) currMonth -= 12;
 
-        var month = monthArray[currMonth];
+        var month = this.monthArray[currMonth];
         menuMonths.push(month);
 
         currMonth = currMonth + 1;
@@ -647,6 +678,14 @@ export default {
         this.content.tool.ranking,
         this.content.tool.month
       );
+    },
+    getRandomColor() {
+      var letters = "0123456789ABCDEF";
+      var color = "#";
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
     }
   }
 };
