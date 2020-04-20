@@ -76,7 +76,7 @@ const axiosConfig = require("../assets/config.json");
 
 const HOST = axiosConfig.APIGATEWAY.HOST;
 const PORT = axiosConfig.APIGATEWAY.PORT;
-const API = "http://" + HOST + ":" + PORT
+const API = "http://" + HOST + ":" + PORT;
 
 export default {
   name: "SignIn",
@@ -138,7 +138,11 @@ export default {
                 JSON.stringify(res.data.accesstoken)
               );
               localStorage.setItem("user", JSON.stringify(res.data.user));
-              router.push({ name: "Home" });
+              if (res.data.user.isAdmin) {
+                router.push({ name: "Dashboard" });
+              } else {
+                router.push({ name: "Home" });
+              }
             }
           }
         })

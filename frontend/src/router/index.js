@@ -165,8 +165,7 @@ router.beforeEach((to, from, next) => {
       if (to.matched.some(record => record.meta.isAdmin)) {
         if (user.isAdmin) {
           next()
-        }
-        else {
+        } else {
           next({
             path: '/403',
             params: { nextUrl: to.fullPath }

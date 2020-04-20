@@ -579,14 +579,10 @@ export default {
               });
 
               if (tempLabel != res.data.data[index].RoomName) {
-                console.log("###########--- " + res.data.data[index].RoomName + " ---###########")
                 for (var indexMonth in this.content.tool.labelReportToolInRoomProblemRanking) {
                   let number = 0;
 
                   for (var indexData in res.data.data) {
-                    console.log("PAST MONTH : " + this.content.tool.labelReportToolInRoomProblemRanking[indexMonth])
-                    console.log("MONTH FROM MYSQL : " + this.monthArray[new Date(res.data.data[indexData].ReportDate).getMonth() ])
-
                     if (res.data.data[index].RoomName === res.data.data[indexData].RoomName && this.content.tool.labelReportToolInRoomProblemRanking[indexMonth] === this.monthArray[new Date(res.data.data[indexData].ReportDate).getMonth()]) {
                       number = number + res.data.data[indexData].NUMBER;
                     }
@@ -597,8 +593,6 @@ export default {
                   } else {
                     data.push(number);
                   }
-
-                  console.log("DATA : " + data)
                 }
 
                 let color = this.getRandomColor()

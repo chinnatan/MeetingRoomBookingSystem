@@ -126,6 +126,12 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <router-link
+                  :to="{path: '/admin/dashboard'}"
+                  v-on:click.native="Dashboard"
+                  class="dropdown-item"
+                >{{ navbar.account.dashboard }}</router-link>
+                <div class="dropdown-divider"></div>
+                <router-link
                   :to="'#'"
                   v-on:click.native="signOut"
                   class="dropdown-item"
@@ -179,6 +185,7 @@ export default {
         home: "หน้าหลัก",
         account: {
           username: "",
+          dashboard: "แดชบอร์ด",
           logout: "ออกจากระบบ"
         }
       },
