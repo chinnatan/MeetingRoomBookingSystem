@@ -895,7 +895,7 @@ exports.getBookingByUserId = (req, res) => {
 
     var userId = req.params.userId
 
-    var sqlQueryBookingByUserId = "select * from Booking join Room on (Booking.RoomId = Room.RoomId) where UserId = ? and BookingStatus = ? and BookingStartDate >= Sysdate()"
+    var sqlQueryBookingByUserId = "select * from Booking join Room on (Booking.RoomId = Room.RoomId) where UserId = ? and BookingStatus = ? and DATE_FORMAT(BookingStartDate, '%Y-%m-%d') >= DATE_FORMAT(SYSDATE(), '%Y-%m-%d')"
     mysqlPool.query(sqlQueryBookingByUserId, [userId, "B"], function (err, results) {
         if (err) {
             console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
