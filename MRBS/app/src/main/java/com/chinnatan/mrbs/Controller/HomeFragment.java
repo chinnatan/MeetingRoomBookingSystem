@@ -89,6 +89,8 @@ public class HomeFragment extends Fragment {
     private int roomid;
     private int bookingid;
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
+    private int tempBookingId = 0;
+    private String tempTopicSlide;
 
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
@@ -115,6 +117,8 @@ public class HomeFragment extends Fragment {
 
         init();
         isRoomActive();
+        getBooking(roomid);
+        getBookingCurrentTime(roomid);
     }
 
     private void init() {
@@ -149,7 +153,7 @@ public class HomeFragment extends Fragment {
         }
 
         try {
-            socketService = IO.socket("http://192.168.1.2:4001");
+            socketService = IO.socket(MainActivity.URL_SOCKET);
             socketService.on("triggerAddBooking", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -166,7 +170,7 @@ public class HomeFragment extends Fragment {
         }
 
         try {
-            socketNodeMCUService = IO.socket("http://192.168.1.2:4002");
+            socketNodeMCUService = IO.socket(MainActivity.URL_SOCKETMCU);
             socketNodeMCUService.on("sendRoomIdToApplication", new Emitter.Listener() {
                 @Override
                 public void call(Object... args) {
@@ -204,6 +208,35 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 currentTime.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
+                if (bookingArrayList.size() > 0) {
+                    int currentHours = Integer.parseInt(String.format("%02d", new Date().getHours()));
+                    int currentMin = Integer.parseInt(String.format("%02d", new Date().getMinutes()));
+                    int nextHours = Integer.parseInt(bookingArrayList.get(0).getBookingTime().substring(0, 2));
+                    int nextMin = Integer.parseInt(bookingArrayList.get(0).getBookingTime().substring(3, 5));
+
+
+                    Log.d(TAG, "CURRENT HOURS : " + currentHours + " CURRENT MIN : " + currentMin);
+                    Log.d(TAG, "NEXT HOURS : " + nextHours + " NEXT MIN : " + nextMin);
+
+                    if(currentHours >= nextHours && currentMin >= nextMin) {
+                        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
+                        homeActiveBtn.setVisibility(View.VISIBLE);
+                        homeStatus.setText("ไม่พร้อม");
+                        tempBookingId = bookingArrayList.get(0).getBookingId();
+                        tempTopicSlide = bookingArrayList.get(0).getBookingTitle();
+                        bookingid = tempBookingId;
+                        homeTopicSlide.setText(tempTopicSlide + " | กำลังใช้งาน");
+                        bookingArrayList.remove(0);
+                        bookingAdapter.notifyDataSetChanged();
+                        bookingList.setAdapter(bookingAdapter);
+                    }
+                } else {
+                    homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
+                    homeActiveBtn.setVisibility(View.INVISIBLE);
+                    homeStatus.setText("พร้อม");
+                    bookingid = 0;
+                    homeTopicSlide.setText(null);
+                }
                 displayTime.postDelayed(displayTimeRunnable, 1000);
             }
         };
@@ -211,8 +244,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void initApiService() {
-        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(8, TimeUnit.SECONDS).writeTimeout(8, TimeUnit.SECONDS).connectTimeout(5, TimeUnit.SECONDS).build();
-        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
+        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).connectTimeout(30, TimeUnit.SECONDS).build();
+        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl(MainActivity.URL_API).addConverterFactory(GsonConverterFactory.create()).build();
         JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
     }
 
@@ -399,8 +432,8 @@ public class HomeFragment extends Fragment {
 
                 List<RoomDao> roomDaos = response.body();
 
-                for(RoomDao roomDao : roomDaos) {
-                    if(roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 0) {
+                for (RoomDao roomDao : roomDaos) {
+                    if (roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 0) {
                         homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorWarning));
                         homeActiveBtn.setVisibility(View.INVISIBLE);
                         homeStatus.setVisibility(View.INVISIBLE);
@@ -409,9 +442,7 @@ public class HomeFragment extends Fragment {
                         message.setText("ห้องนี้ถูกปิดใช้งาน");
                         homeBookingBtn.setVisibility(View.INVISIBLE);
                         isRoomActiveFlag = false;
-                    } else if (roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 1){
-                        getBooking(roomid);
-                        getBookingCurrentTime(roomid);
+                    } else if (roomDao.getRoomId() == roomid && roomDao.getRoomActive() == 1) {
                         isRoomActiveFlag = true;
                     }
                 }

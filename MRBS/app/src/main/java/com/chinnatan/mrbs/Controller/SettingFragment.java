@@ -67,7 +67,7 @@ public class SettingFragment extends Fragment {
 
         init();
         OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(8, TimeUnit.SECONDS).writeTimeout(8, TimeUnit.SECONDS).connectTimeout(5, TimeUnit.SECONDS).build();
-        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl("http://192.168.1.2:4000/").addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl(MainActivity.URL_API).addConverterFactory(GsonConverterFactory.create()).build();
         JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         getRoomName();
     }

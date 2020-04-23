@@ -15,6 +15,10 @@ import com.chinnatan.mrbs.Controller.SettingFragment;
 public class MainActivity extends AppCompatActivity {
 
     public static String stateFragmentName = null;
+    public static final String URL_API = "http://192.168.1.2:4000/";
+    public static final String URL_SOCKET = "http://192.168.1.2:4001/";
+    public static final String URL_SOCKETMCU = "http://192.168.1.2:4001/";
+
     private static final String TAG = "MAINACTIVITY";
 
     private Fragment fragment;
