@@ -5,6 +5,8 @@
 ### Node ###
 # Config
 config.json
+Dockerfile
+process.yml
 
 # Logs
 logs
