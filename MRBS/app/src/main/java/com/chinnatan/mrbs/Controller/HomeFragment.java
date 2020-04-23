@@ -91,6 +91,8 @@ public class HomeFragment extends Fragment {
     private ArrayList<Booking> bookingArrayList = new ArrayList<>();
     private int tempBookingId = 0;
     private String tempTopicSlide;
+    private int tempBeforeEndHours = -1;
+    private int tempBeforeEndMin = -1;
 
     private BookingAdapter bookingAdapter;
     private JsonPlaceHolderApi JsonPlaceHolderApi;
@@ -208,35 +210,27 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 currentTime.setText(new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
+                int currentHours = Integer.parseInt(String.format("%02d", new Date().getHours()));
+                int currentMin = Integer.parseInt(String.format("%02d", new Date().getMinutes()));
+                Log.d(TAG, "END HOURS : " + tempBeforeEndHours + " END MIN : " + tempBeforeEndMin);
                 if (bookingArrayList.size() > 0) {
-                    int currentHours = Integer.parseInt(String.format("%02d", new Date().getHours()));
-                    int currentMin = Integer.parseInt(String.format("%02d", new Date().getMinutes()));
                     int nextHours = Integer.parseInt(bookingArrayList.get(0).getBookingTime().substring(0, 2));
                     int nextMin = Integer.parseInt(bookingArrayList.get(0).getBookingTime().substring(3, 5));
-
 
                     Log.d(TAG, "CURRENT HOURS : " + currentHours + " CURRENT MIN : " + currentMin);
                     Log.d(TAG, "NEXT HOURS : " + nextHours + " NEXT MIN : " + nextMin);
 
-                    if(currentHours >= nextHours && currentMin >= nextMin) {
-                        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorNoAvaliable));
-                        homeActiveBtn.setVisibility(View.VISIBLE);
-                        homeStatus.setText("ไม่พร้อม");
-                        tempBookingId = bookingArrayList.get(0).getBookingId();
-                        tempTopicSlide = bookingArrayList.get(0).getBookingTitle();
-                        bookingid = tempBookingId;
-                        homeTopicSlide.setText(tempTopicSlide + " | กำลังใช้งาน");
-                        bookingArrayList.remove(0);
-                        bookingAdapter.notifyDataSetChanged();
-                        bookingList.setAdapter(bookingAdapter);
+                    if (currentHours >= nextHours && currentMin >= nextMin) {
+                        getBookingCurrentTime(roomid);
+                        getBooking(roomid);
+                    } else if ((tempBeforeEndHours != -1 && tempBeforeEndMin != -1) && (currentHours >= tempBeforeEndHours && currentMin >= tempBeforeEndMin)) {
+                        getBookingCurrentTime(roomid);
+                        getBooking(roomid);
                     }
                 } else {
-                    if(isRoomActiveFlag) {
-                        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
-                        homeActiveBtn.setVisibility(View.INVISIBLE);
-                        homeStatus.setText("พร้อม");
-                        bookingid = 0;
-                        homeTopicSlide.setText(null);
+                    if ((tempBeforeEndHours != -1 && tempBeforeEndMin != -1) && (currentHours >= tempBeforeEndHours && currentMin >= tempBeforeEndMin)) {
+                        getBookingCurrentTime(roomid);
+                        getBooking(roomid);
                     }
                 }
                 displayTime.postDelayed(displayTimeRunnable, 1000);
@@ -324,9 +318,9 @@ public class HomeFragment extends Fragment {
                     message.setText("ไม่พบข้อมูลการจอง");
                 }
 
-                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
-                    call.clone().enqueue(this);
-                }
+//                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
+//                    call.clone().enqueue(this);
+//                }
             }
 
             @Override
@@ -359,17 +353,33 @@ public class HomeFragment extends Fragment {
                     homeStatus.setText("ไม่พร้อม");
                     bookingid = bookingDaos.get(0).getBookingId();
                     homeTopicSlide.setText(bookingDaos.get(0).getBookingTitle() + " | กำลังใช้งาน");
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat isoDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    isoDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    try {
+                        Booking booking = new Booking();
+                        Date nowStartDate = isoDate.parse(bookingDaos.get(0).getBookingStartDate());
+                        Date nowEndDate = isoDate.parse(bookingDaos.get(0).getBookingEndDate());
+                        booking.setBookingTime(formatter.format(nowStartDate) + " - " + formatter.format(nowEndDate));
+                        tempBeforeEndHours = Integer.parseInt(booking.getBookingTime().substring(8, 10));
+                        tempBeforeEndMin = Integer.parseInt(booking.getBookingTime().substring(11, 13));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
                     homeActiveBtn.setVisibility(View.INVISIBLE);
                     homeStatus.setText("พร้อม");
                     bookingid = 0;
                     homeTopicSlide.setText(null);
+                    tempBeforeEndHours = -1;
+                    tempBeforeEndMin = -1;
                 }
 
-                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
-                    call.clone().enqueue(this);
-                }
+//                if (MainActivity.stateFragmentName.equals(TAG) && isRoomActiveFlag) {
+//                    call.clone().enqueue(this);
+//                }
             }
 
             @Override
@@ -424,11 +434,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<List<RoomDao>> call, Response<List<RoomDao>> response) {
                 if (!response.isSuccessful()) {
-                    if (MainActivity.stateFragmentName.equals(TAG)) {
-                        call.clone().enqueue(this);
-                        isRoomActiveFlag = false;
-                        connectFailed();
-                    }
+//                    if (MainActivity.stateFragmentName.equals(TAG)) {
+//                        call.clone().enqueue(this);
+//                        isRoomActiveFlag = false;
+//                        connectFailed();
+//                    }
                     return;
                 }
 
@@ -449,9 +459,9 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                if (MainActivity.stateFragmentName.equals(TAG)) {
-                    call.clone().enqueue(this);
-                }
+//                if (MainActivity.stateFragmentName.equals(TAG)) {
+//                    call.clone().enqueue(this);
+//                }
             }
 
             @Override
