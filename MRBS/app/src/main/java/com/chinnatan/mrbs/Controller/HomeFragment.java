@@ -231,11 +231,13 @@ public class HomeFragment extends Fragment {
                         bookingList.setAdapter(bookingAdapter);
                     }
                 } else {
-                    homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
-                    homeActiveBtn.setVisibility(View.INVISIBLE);
-                    homeStatus.setText("พร้อม");
-                    bookingid = 0;
-                    homeTopicSlide.setText(null);
+                    if(isRoomActiveFlag) {
+                        homeHeader.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAvaliable));
+                        homeActiveBtn.setVisibility(View.INVISIBLE);
+                        homeStatus.setText("พร้อม");
+                        bookingid = 0;
+                        homeTopicSlide.setText(null);
+                    }
                 }
                 displayTime.postDelayed(displayTimeRunnable, 1000);
             }
@@ -244,7 +246,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initApiService() {
-        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).connectTimeout(30, TimeUnit.SECONDS).build();
+        OkHttpClient httpClient = new OkHttpClient.Builder().retryOnConnectionFailure(true).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).connectTimeout(10, TimeUnit.SECONDS).build();
         Retrofit retrofit = new Retrofit.Builder().client(httpClient).baseUrl(MainActivity.URL_API).addConverterFactory(GsonConverterFactory.create()).build();
         JsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
     }
