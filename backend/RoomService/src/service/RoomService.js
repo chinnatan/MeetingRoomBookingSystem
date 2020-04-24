@@ -2,6 +2,7 @@ const MySQL = require("mysql");
 const Config = require("../../config.json");
 
 const SERVICE_NAME = Config.SERVER.NAME;
+const API = Config.API_PRODUCTION.SERVER;
 
 // MySQL Configuration
 const HOST_MYSQL = Config.MYSQL.HOST;
@@ -159,7 +160,7 @@ exports.getRoomBookingStatusCurDateById = (req, res) => {
     if (results.length) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] -> Get Room By ID Found`);
       var sqlQueryRoomBooking = "select Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus = ? and BookingStartDate >= ?;"
-      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date().toLocaleString()], function (err, results, fields) {
+      mysqlPool.query(sqlQueryRoomBooking, [roomId, "B", new Date()], function (err, results, fields) {
         if (err) {
           console.log(`[${SERVICE_NAME}][${API_NAME}] ERROR -> ${err.message}`);
           return res.status(500).json({ "sql_error_message": err.message });
@@ -187,7 +188,7 @@ exports.getRoomBookingStatusCurDateAndCurTime = (req, res) => {
   var roomId = req.params.roomid;
 
   var sqlQueryRoomBooking = "select Booking.BookingId, Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus != ? and ? between BookingStartDate and BookingEndDate"
-  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date().toLocaleString()], function (err, results, fields) {
+  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date()], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -209,7 +210,7 @@ exports.displaySchedule = (req, res) => {
   var roomId = req.params.roomid;
 
   var sqlQueryRoomBooking = "select Booking.BookingId, Booking.BookingTitle, Booking.BookingStartDate, Booking.BookingEndDate, Booking.RoomId, User.Fullname from mrbs.Booking join mrbs.User on (mrbs.Booking.UserId = mrbs.User.UserId) where RoomId = ? and BookingStatus != ? and ? between BookingStartDate and BookingEndDate"
-  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date().toLocaleString()], function (err, results, fields) {
+  mysqlPool.query(sqlQueryRoomBooking, [roomId, "C", new Date()], function (err, results, fields) {
     if (err) {
       console.log(`[${SERVICE_NAME}][${API_NAME}] ERROR -> ${err.message}`);
       return res.status(500).json({ "sql_error_message": err.message });
@@ -237,7 +238,7 @@ exports.activeRoom = async (req, res) => {
   let settingRs
   let setting
   try {
-    settingRs = await axios.get('http://localhost:4000/api/setting/')
+    settingRs = await axios.get(API + '/api/setting/')
     setting = {
       SlowestActivation: settingRs.data.SlowestActivation,
       Unit: {
