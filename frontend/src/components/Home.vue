@@ -32,7 +32,7 @@
               <router-link :to="{path: '/booking' }" replace>
                 <button
                   type="button"
-                  class="btn btn-lg btn-outline-variasi-warna"
+                  class="btn btn-lg btn-outline-primary"
                 >{{ content.button.start }}</button>
               </router-link>
             </div>

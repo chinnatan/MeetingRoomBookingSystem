@@ -607,6 +607,10 @@ export default {
                 data = []
 
                 tempLabel = res.data.data[index].RoomName;
+
+                if(this.content.tool.dataSetReportToolInRoomProblemRanking.length == isRanking) {
+                  break;
+                }
               }
             }
           }
