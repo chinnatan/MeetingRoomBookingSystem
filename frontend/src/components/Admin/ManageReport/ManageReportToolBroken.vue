@@ -173,7 +173,7 @@
             <div class="col-md-12">
               <button
                 type="button"
-                class="btn btn-outline-variasi-warna col-md-12"
+                class="btn btn-outline-primary col-md-12"
                 v-print="'#reportToolPrint'"
               >
                 {{ button.print_report }}
