@@ -2,8 +2,8 @@ const MySQL = require("mysql");
 const Config = require("../../config.json");
 
 const SERVICE_NAME = Config.SERVER.NAME;
-const API = Config.API_PRODUCTION;
-const API_SOCKET = Config.API_PRODUCTION
+const API = Config.API_PRODUCTION.SERVER;
+const API_SOCKET = Config.API_PRODUCTION.SOCKET;
 
 // MySQL Configuration
 const HOST_MYSQL = Config.MYSQL.HOST;
