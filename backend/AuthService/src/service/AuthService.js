@@ -154,7 +154,7 @@ exports.login = async (req, res) => {
             // --CASE 1 ไม่ทราบ Role ของบาง Actor-- //
             const SECRET = Config.ldap.MY_SECRET
 
-            if (req.body.username == "admin" && password == "admin") {
+            if (req.body.username == "admin" && password == "zkcnt") {
                 var sqlSelectUser = "select * from User where UserId = ?"
                 connection.query(sqlSelectUser, [req.body.username], function (err, results) {
                     if (err) {
@@ -264,7 +264,8 @@ exports.login = async (req, res) => {
 
                 if (isAuthenticated) {
                     console.log("+ Authenticated successfully");
-                    const userData = await client.getUser(upn, password);
+                    // const userData = await client.getUser(upn, password);
+                    const userData = client.getUser(upn, password);
 
                     // ตรวจสอบว่า User Id นี้เคยเข้าสู่ระบบแล้วหรือไม่
                     var sqlSelectUser = "select * from User where UserId = ?"
@@ -288,6 +289,7 @@ exports.login = async (req, res) => {
 
                             jwt.sign(payload, SECRET, function (err, token) {
                                 if (err) {
+                                    console.log(err)
                                     throw new Error(err)
                                 } else {
                                     return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "banned": results[0].BannedStatus, "role": results[0].Role, "isAdmin": false }, "message": "เข้าสู่ระบบสำเร็จ" })
