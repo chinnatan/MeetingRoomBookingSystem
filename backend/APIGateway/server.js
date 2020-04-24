@@ -6,11 +6,11 @@ const http = require('http').Server(app);
 const config = require('./config.json')
 const jwt = require("jsonwebtoken");
 
-const authServiceProxy = httpProxy('http://0.0.0.0:3000')
-const roomServiceProxy = httpProxy('http://0.0.0.0:3001')
-const bookingServiceProxy = httpProxy('http://0.0.0.0:3002')
-const settingServiceProxy = httpProxy('http://0.0.0.0:3003')
-const toolServiceProxy = httpProxy('http://0.0.0.0:3004')
+const authServiceProxy = httpProxy(config.HOST_PRODUCTION + ':3000')
+const roomServiceProxy = httpProxy(config.HOST_PRODUCTION + ':3001')
+const bookingServiceProxy = httpProxy(config.HOST_PRODUCTION + ':3002')
+const settingServiceProxy = httpProxy(config.HOST_PRODUCTION + ':3003')
+const toolServiceProxy = httpProxy(config.HOST_PRODUCTION + ':3004')
 
 // API Gateway Option
 const NAME = "API Gateway";
@@ -20,7 +20,7 @@ const HOST = "0.0.0.0";
 // Set CORS
 app.use((req, res, next) => {
     const allowedOrigins = [
-        'http://localhost:8080/', 'http://localhost:8081/'
+        'http://localhost:8080/', 'http://localhost:8081/', 'http://10.0.15.37/', 'http://kcnt.sytes.net/'
     ];
     if (!allowedOrigins.includes(req.headers.origin)) {
         res.header("Access-Control-Allow-Origin", req.headers.origin);
