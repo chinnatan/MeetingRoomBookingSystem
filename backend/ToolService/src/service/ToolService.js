@@ -190,7 +190,7 @@ exports.sendReportTool = (req, res) => {
       if (toolProblem.length > 0) {
         var sqlInsertReport = "insert into Report (ReportDetail, ReportStatus, ReportDate, ToolId, RoomAccessId) values (?, ?, ?, ?, ?)"
         for (var index in toolProblem) {
-          connection.query(sqlInsertReport, [toolProblem[index].detail, reportStatus, new Date().toLocaleString(), toolProblem[index].toolId, roomAccessId], function (err, results) {
+          connection.query(sqlInsertReport, [toolProblem[index].detail, reportStatus, new Date(), toolProblem[index].toolId, roomAccessId], function (err, results) {
             if (err) {
               connection.rollback(function () {
                 console.log(`[${SERVICE_NAME}][${API_NAME}] SQL BEGIN TRANSACTION ERROR -> ${err.message}`);
@@ -394,8 +394,8 @@ exports.frequentlyReportToolInProblemRanking = (req, res) => {
       "join Room on (Room.RoomId = Tool.RoomId) " +
       "where Report.ReportDate >= DATE_ADD(NOW(), interval -? month) " +
       "group by Room.RoomId, Report.ReportDate " +
-      "order by NUMBER desc limit ?"
-    mysqlPool.query(sqlQueryRanking, [isMonth, isRanking * isMonth], function (err, results) {
+      "order by NUMBER desc"
+    mysqlPool.query(sqlQueryRanking, [isMonth], function (err, results) {
       if (err) {
         console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY ERROR -> ${err.message}`);
         return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
