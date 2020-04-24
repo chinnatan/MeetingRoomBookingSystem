@@ -2,6 +2,8 @@ const MySQL = require("mysql");
 const Config = require("../../config.json");
 
 const SERVICE_NAME = Config.SERVER.NAME;
+const API = Config.API_PRODUCTION;
+const API_SOCKET = Config.API_PRODUCTION
 
 // MySQL Configuration
 const HOST_MYSQL = Config.MYSQL.HOST;
@@ -60,7 +62,7 @@ exports.addBooking = async (req, res) => {
     if (stateCheck) {
         let userRs
         try {
-            userRs = await axios.get('http://localhost:4000/api/auth/user/' + UserId)
+            userRs = await axios.get(API + '/api/auth/user/' + UserId)
             UserEmail = userRs.data.results[0].Email
         } catch (error) {
             return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
@@ -82,6 +84,8 @@ exports.addBooking = async (req, res) => {
     endDateTime.setHours(endTimeHour)
     endDateTime.setMinutes(endTimeMinute)
     endDateTime.setSeconds(0)
+
+    const moment = require('moment')
     var currentDate = new Date()
 
     // --GET SETTING SYSTEM-- //
@@ -90,7 +94,7 @@ exports.addBooking = async (req, res) => {
     let userBannedRs
     let userBanned
     try {
-        settingRs = await axios.get('http://localhost:4000/api/setting/')
+        settingRs = await axios.get(API + '/api/setting/')
         setting = {
             HighestPeriodPerTime: settingRs.data.HighestPeriodPerTime,
             AdvanceBooking: settingRs.data.AdvanceBooking,
@@ -103,7 +107,7 @@ exports.addBooking = async (req, res) => {
             }
         }
 
-        userBannedRs = await axios.get('http://localhost:4000/api/auth/user/ban/check/' + UserId)
+        userBannedRs = await axios.get(API + '/api/auth/user/ban/check/' + UserId)
         userBanned = userBannedRs.data.isBanned
     } catch (error) {
         return res.status(200).json({ "isError": true, "message": "ไม่สามารถทำรายการได้เนื่องจากเกิดความผิดพลาดของระบบ" })
@@ -111,7 +115,6 @@ exports.addBooking = async (req, res) => {
     // --GET SETTING SYSTEM-- //
 
     // --CONDITION BEFORE BOOKING-- //
-    const moment = require('moment')
 
     if (userBanned && !stateCheck) {
         return res.status(200).json({ "isBanned": userBanned })
@@ -289,7 +292,7 @@ exports.addBooking = async (req, res) => {
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Booking Successfully"`);
 
-                            axios.get('http://localhost:4001/api/trigger/booking');
+                            axios.get(API_SOCKET + '/api/trigger/booking');
 
                             return res.status(200).json({ "isError": false, "pin": BookingPin, "message": "จองห้องสำเร็จ" })
                         })
@@ -425,7 +428,7 @@ exports.editBooking = async (req, res) => {
     let settingRs
     let setting
     try {
-        settingRs = await axios.get('http://localhost:4000/api/setting/')
+        settingRs = await axios.get(API + '/api/setting/')
         setting = {
             HighestPeriodPerTime: settingRs.data.HighestPeriodPerTime,
             AdvanceBooking: settingRs.data.AdvanceBooking,
@@ -618,6 +621,8 @@ exports.editBooking = async (req, res) => {
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Edit Booking Successfully"`);
 
+                            axios.get(API_SOCKET + '/api/trigger/booking');
+
                             res.status(200).json({ "message": "แก้ไขการจองสำเร็จ" })
                         })
                     })
@@ -708,6 +713,8 @@ exports.editBooking = async (req, res) => {
 
                             console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Edit Booking Successfully"`);
 
+                            axios.get(API_SOCKET + '/api/trigger/booking');
+
                             res.status(200).json({ "message": "แก้ไขการจองสำเร็จ" })
                         })
                     })
@@ -730,8 +737,8 @@ exports.cancelBooking = async (req, res) => {
     let bookingRs
     let booking
     try {
-        settingRs = await axios.get('http://localhost:4000/api/setting/')
-        bookingRs = await axios.get('http://localhost:4000/api/booking/' + bookingId)
+        settingRs = await axios.get(API + '/api/setting/')
+        bookingRs = await axios.get(API + '/api/booking/' + bookingId)
 
         setting = {
             AdvanceCancel: settingRs.data.AdvanceCancel,
@@ -882,6 +889,8 @@ exports.cancelBooking = async (req, res) => {
                     }
 
                     console.log(`[${SERVICE_NAME}][${API_NAME}] -> "Cancel Booking Successfully"`);
+
+                    axios.get(API_SOCKET + '/api/trigger/booking');
 
                     res.status(200).json({ "isCancel": true, "message": "ยกเลิกการจองสำเร็จ" })
                 })
