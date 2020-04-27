@@ -1,4 +1,5 @@
 const ldapClient = require("simple-ldap-client")
+const ldapjs = require("ldapjs")
 const MySQL = require('mysql')
 const Config = require('../../config')
 const jwt = require("jsonwebtoken");
@@ -21,8 +22,8 @@ class Client {
     }
 
     async getUser(upn, password) {
-        const result = await this.ldap.getUser({ upn, password });
-        return result;
+        const results = await this.ldap.getUser({ upn, password })
+        return results;
     }
 }
 
@@ -94,10 +95,10 @@ cron.schedule('0 0 0 * * *', function () {
                                 }
 
                                 if (results.length > 0) {
-                                    for(var index in results) {
+                                    for (var index in results) {
                                         let BookingId = results[index].BookingId
                                         var sqlDeleteBooking = "delete from Booking where BookingId = ? and BookingStatus = ? and UserId = ?"
-                                        connection.query(sqlDeleteBooking, [BookingId, "B", UserId], function(err) {
+                                        connection.query(sqlDeleteBooking, [BookingId, "B", UserId], function (err) {
                                             if (err) {
                                                 connection.rollback(function () {
                                                     console.log(`[${SERVICE_NAME}] sqlDeleteBooking Error -> ${err}`)
@@ -137,7 +138,6 @@ cron.schedule('0 0 0 * * *', function () {
         }
     })
 });
-
 
 exports.login = async (req, res) => {
     const url = Config.ldap.url;
@@ -264,8 +264,9 @@ exports.login = async (req, res) => {
 
                 if (isAuthenticated) {
                     console.log("+ Authenticated successfully");
-                    // const userData = await client.getUser(upn, password);
-                    const userData = client.getUser(upn, password);
+                    let userData = null;
+
+                    const ldapClient = ldapjs.createClient({ url, reconnect: true });
 
                     // ตรวจสอบว่า User Id นี้เคยเข้าสู่ระบบแล้วหรือไม่
                     var sqlSelectUser = "select * from User where UserId = ?"
@@ -296,31 +297,56 @@ exports.login = async (req, res) => {
                                 }
                             })
                         } else { // ถ้าไม่เคยเข้าสู่ระบบเลยให้เพิ่มข้อมูลลงฐานข้อมูลและ sign token
-                            var sqlInsertUser = "insert into User (UserId, Fullname, Email, BannedStatus, BannedDate, Role) values (?, ?, ?, ?, ?)"
-                            connection.query(sqlInsertUser, [req.body.username, userData.name, userData.mail, false, null, userData.description], function (err, results) {
+                            ldapClient.bind(upn, password, async function (err) {
                                 if (err) {
-                                    console.log(`[${SERVICE_NAME}] sqlInsertUser Error -> ${err}`)
-                                } else {
-                                    console.log("Insert User Success")
-
-                                    const payload = {
-                                        _id: req.body.username,
-                                        fullname: userData.name,
-                                        mail: userData.mail,
-                                        banned: false,
-                                        role: userData.description,
-                                        iat: new Date().getTime(), //มาจากคำว่า issued at time (สร้างเมื่อ)
-                                        exp: Math.floor(Date.now() / 1000) + (60 * 60)
-                                    };
-
-                                    jwt.sign(payload, SECRET, function (err, token) {
-                                        if (err) {
-                                            throw new Error(err)
-                                        } else {
-                                            return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "banned": results[0].BannedStatus, "role": results[0].Role, "isAdmin": false }, "message": "เข้าสู่ระบบสำเร็จ" })
-                                        }
-                                    })
+                                    console.log(err)
+                                    ldapClient.destroy(err)
                                 }
+
+                                const filter = '(userPrincipalName=' + upn + ')'
+
+                                const opts = {
+                                    filter,
+                                    scope: 'sub'
+                                }
+
+                                ldapClient.search(baseDn, opts, async function (err, search) {
+                                    if (err) {
+                                        console.log(err)
+                                    }
+                                    search.on('searchEntry', async (entry) => {
+                                        userData = entry.object
+
+                                        var sqlInsertUser = "insert into User (UserId, Fullname, Email, BannedStatus, BannedDate, Role) values (?, ?, ?, ?, ?, ?)"
+                                        connection.query(sqlInsertUser, [req.body.username, userData.name, userData.mail, false, null, userData.description], function (err, results) {
+                                            if (err) {
+                                                console.log(`[${SERVICE_NAME}] sqlInsertUser Error -> ${err}`)
+                                            } else {
+                                                console.log("Insert User Success")
+
+                                                const payload = {
+                                                    _id: req.body.username,
+                                                    fullname: userData.name,
+                                                    mail: userData.mail,
+                                                    banned: false,
+                                                    role: userData.description,
+                                                    iat: new Date().getTime(), //มาจากคำว่า issued at time (สร้างเมื่อ)
+                                                    exp: Math.floor(Date.now() / 1000) + (60 * 60)
+                                                };
+
+                                                jwt.sign(payload, SECRET, function (err, token) {
+                                                    if (err) {
+                                                        throw new Error(err)
+                                                    } else {
+                                                        return res.status(200).json({ "accesstoken": token, "user": { "id": results[0].UserId, "fullname": results[0].Fullname, "mail": results[0].Email, "banned": results[0].BannedStatus, "role": results[0].Role, "isAdmin": false }, "message": "เข้าสู่ระบบสำเร็จ" })
+                                                    }
+                                                })
+                                            }
+                                        })
+
+                                        ldapClient.destroy()
+                                    })
+                                })
                             })
                         }
 
