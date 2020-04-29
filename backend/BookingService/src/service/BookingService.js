@@ -589,7 +589,7 @@ exports.editBooking = async (req, res) => {
                                 var BookingPin = results[0].BookingPin
                                 let editMailOption = {
                                     from: Config.GMAIL.USER,                // sender
-                                    to: '59070040@it.kmitl.ac.th',                // list of receivers
+                                    to: UserEmail,                // list of receivers
                                     subject: `[MRBS][แก้ไข] รายละเอียดการจองที่ได้รับการแก้ไขของห้อง ${roomName}`,              // Mail subject
                                     html: `<b>ห้องที่ทำการจอง : </b>${roomName}<br>
                                     <b>หัวข้อการจอง : </b>${BookingTitle}<br>
