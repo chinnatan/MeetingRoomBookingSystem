@@ -26,8 +26,9 @@ void runCheck();
 
 Task runCheckSaveEndDate(100, TASK_FOREVER, &runCheck, &runCheckSaveDate, true);
 
-const char* ssid     = "MAENUI Floor 1";
-const char* password = "maenui2563";
+// WiFi 1
+const char* ssid     = "YOU WIFI SSID";
+const char* password = "YOU WIFI PASSWORD";
 
 const char* ROOMM03 = "4";
 const char* ROOMM04 = "5";
@@ -52,7 +53,7 @@ void setup() {
 
   // Socket Configuration
   webSocket.on("sendRoomIdToNodeMCU", socketRoomIdEvent);
-  webSocket.begin("171.4.7.253", 4002);
+  webSocket.begin("kcnt.sytes.net", 4002);
 
   // Software Serial Configuration
   pinMode(D2, INPUT);
