@@ -262,7 +262,20 @@ exports.activeRoom = async (req, res) => {
 
     if (results.length > 0) {
       // --สั่งเปิดประตู-- //
-      return res.status(200).json({ "message": "ยืนยันสำเร็จ" })
+      var sqlQueryBooking = "select * from Booking where BookingId = ? and BookingPin = ? and BookingStatus = 'U'"
+      mysqlPool.query(sqlQueryBooking, [bookingId, bookingPin], function (err, results) {
+        if (err) {
+          console.log(`[${SERVICE_NAME}][${API_NAME}] SQL QUERY[sqlQueryBooking] ERROR -> ${err}`);
+          return res.status(200).json({ "error_message": "ไม่สามารถทำรายการได้เนื่องจากเกิดจากความผิดพลาดของระบบ" })
+        }
+
+        if (results.length > 0) {
+          return res.status(200).json({ "message": "ยืนยันสำเร็จ" })
+        } else {
+          var message = "ไม่สามารถยืนยันการเข้าใช้งานได้ เนื่องจากรหัสผ่านไม่ถูกต้องกรุณาลองใหม่อีกครั้ง"
+          return res.status(200).json({ "message": message })
+        }
+      })
     } else {
       // --กรณีเข้าใช้งานห้องครั้งแรก-- //
       var sqlQueryBooking = "select * from Booking where BookingId = ?"
