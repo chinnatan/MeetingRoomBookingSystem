@@ -844,7 +844,7 @@ export default {
 
         if (
           JSON.parse(localStorage.getItem("user")).role.toUpperCase() ==
-          "PROFESSOR"
+          "LECTURE"
         ) {
           if (professor) {
             this.getBookingScheduleCurDateAndCurTime(roomId, rectId)

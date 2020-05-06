@@ -5,7 +5,7 @@
     </div>
 
     <div id="content" class="container h-100">
-      <div class="row h-100">
+      <div class="row h-100 responsive mx-auto">
         <div class="col-md-12 my-auto">
           <div class="row">
             <div class="col-md-12">
@@ -18,16 +18,24 @@
                 <li>
                   <h3 class="text-left">{{ content.text.policy.title }}</h3>
                   <ul>
-                    <li><h2>{{ content.text.policy.no1 }}</h2></li>
-                    <li><h2>{{ content.text.policy.no2 }}</h2></li>
-                    <li><h2>{{ content.text.policy.no3 }}</h2></li>
-                    <li><h2>{{ content.text.policy.no4 }}</h2></li>
+                    <li>
+                      <h2>{{ content.text.policy.no1 }}</h2>
+                    </li>
+                    <li>
+                      <h2>{{ content.text.policy.no2 }}</h2>
+                    </li>
+                    <li>
+                      <h2>{{ content.text.policy.no3 }}</h2>
+                    </li>
+                    <li>
+                      <h2>{{ content.text.policy.no4 }}</h2>
+                    </li>
                   </ul>
                 </li>
               </ul>
             </div>
           </div>
-          <div class="row">
+          <div class="row button-margin-bottom">
             <div class="col-md-12">
               <router-link :to="{path: '/booking' }" replace>
                 <button
@@ -50,7 +58,7 @@ const axiosConfig = require("../assets/config.json");
 
 const HOST = axiosConfig.APIGATEWAY.HOST;
 const PORT = axiosConfig.APIGATEWAY.PORT;
-const API = "http://" + HOST + ":" + PORT
+const API = "http://" + HOST + ":" + PORT;
 
 export default {
   name: "Home",
@@ -58,7 +66,7 @@ export default {
     Navbar: Navbar
   },
   created() {
-    this.getPolicy()
+    this.getPolicy();
   },
   data() {
     return {
@@ -106,23 +114,46 @@ export default {
       axios
         .get(path)
         .then(res => {
-          let rs = res.data
+          let rs = res.data;
           if (rs) {
-            this.content.setting.HighestPeriodPerTime = rs.HighestPeriodPerTime
-            this.content.setting.SlowestActivation = rs.SlowestActivation
-            this.content.setting.AdvanceBooking = rs.AdvanceBooking
-            this.content.setting.AdvanceCancel = rs.AdvanceCancel
-            this.content.setting.Unit.HighestPeriodPerTime = rs.Unit.HighestPeriodPerTime
-            this.content.setting.Unit.SlowestActivation = rs.Unit.SlowestActivation
-            this.content.setting.Unit.AdvanceBooking.ShortName = rs.Unit.AdvanceBooking.ShortName
-            this.content.setting.Unit.AdvanceBooking.LongName = rs.Unit.AdvanceBooking.LongName
-            this.content.setting.Unit.AdvanceCancel.ShortName = rs.Unit.AdvanceCancel.ShortName
-            this.content.setting.Unit.AdvanceCancel.LongName = rs.Unit.AdvanceCancel.LongName
+            this.content.setting.HighestPeriodPerTime = rs.HighestPeriodPerTime;
+            this.content.setting.SlowestActivation = rs.SlowestActivation;
+            this.content.setting.AdvanceBooking = rs.AdvanceBooking;
+            this.content.setting.AdvanceCancel = rs.AdvanceCancel;
+            this.content.setting.Unit.HighestPeriodPerTime =
+              rs.Unit.HighestPeriodPerTime;
+            this.content.setting.Unit.SlowestActivation =
+              rs.Unit.SlowestActivation;
+            this.content.setting.Unit.AdvanceBooking.ShortName =
+              rs.Unit.AdvanceBooking.ShortName;
+            this.content.setting.Unit.AdvanceBooking.LongName =
+              rs.Unit.AdvanceBooking.LongName;
+            this.content.setting.Unit.AdvanceCancel.ShortName =
+              rs.Unit.AdvanceCancel.ShortName;
+            this.content.setting.Unit.AdvanceCancel.LongName =
+              rs.Unit.AdvanceCancel.LongName;
 
-            this.content.text.policy.no1 = "ผู้ใช้งานต้องทำการจองห้องก่อน " + this.content.setting.AdvanceBooking + " " + this.content.setting.Unit.AdvanceBooking.LongName
-            this.content.text.policy.no2 = "ผู้ใช้งานต้องทำการยกเลิกการจองห้องก่อน " + this.content.setting.AdvanceCancel + " " + this.content.setting.Unit.AdvanceCancel.LongName
-            this.content.text.policy.no3 = "ผู้ใช้งานต้องเข้าใช้งานห้องภายในระยะเวลา " + this.content.setting.SlowestActivation + " " + this.content.setting.Unit.SlowestActivation + " โดยนับจากเวลาเริ่มต้นใช้งาน"
-            this.content.text.policy.no4 = "ผู้ใช้งานสามารถจองห้องได้ครั้งละ " + this.content.setting.HighestPeriodPerTime + " " + this.content.setting.Unit.HighestPeriodPerTime
+            this.content.text.policy.no1 =
+              "ผู้ใช้งานต้องทำการจองห้องก่อน " +
+              this.content.setting.AdvanceBooking +
+              " " +
+              this.content.setting.Unit.AdvanceBooking.LongName;
+            this.content.text.policy.no2 =
+              "ผู้ใช้งานต้องทำการยกเลิกการจองห้องก่อน " +
+              this.content.setting.AdvanceCancel +
+              " " +
+              this.content.setting.Unit.AdvanceCancel.LongName;
+            this.content.text.policy.no3 =
+              "ผู้ใช้งานต้องเข้าใช้งานห้องภายในระยะเวลา " +
+              this.content.setting.SlowestActivation +
+              " " +
+              this.content.setting.Unit.SlowestActivation +
+              " โดยนับจากเวลาเริ่มต้นใช้งาน";
+            this.content.text.policy.no4 =
+              "ผู้ใช้งานสามารถจองห้องได้ครั้งละ " +
+              this.content.setting.HighestPeriodPerTime +
+              " " +
+              this.content.setting.Unit.HighestPeriodPerTime;
           }
         })
         .catch(error => {
@@ -132,3 +163,16 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@media only screen and (min-device-width: 320px) and (max-device-height: 900px) {
+  .responsive {
+    margin-top: 10vh;
+  }
+
+  .button-margin-bottom {
+    margin-bottom: 10vh;
+  }
+}
+
+</style>
